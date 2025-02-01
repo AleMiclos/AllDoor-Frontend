@@ -1,16 +1,22 @@
 /* A principal mudança é garantir que o .main-container ocupe 100vh */
 .main-container {
-  height: 100vh;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;  /* Ocupa toda a altura da tela */
   overflow: hidden;
   background-color: black;
-  transform-origin: center;
+  rotate: 90deg;
+  margin: 0;
+  padding: 0;
 }
 
 /* O vídeo ocupará 75% da altura do main-container */
 .video-container {
   width: 100%;
-  height: 100%;  /* 75% da altura */
+  height: 75%;  /* 75% da altura */
 }
 
 .video-container iframe {
@@ -31,7 +37,6 @@
   padding: 10px;
   box-sizing: border-box;
   overflow-y: auto;
-  color: black;
 
 }
 

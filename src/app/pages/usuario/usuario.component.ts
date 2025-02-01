@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpHeaders
 import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 
@@ -16,30 +16,55 @@ import { FooterComponent } from '../../components/footer/footer.component';
 export class UsuarioComponent {
   selectedUserId: string | null = null;
   statusMessage: string = '';
-  loading = true;
+  loading = false;
   totems: any[] = [];
   editingTotem: any = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    this.selectedUserId = localStorage.getItem('userId'); // Obtém o userId salvo após login
+    console.log('userId recuperado:', this.selectedUserId);
+
+    if (!this.selectedUserId) {
+      this.statusMessage = 'Erro: Usuário não autenticado.';
+      return;
+    }
+
     this.fetchTotens();
   }
 
   fetchTotens(): void {
     this.loading = true;
-    this.http.get<any[]>('http://localhost:5000/totems') // Altere para o URL correto da API
-      .subscribe(
-        (data) => {
+
+    // Recupera o token do localStorage
+    const token = localStorage.getItem('token');
+
+    // Verifica se o token está presente
+    if (!token) {
+      this.statusMessage = 'Erro: Token de autenticação não encontrado.';
+      this.loading = false;
+      return;
+    }
+
+    // Configura o cabeçalho com o token
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}` // Adiciona o token no cabeçalho
+    });
+
+    // Faz a requisição com o cabeçalho
+    this.http.get<any[]>(`http://localhost:5000/totems/by-user-id/${this.selectedUserId}`, { headers })
+      .subscribe({
+        next: (data) => {
           this.totems = data;
           this.loading = false;
         },
-        (error) => {
+        error: (error) => {
           console.error('Erro ao buscar os totens:', error);
           this.statusMessage = 'Erro ao carregar os totens.';
           this.loading = false;
         }
-      );
+      });
   }
 
   handleStartEditing(totem: any) {

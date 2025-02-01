@@ -1,20 +1,34 @@
-<div class="sidebar-container" [class.open]="isSidebarOpen">
-  <button class="toggle-btn" (click)="toggleSidebar()">{{ isSidebarOpen ? '<' : '>' }}</button>
+<div class="users-container">
+  <div class="sidebar-container" [class.open]="isSidebarOpen">
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i
+        [class]="isSidebarOpen ? 'fas fa-chevron-left' : 'fas fa-chevron-right'"
+      ></i>
+      <span class="toggle-text">{{
+        isSidebarOpen ? "Fechar Lista de Usuários" : "Abrir Lista de Usuários"
+      }}</span>
+    </button>
 
-  <div class="users-menu" *ngIf="isSidebarOpen">
-    <ul>
-      <li *ngFor="let user of users"
+    <div class="users-menu" *ngIf="isSidebarOpen">
+      <ul>
+        <li
+          *ngFor="let user of users"
           [class.selected]="user === selectedUser"
-          (click)="handleUserClick(user)">
-        {{ user.name }}
-      </li>
-      <p *ngIf="users.length === 0">Sem usuários disponíveis.</p>
-    </ul>
+          (click)="handleUserClick(user)"
+        >
+          {{ user.name }}
+        </li>
+        <p *ngIf="users.length === 0">Sem usuários disponíveis.</p>
+      </ul>
+    </div>
   </div>
-</div>
 
-<!-- Exibir a lista de totens fora da sidebar -->
-<div *ngIf="selectedUser" class="totem-list-container">
-  <h3>Totens do Usuário: {{ selectedUser.name }}</h3>
-  <app-totem-list [userId]="selectedUser.id"></app-totem-list>
+  <!-- Exibir a lista de totens fora da sidebar -->
+  <div
+    *ngIf="selectedUser"
+    class="totem-list-container animate__animated animate__fadeIn"
+  >
+    <h3>Totens do Usuário: {{ selectedUser.name }}</h3>
+    <app-totem-list [userId]="clienteSelecionadoId"></app-totem-list>
+  </div>
 </div>

@@ -14,15 +14,28 @@ export class AuthService {
 
   // Método de login
   login(email: string, password: string) {
-    return this.http.post<{ token: string; user: { role: string; name: string } }>(
+    return this.http.post<{
+      message: string;
+      token: string;
+      user: {
+        email: string;
+        name: string;
+        role: string;
+        totemId: string | null;
+        userId: string; // userId está presente aqui
+      }
+    }>(
       'http://localhost:5000/auth/login',
       { email, password }
     ).pipe(
       tap((response) => {
-        // Armazena o token, role e nome do usuário no localStorage
+        console.log('Resposta da API:', response); // Verifique a estrutura da resposta
+
+        // Armazena o token, role, nome e userId no localStorage
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.user.role);
-        localStorage.setItem('userName', response.user.name); // Agora correto!
+        localStorage.setItem('userName', response.user.name);
+        localStorage.setItem('userId', response.user.userId); // Salva o userId corretamente
 
         // Atualiza a role no BehaviorSubject
         this.setUserRole(response.user.role);
