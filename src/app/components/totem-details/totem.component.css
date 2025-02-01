@@ -12,19 +12,13 @@
   position: relative;
 }
 
-.video-iframe{
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
 /* O container do vídeo também ocupa toda a tela */
 .video-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: 220vh;
   overflow: hidden;
   position: relative;
   transform: rotate(90deg);
@@ -52,7 +46,29 @@
 @media (orientation: landscape) {
   .video-container iframe {
     width: 100vw;
-    height: 56.25vw; /* Mantém a proporção 16:9 */
-    max-height: 100vh;
+    height: 85.25vw; /* Mantém a proporção 16:9 */
   }
+}
+
+/* Ajustes para o conteúdo de texto */
+.content {
+  position: absolute;
+  bottom: 0; /* Posiciona o texto na parte inferior */
+  width: 100vw; /* Largura total */
+  height: 10%; /* Ajuste a altura conforme necessário */
+  background: rgba(0, 0, 0, 0.7); /* Fundo semitransparente para o texto */
+  color: white; /* Texto em branco */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  text-align: center; /* Centraliza o texto */
+}
+
+.content h2,
+.content p {
+  margin: 0;
 }

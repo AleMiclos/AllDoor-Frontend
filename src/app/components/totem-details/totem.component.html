@@ -10,11 +10,12 @@
         title="Vídeo do Totem"
         class="video-iframe"
       ></iframe>
+      <div class="content">
+        <h2>{{ totem.title }}</h2>
+        <p>{{ description }}</p>
+      </div>
     </div>
-    <div class="content">
-      <h2>{{ totem.title }}</h2>
-      <p>{{ totem.description }}</p>
-    </div>
+
   </ng-container>
 
   <ng-template #notFound>
