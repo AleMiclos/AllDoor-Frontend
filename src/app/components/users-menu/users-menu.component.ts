@@ -25,7 +25,7 @@ export class UsersMenuComponent implements OnInit {
   }
 
   fetchUsers(): void {
-    this.http.get<any[]>('http://localhost:5000/users').subscribe(
+    this.http.get<any[]>('https://outdoor-backend.onrender.com/users').subscribe(
       (response) => {
         this.users = response;
       },

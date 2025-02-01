@@ -25,7 +25,7 @@ export class AuthService {
         userId: string; // userId está presente aqui
       }
     }>(
-      'http://localhost:5000/auth/login',
+      'https://outdoor-backend.onrender.com/auth/login',
       { email, password }
     ).pipe(
       tap((response) => {
@@ -48,7 +48,7 @@ export class AuthService {
 
   // Método de registro
   register(name: string, email: string, password: string, role: string) {
-    return this.http.post('http://localhost:5000/auth/register', { name, email, password, role });
+    return this.http.post('https://outdoor-backend.onrender.com/auth/register', { name, email, password, role });
   }
 
   // Atualiza a role do usuário
