@@ -15,7 +15,6 @@ export class TotemDetailsComponent implements OnInit {
   totem: any = null;
   loading = true;
   error: string | null = null;
-  description: string | null = null;
 
   constructor(
     private totemService: TotemService, // Injete o serviço
@@ -24,7 +23,6 @@ export class TotemDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isDayOrNight()
     this.route.paramMap.subscribe(params => {
       const totemId = params.get('id'); // Substitua pelo ID do totem a ser buscado
       if (totemId) {
@@ -35,22 +33,6 @@ export class TotemDetailsComponent implements OnInit {
       }
     });
   }
-
-  isDayOrNight(): string {
-    // Verifica se é dia ou noite
-    const timeOfDay = new Date().getHours() >= 6 && new Date().getHours() < 18 ? 'day' : 'night';
-  
-    // Define a descrição com base no horário
-    if (timeOfDay === 'day') {
-      this.description = 'Bom dia!';
-    } else {
-      this.description = 'Boa noite!';
-    }
-  
-    // Retorna 'day' ou 'night'
-    return timeOfDay;
-  }
-  
 
   fetchTotemById(id: string): void {
     this.loading = true;

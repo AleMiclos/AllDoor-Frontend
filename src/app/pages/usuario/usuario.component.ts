@@ -72,13 +72,31 @@ export class UsuarioComponent {
   }
 
   handleSaveChanges() {
-    const index = this.totems.findIndex(t => t._id === this.editingTotem._id);
-    if (index !== -1) {
-      this.totems[index] = this.editingTotem;
-      this.editingTotem = null;
-      this.statusMessage = 'Totem atualizado com sucesso!';
-    } else {
-      this.statusMessage = 'Erro ao atualizar o totem.';
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      this.statusMessage = 'Erro: Token de autenticação não encontrado.';
+      return;
     }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    this.http.put(`https://outdoor-backend.onrender.com/totems/${this.editingTotem._id}`, this.editingTotem, { headers })
+      .subscribe({
+        next: () => {
+          const index = this.totems.findIndex(t => t._id === this.editingTotem._id);
+          if (index !== -1) {
+            this.totems[index] = { ...this.editingTotem };
+          }
+          this.editingTotem = null;
+          this.statusMessage = 'Totem atualizado com sucesso!';
+        },
+        error: (error) => {
+          console.error('Erro ao atualizar o totem:', error);
+          this.statusMessage = 'Erro ao atualizar o totem.';
+        }
+      });
   }
 }
