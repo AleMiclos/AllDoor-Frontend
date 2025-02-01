@@ -53,7 +53,7 @@ export class UsuarioComponent {
     });
 
     // Faz a requisição com o cabeçalho
-    this.http.get<any[]>(`https://outdoor-backend.onrender.com/totems/by-user-id/${this.selectedUserId}`, { headers })
+    this.http.get<any[]>(`https://outdoor-backend.onrender.com/totems/`, { headers })
       .subscribe({
         next: (data) => {
           this.totems = data;

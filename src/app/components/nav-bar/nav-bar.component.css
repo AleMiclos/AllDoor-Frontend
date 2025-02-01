@@ -126,27 +126,57 @@ a {
 
 /* Responsividade */
 @media screen and (max-width: 768px) {
-    .navbar {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-    }
+  .header {
+      padding: 10px 5%;
+      flex-wrap: wrap;
+  }
 
-    .navbar.active {
-        display: flex;
-    }
+  .logo {
+      font-size: 24px;
+      width: 100%;
+      text-align: center;
+  }
 
-    .menu-toggle {
-        display: flex;
-    }
+  .menu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+  }
 
-    .header {
-        padding: 10px 5%;
-    }
+  .navbar {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+  }
 
-    .logo {
-        font-size: 24px;
-    }
+  .navbar.active {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .navbar a {
+      font-size: 18px;
+      width: 100%;
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+  }
+
+  .user-controls {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+  }
+
+  .login-btn, .logout-btn {
+      width: 80%;
+      padding: 10px 0;
+  }
 }
 
 

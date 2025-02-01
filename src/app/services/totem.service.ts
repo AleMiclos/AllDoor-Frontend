@@ -41,9 +41,9 @@ export class TotemService {
   getTotems(userId: string): Observable<any[]> {
     const headers = this.getAuthHeaders();
     console.log('Headers:', headers); // Depuração
-
+    // by-user-id/${userId}
     return this.http
-      .get<any[]>(`${this.apiUrl}/by-user-id/${userId}`, { headers })
+      .get<any[]>(`${this.apiUrl}/`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Erro ao buscar totens:', error);

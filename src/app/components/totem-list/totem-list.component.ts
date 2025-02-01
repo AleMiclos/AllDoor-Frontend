@@ -26,7 +26,6 @@ export class TotemListComponent implements OnInit {
       description: ['', Validators.required],
       videoUrl: ['', [Validators.required, Validators.pattern('https?://.+')]], // Validação de URL
       address: ['', Validators.required],
-      isOnline: [false],
     });
 
     this.editTotemForm = this.fb.group({
@@ -34,7 +33,6 @@ export class TotemListComponent implements OnInit {
       description: ['', Validators.required],
       videoUrl: ['', [Validators.required, Validators.pattern('https?://.+')]], // Validação de URL
       address: ['', Validators.required],
-      isOnline: [false],
     });
   }
 
@@ -75,12 +73,20 @@ export class TotemListComponent implements OnInit {
     );
   }
 
+
+  debugAddTotem() {
+    console.log('Botão Adicionar Totem clicado!');
+  }
+
   // Adiciona um novo totem
   handleAddTotem() {
     console.log('Adicionar Totem chamado'); // Verifique se essa mensagem aparece no console
+    console.log('Formulário válido?', this.newTotemForm.valid);
+    console.log('Valores do formulário:', this.newTotemForm.value);
 
     if (this.newTotemForm.invalid || !this.isValidObjectId(this.userId)) {
       this.errorMessage = 'Preencha todos os campos corretamente e selecione um usuário válido.';
+      console.log(this.errorMessage);
       return;
     }
 
@@ -88,9 +94,10 @@ export class TotemListComponent implements OnInit {
 
     this.totemService.addTotem(newTotem).subscribe(
       (data) => {
-        this.totems.push(data); // Adiciona o novo totem à lista
-        this.newTotemForm.reset(); // Limpa o formulário
-        this.errorMessage = ''; // Limpa a mensagem de erro
+        this.totems.push(data);
+        this.newTotemForm.reset();
+        this.errorMessage = '';
+        console.log('Totem adicionado com sucesso:', data);
       },
       (error) => {
         console.error('Erro ao adicionar totem:', error);
@@ -98,6 +105,7 @@ export class TotemListComponent implements OnInit {
       }
     );
   }
+
 
 
   // Define o totem em edição
