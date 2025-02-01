@@ -1,0 +1,91 @@
+<div class="totem-list">
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+  <!-- Formulário para adicionar Totem -->
+  <div class="form">
+    <h3>Novo Totem</h3>
+    <form [formGroup]="newTotemForm" (ngSubmit)="handleAddTotem()">
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="Título"
+        required
+      />
+      <input
+        type="text"
+        formControlName="description"
+        placeholder="Descrição"
+        required
+      />
+      <input
+        type="url"
+        formControlName="videoUrl"
+        placeholder="URL do Vídeo"
+        required
+      />
+      <input
+        type="text"
+        formControlName="address"
+        placeholder="Endereço"
+        required
+      />
+      <label>
+        <input type="checkbox" formControlName="isOnline" />
+
+      </label>
+      <button type="submit">Adicionar</button>
+    </form>
+  </div>
+
+  <!-- Lista de Totens -->
+  <div class="totem-list">
+    <div *ngFor="let totem of totems" class="totem-card">
+      <h4>{{ totem.title }}</h4>
+      <p>{{ totem.description }}</p>
+      <p>Endereço: {{ totem.address }}</p>
+      <p>
+        Status:
+        <span [style.color]="totem.isOnline ? 'green' : 'red'">
+          {{ totem.isOnline ? 'Online' : 'Offline' }}
+        </span>
+      </p>
+      <a [routerLink]="['/totem', totem._id]" target="_blank">Ver Totem</a>
+      <button (click)="setEditingTotem(totem)">Editar</button>
+      <button (click)="handleDeleteTotem(totem._id)">Deletar</button>
+    </div>
+  </div>
+
+  <!-- Formulário para editar Totem -->
+  <div *ngIf="editingTotem" class="edit-form">
+    <h3>Editar Totem</h3>
+    <form [formGroup]="newTotemForm" (ngSubmit)="handleAddTotem()">
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="Título"
+        required
+      />
+      <input
+        type="text"
+        formControlName="description"
+        placeholder="Descrição"
+        required
+      />
+      <input
+        type="url"
+        formControlName="videoUrl"
+        placeholder="URL do Vídeo"
+        required
+      />
+      <input
+        type="text"
+        formControlName="address"
+        placeholder="Endereço"
+        required
+      />
+
+      <button type="submit">Salvar</button>
+      <button type="button" (click)="setEditingTotem(null)">Cancelar</button>
+    </form>
+  </div>
+</div>

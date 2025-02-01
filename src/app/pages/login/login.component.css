@@ -1,0 +1,175 @@
+.logint {
+  font: 1.5em sans-serif;
+  font-weight: bold;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  margin: 0;
+  background: linear-gradient(135deg, rgba(0, 128, 255, 1) 0%, rgba(0, 255, 128, 1) 100%);
+}
+
+.loginForm {
+  max-width: 90%; /* Ajuste para telas menores */
+  width: 400px;
+  height: auto; /* Ajuste de altura para dispositivos menores */
+  background-color: rgba(5, 115, 158, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.form-group label {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #ddd;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 2px solid #888;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.form-button button {
+  width: 100%; /* Botão ocupa toda a largura no mobile */
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.form-button button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.error-message {
+  color: red;
+  font-size: 1rem;
+  margin: 1rem;
+  text-align: center;
+
+}
+
+.switch-auth {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.switch-auth button {
+  background: none;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.switch-auth button:hover {
+  opacity: 0.7;
+}
+
+/* Media queries para dispositivos menores */
+@media (max-width: 768px) {
+  .loginForm {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .form-button button {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .switch-auth button {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logint {
+    font-size: 1.2em;
+  }
+
+  .form-button button {
+    font-size: 0.85rem;
+  }
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-button button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.back-button fa-icon {
+  margin-right: 8px; /* Espaço entre o ícone e o texto */
+}
+
+.back-button button:hover {
+  color: #007bff; /* Cor ao passar o mouse */
+}

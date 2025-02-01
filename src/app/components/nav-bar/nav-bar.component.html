@@ -1,0 +1,28 @@
+<header
+  class="header"
+  [class.hidden]="isHeaderHidden"
+  [class.scrolled]="isHeaderScrolled"
+>
+  <a routerLink="/" class="logo">ALL DOOR</a>
+
+  <!-- Botão Hamburguer -->
+  <div class="menu-toggle" (click)="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav class="navbar" [class.active]="isMenuOpen">
+    <a routerLink="/home">Home</a>
+    <div class="user-controls">
+      <span *ngIf="userName" class="user-info">Bem-vindo, {{ userName }}</span>
+      <button *ngIf="!userName" (click)="handleLoginRedirect()" class="login-btn">
+        <fa-icon [icon]="faSignIn"></fa-icon> Login
+      </button>
+
+      <button *ngIf="userName" (click)="handleLogout()" class="logout-btn">
+        <fa-icon [icon]="faSignOut"></fa-icon> Logout
+      </button>
+    </div>
+  </nav>
+</header>

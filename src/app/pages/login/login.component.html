@@ -1,0 +1,53 @@
+
+<div class="container">
+  <div class="back-button">
+    <button (click)="goBack()">
+      <fa-icon [icon]="faArrowLeft"></fa-icon> Voltar
+    </button>
+  </div>
+  <form class="loginForm" (ngSubmit)="isRegistering ? handleRegister() : handleLogin()">
+    <h2 class="logint">{{ isRegistering ? 'Registrar' : 'Login' }}</h2>
+
+    <!-- Mensagem de erro -->
+    <p *ngIf="error" class="error-message">{{ error }}</p>
+
+    <!-- Campo de nome (somente no registro) -->
+    <div *ngIf="isRegistering" class="form-group">
+      <label for="name">Nome</label>
+      <input type="text" id="name" [(ngModel)]="name" name="name" placeholder="Digite seu nome" required />
+    </div>
+
+    <!-- Campo de email -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Digite seu e-mail" required />
+    </div>
+
+    <!-- Campo de senha -->
+    <div class="form-group">
+      <label for="password">Senha</label>
+      <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Digite sua senha" required />
+    </div>
+
+    <!-- Campo de role (somente no registro) -->
+    <div *ngIf="isRegistering" class="form-group">
+      <label for="role">Tipo de Conta</label>
+      <select id="role" [(ngModel)]="role" name="role" required>
+        <option value="cliente">Cliente</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <!-- Botão de login/registro -->
+    <div class="form-button">
+      <button type="submit">{{ isRegistering ? 'Registrar' : 'Login' }}</button>
+    </div>
+
+    <!-- Alternar entre login e registro -->
+    <div class="switch-auth">
+      <button type="button" (click)="toggleAuthMode()">
+        {{ isRegistering ? 'Já tem conta? Faça login' : 'Ainda não tem conta? Registre-se' }}
+      </button>
+    </div>
+  </form>
+</div>

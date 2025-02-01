@@ -1,0 +1,36 @@
+<div class="main-container">
+  <ng-container *ngIf="loading; else loaded">
+    <p>Carregando...</p>
+  </ng-container>
+
+  <ng-template #loaded>
+    <ng-container *ngIf="error; else content">
+      <p>{{ error }}</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #content>
+    <ng-container *ngIf="totem; else notFound">
+      <div class="video-container">
+        <iframe
+          *ngIf="totem.videoUrl"
+          [src]="'https://player.vimeo.com/video/' + extractVimeoVideoId(totem.videoUrl) + '?autoplay=1&muted=1&loop=1'"
+          width="640"
+          height="360"
+          frameborder="0"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          title="Vídeo do Totem"
+        ></iframe>
+      </div>
+      <div class="content">
+        <h2>{{ totem.title }}</h2>
+        <p>{{ totem.description }}</p>
+      </div>
+    </ng-container>
+
+    <ng-template #notFound>
+      <p>Totem não encontrado.</p>
+    </ng-template>
+  </ng-template>
+</div>

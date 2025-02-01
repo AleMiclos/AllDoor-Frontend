@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Poppins:wght@400;500&display=swap');
+
+* {
+    font-family: "Poppins", serif;
+    margin: 0;
+    padding: 0;
+}
+
+.logo {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.login-btn, .logout-btn {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: seagreen;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover, .logout-btn:hover {
+    background-color: #ffb400;
+    color: #fff;
+}
+
+/* Menu Toggle para dispositivos móveis */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.menu-toggle div {
+    width: 30px;
+    height: 3px;
+    background-color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.navbar.active {
+    display: flex;
+    flex-direction: column;
+    background-color: seagreen;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.navbar.active a {
+    margin: 10px 0;
+    text-align: center;
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+    .navbar {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .header {
+        padding: 10px 5%;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .navbar.active {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 20px;
+        background-color: seagreen;
+    }
+
+    .navbar a {
+        font-size: 16px;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .login-btn, .logout-btn {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+}
+
+/* Adiciona margem ao conteúdo principal para não ficar atrás do Navbar */
+.home-container {
+    padding: 30px;
+    animation: fadeIn 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, rgb(46, 139, 87) 20%, rgba(0, 128, 255, 1) 80%);
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.home-section {
+    background-color: white;
+    padding: 30px;
+    width: 50%;
+    text-align: center;
+    margin-bottom: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Seção Home */
+.home-section-a {
+    display: flex;
+    height: 100vh; /* Preenche a tela inteira */
+    margin-bottom: 50px;
+    margin-top: 60px;
+}
+
+/* Texto à esquerda */
+.sobre {
+    padding: 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.sobre h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #ffffff; /* Cor para destacar o título */
+    font-family: "Baloo Da 2", serif;
+}
+
+.sobre p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 700px; /* Limita o tamanho da linha para mais legibilidade */
+    color: #ffffff;
+    font-weight: bold;
+    font-family: "Baloo Da 2", serif;
+    text-align: left;
+    text-justify: inter-word;
+}
+
+.home-section-a:hover .background-half {
+    transform: scale(1.1); /* Efeito de zoom no fundo ao passar o mouse */
+}
+
+.home-section:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.home-section h1,
+.home-section h2 {
+    color: #004080;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.home-section p,
+.home-section ul {
+    margin-bottom: 15px;
+}
+
+.home-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.home-section ul li {
+    background-color: #e9f1fb;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+}
+
+.home-section ul li strong {
+    color: #004080;
+    margin-right: 10px;
+}
+
+.home-section ul li:before {
+    content: "✔";
+    color: #007bff;
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+
+
+    .navbar a {
+        margin-right: 10px;
+        font-size: 16px;
+    }
+
+    .login-btn,
+    .logout-btn {
+        padding: 8px 10px;
+    }
+
+    .home-container {
+        padding: 15px;
+        margin-top: 430%;
+
+    }
+
+    .home-section {
+        padding: 20px;
+        width: 100%;
+    }
+
+    .sobre h1 {
+        font-size: 1.8rem;
+    }
+
+    .sobre p {
+        font-size: 1rem;
+        max-width: 100%; /* Permite que o texto ocupe toda a largura disponível no celular */
+    }
+}

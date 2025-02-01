@@ -1,0 +1,20 @@
+<div class="sidebar-container" [class.open]="isSidebarOpen">
+  <button class="toggle-btn" (click)="toggleSidebar()">{{ isSidebarOpen ? '<' : '>' }}</button>
+
+  <div class="users-menu" *ngIf="isSidebarOpen">
+    <ul>
+      <li *ngFor="let user of users"
+          [class.selected]="user === selectedUser"
+          (click)="handleUserClick(user)">
+        {{ user.name }}
+      </li>
+      <p *ngIf="users.length === 0">Sem usuários disponíveis.</p>
+    </ul>
+  </div>
+</div>
+
+<!-- Exibir a lista de totens fora da sidebar -->
+<div *ngIf="selectedUser" class="totem-list-container">
+  <h3>Totens do Usuário: {{ selectedUser.name }}</h3>
+  <app-totem-list [userId]="selectedUser.id"></app-totem-list>
+</div>

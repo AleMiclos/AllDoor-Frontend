@@ -1,0 +1,58 @@
+<app-nav-bar></app-nav-bar>
+<div class="cliente-container">
+  <div class="dashboard-content">
+    <h1 class="dashboard-title">Meus Totens</h1>
+
+    <div
+      *ngIf="statusMessage"
+      class="status-message"
+      [ngClass]="{ error: statusMessage.includes('Erro'), success: !statusMessage.includes('Erro') }"
+      aria-live="polite"
+    >
+      {{ statusMessage }}
+    </div>
+
+    <div *ngIf="loading" class="loading-container">
+      <p>Carregando dados dos totens...</p>
+    </div>
+
+    <div *ngIf="!loading">
+      <div *ngIf="totems.length === 0; else totensList">
+        <p class="no-totens-message">Nenhum totem encontrado.</p>
+      </div>
+
+      <ng-template #totensList>
+        <div class="totens-list">
+          <div *ngFor="let totem of totems" class="totem-card">
+            <ng-container *ngIf="editingTotem && editingTotem._id === totem._id; else viewMode">
+              <input
+                class="c-Area"
+                type="text"
+                [(ngModel)]="editingTotem.title"
+                placeholder="Título do Totem"
+              />
+              <input
+                class="c-Area"
+                [(ngModel)]="editingTotem.description"
+                placeholder="Descrição do Totem"
+              />
+              <button class="btn success" (click)="handleSaveChanges()">Atualizar</button>
+              <button class="btn secondary" (click)="editingTotem = null">Cancelar</button>
+            </ng-container>
+
+            <ng-template #viewMode>
+              <h3>{{ totem.title }}</h3>
+              <p>{{ totem.description }}</p>
+              <p><strong>Endereço:</strong> {{ totem.address }}</p>
+              <p>
+                <a [routerLink]="['/totem', totem._id]" target="_blank">Ver Totem</a>
+              </p>
+              <button class="btn primary" (click)="handleStartEditing(totem)">Editar</button>
+            </ng-template>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
