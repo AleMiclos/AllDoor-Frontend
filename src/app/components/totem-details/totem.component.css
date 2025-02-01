@@ -1,45 +1,58 @@
-/* A principal mudança é garantir que o .main-container ocupe 100vh */
+/* O container principal ocupa 100% da tela */
 .main-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 100vh;  /* Ocupa toda a altura da tela */
+  height: 100vh;
   overflow: hidden;
   background-color: black;
-  rotate: 90deg;
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
-/* O vídeo ocupará 75% da altura do main-container */
-.video-container {
+.video-iframe{
   width: 100%;
-  height: 75%;  /* 75% da altura */
-}
-
-.video-container iframe {
-  width: 100%;
-  height: 100%;  /* Preenche a área do container */
+  height: 100%;
   border: none;
 }
 
-/* O conteúdo ocupará 25% da altura do main-container */
-.content {
-  width: 100%;
-  height: 20%;  /* 25% da altura */
+/* O container do vídeo também ocupa toda a tela */
+.video-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  box-sizing: border-box;
-  overflow-y: auto;
-
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  transform: rotate(90deg);
 }
 
-.content h2, .content p {
-  color: white;
+/* O iframe do vídeo */
+.video-container iframe {
+  border: none;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Se o monitor estiver na vertical (portrait) */
+@media (orientation: portrait) {
+  .video-container iframe {
+    width: 100vh;  /* Inverte largura e altura */
+    height: 100vw;
+    transform: rotate(90deg); /* Rotaciona o vídeo para deixá-lo deitado */
+    transform-origin: center center;
+  }
+}
+
+/* Se o monitor estiver na horizontal (landscape) */
+@media (orientation: landscape) {
+  .video-container iframe {
+    width: 100vw;
+    height: 56.25vw; /* Mantém a proporção 16:9 */
+    max-height: 100vh;
+  }
 }

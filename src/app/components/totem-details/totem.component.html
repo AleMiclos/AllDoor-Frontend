@@ -4,12 +4,11 @@
       <iframe
         *ngIf="totem.videoUrl"
         [src]="getSafeVideoUrl(totem.videoUrl)"
-        width="640"
-        height="360"
         frameborder="0"
         allow="autoplay; fullscreen; picture-in-picture"
         allowfullscreen
         title="Vídeo do Totem"
+        class="video-iframe"
       ></iframe>
     </div>
     <div class="content">
@@ -19,6 +18,6 @@
   </ng-container>
 
   <ng-template #notFound>
-    <p>Totem não encontrado.</p>
+    <p>Vídeo indisponível</p>
   </ng-template>
 </div>
