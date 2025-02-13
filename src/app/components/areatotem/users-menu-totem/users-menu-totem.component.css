@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Poppins:wght@400;500&display=swap');
+
+* {
+    font-family: "Poppins", serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.users-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.users-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.users-menu button.toggle-btn {
+    background-color: seagreen;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.users-menu button.toggle-btn i {
+    margin-right: 10px;
+}
+
+.users-menu ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.users-menu ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    text-align: center;
+}
+
+.users-menu ul li.selected {
+    background-color: #e0ffe0;
+}
+
+.users-menu ul p {
+    text-align: center;
+    color: #888;
+}
+
+.totem-list-container {
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.totem-list-container h3 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+    .users-menu {
+        padding: 10px;
+    }
+
+    .totem-list-container {
+        padding: 10px;
+    }
+}

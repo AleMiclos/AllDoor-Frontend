@@ -1,7 +1,7 @@
 <app-nav-bar></app-nav-bar>
 <div class="cliente-container">
   <div class="dashboard-content">
-    <h1 class="dashboard-title">Meus Totens</h1>
+    <h1 class="dashboard-title">Meus Serviços</h1>
 
     <div
       *ngIf="statusMessage"
@@ -13,18 +13,21 @@
     </div>
 
     <div *ngIf="loading" class="loading-container">
-      <p>Carregando dados dos totens...</p>
+      <p>Carregando dados...</p>
     </div>
 
     <div *ngIf="!loading">
-      <div *ngIf="totems.length === 0; else totensList">
-        <p class="no-totens-message">Nenhum totem encontrado.</p>
+      <!-- Caso não tenha nenhum totem e nenhuma TV -->
+      <div *ngIf="totems.length === 0 && tvs.length === 0">
+        <p class="no-totens-message">Nenhum Totem ou TV encontrado.</p>
       </div>
 
-      <ng-template #totensList>
+      <!-- Caso tenha apenas Totens -->
+      <div *ngIf="totems.length > 0">
+        <h2 class="section-title">Meus Totens</h2>
         <div class="totens-list">
           <div *ngFor="let totem of totems" class="totem-card">
-            <ng-container *ngIf="editingTotem && editingTotem._id === totem._id; else viewMode">
+            <ng-container *ngIf="editingTotem && editingTotem._id === totem._id; else viewModeTotem">
               <input
                 class="c-Area"
                 type="text"
@@ -40,7 +43,7 @@
               <button class="btn secondary" (click)="editingTotem = null">Cancelar</button>
             </ng-container>
 
-            <ng-template #viewMode>
+            <ng-template #viewModeTotem>
               <h3>{{ totem.title }}</h3>
               <p>{{ totem.description }}</p>
               <p><strong>Endereço:</strong> {{ totem.address }}</p>
@@ -51,7 +54,41 @@
             </ng-template>
           </div>
         </div>
-      </ng-template>
+      </div>
+
+      <!-- Caso tenha apenas TVs -->
+      <div *ngIf="tvs.length > 0">
+        <h2 class="section-title">Minhas TVs</h2>
+        <div class="totens-list">
+          <div *ngFor="let tv of tvs" class="totem-card">
+            <ng-container *ngIf="editingTotem && editingTotem._id === tv._id; else viewModeTv">
+              <input
+                class="c-Area"
+                type="text"
+                [(ngModel)]="editingTotem.title"
+                placeholder="Título da TV"
+              />
+              <input
+                class="c-Area"
+                [(ngModel)]="editingTotem.description"
+                placeholder="Descrição da TV"
+              />
+              <button class="btn success" (click)="handleSaveChanges()">Atualizar</button>
+              <button class="btn secondary" (click)="editingTotem = null">Cancelar</button>
+            </ng-container>
+
+            <ng-template #viewModeTv>
+              <h3>{{ tv.title }}</h3>
+              <p>{{ tv.description }}</p>
+              <p><strong>Endereço:</strong> {{ tv.address }}</p>
+              <p>
+                <a [routerLink]="['/tv', tv._id]" target="_blank">Ver TV</a>
+              </p>
+              <button class="btn primary" (click)="handleStartEditing(tv)">Editar</button>
+            </ng-template>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -6,7 +6,7 @@ import { Observable, catchError, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class TotemService {
-  private apiUrl = 'https://outdoor-backend.onrender.com/totems'; // URL base da API
+  private apiUrl = 'http://localhost:5000/totems'; // URL base da API
 
   constructor(private http: HttpClient) {}
 

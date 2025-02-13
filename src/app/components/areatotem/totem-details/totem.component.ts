@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { TotemService } from '../../services/totem.service'; // Importe o serviço
+import { TotemService } from '../../../services/totem.service'; // Importe o serviço
 import { ActivatedRoute } from '@angular/router'; // Importe ActivatedRoute para acessar parâmetros de rota
 import { CommonModule } from '@angular/common'; // Importe o CommonModule
 

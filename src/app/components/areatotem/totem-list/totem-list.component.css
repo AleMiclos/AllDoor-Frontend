@@ -1,11 +1,11 @@
 
 
 .totem-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center; /* Centraliza o conteúdo */
   padding: 10px;
+
 }
 
 .totem-form {
@@ -82,6 +82,8 @@
   overflow-y: auto;
   padding-bottom: 26px;
   padding-top: 20px;
+  margin-bottom: auto;
+
 }
 
 .totem-item {

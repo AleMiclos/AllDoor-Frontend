@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
-import { TotemDetailsComponent } from './components/totem-details/totem.component';
+import { TotemDetailsComponent } from './components/areatotem/totem-details/totem.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component'; // Standalone component
 
 @NgModule({
@@ -22,7 +22,7 @@ import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard
     AppComponent,
     LoginComponent,
     TotemDetailsComponent,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   providers: [],
 })

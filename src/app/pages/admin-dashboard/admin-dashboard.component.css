@@ -1,43 +1,103 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .admin {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: 100%;
+  justify-content: space-between;
 }
 
 .admin-dashboard {
   flex: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  padding-top: 100px; /* Ajuste conforme a altura real da navbar */
-}
-
-
-.layout-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  max-height: calc(100vh - 80px - 60px); /* Ajuste conforme necessário */
+  padding-top: 100px; /* Ajuste conforme a altura real da navbar */
+  height: 100vh;
+}
+
+.view-options {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.view-options button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background 0.3s;
+}
+
+.view-options button:hover {
+  background-color: #0056b3;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  margin-bottom: auto;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: darkred;
+}
+
+.layout-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.totem-list-container {
+  width: 100%;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .footer {
   width: 100%;
-  background-color: #333;
   color: white;
   text-align: center;
-  padding: 10px 0;
-  margin-top: auto; /* Faz com que o footer fique sempre na parte inferior */
+  padding: 0;
+  position: relative;
+  bottom: 0;
+  margin-top: 35px;
 }
-
-
-
 
 @media screen and (max-width: 768px) {
   .admin-dashboard {
-    display: flex;
     flex-direction: column;
   }
 

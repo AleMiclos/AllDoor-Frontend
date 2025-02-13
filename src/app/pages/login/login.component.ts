@@ -16,12 +16,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   imports: [CommonModule, FormsModule, FontAwesomeModule ,HttpClientModule],
 })
 export class LoginComponent {
-  faArrowLeft = faArrowLeft
+  faArrowLeft = faArrowLeft;
   isRegistering = false; // 🔄 Alternar entre login e registro
   email = '';
   password = '';
   name = '';
-  role = 'cliente'; // Definir valor padrão
+  role = 'user'; // Corrigido para um valor válido de role
   error = '';
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -29,6 +29,7 @@ export class LoginComponent {
   goBack(): void {
     this.router.navigate(['/']); // Redireciona para a página inicial (home)
   }
+
   // 🔹 Chamada real para login
   handleLogin() {
     if (!this.email || !this.password) {

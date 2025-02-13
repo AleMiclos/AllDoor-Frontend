@@ -1,0 +1,22 @@
+<div class="container">
+  <h2>Gerenciar TVs do Usuário</h2>
+
+  <div class="tv-form">
+    <input [(ngModel)]="newTv.youtubeLink" placeholder="YouTube Link">
+    <input [(ngModel)]="newTv.vimeoLink" placeholder="Vimeo Link">
+    <input [(ngModel)]="newTv.address" placeholder="Endereço">
+    <button (click)="addTv()">Adicionar TV</button>
+  </div>
+
+  <div class="tv-cards">
+    <div *ngFor="let tv of tvs" class="tv-card">
+      <h3>Endereço: {{ tv.address }}</h3>
+      <p>YouTube: {{ tv.youtubeLink }}</p>
+      <p>Vimeo: {{ tv.vimeoLink }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+</div>

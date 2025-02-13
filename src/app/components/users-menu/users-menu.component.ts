@@ -1,52 +1,76 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { TotemListComponent } from '../totem-list/totem-list.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users-menu',
   templateUrl: './users-menu.component.html',
   styleUrls: ['./users-menu.component.css'],
-  standalone: true,
-  imports: [CommonModule, TotemListComponent]
+  imports: [CommonModule, FormsModule],
 })
 export class UsersMenuComponent implements OnInit {
   users: any[] = [];
-  selectedUser: any = null;
-  clienteSelecionadoId: string = '';
-  isSidebarOpen = true;
-
-  @Output() selectUser = new EventEmitter<string>();
+  selectedUser = { _id: '', name: '', email: '', role: '', permissions: { totens: false, tvs: false } };
+  isEditing: boolean = false;
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.fetchUsers();
   }
 
-  fetchUsers(): void {
-    this.http.get<any[]>('https://outdoor-backend.onrender.com/users').subscribe(
-      (response) => {
-        this.users = response;
+  getAuthHeaders() {
+    const token = localStorage.getItem('token'); // Pegando o token salvo
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
+  fetchUsers() {
+    this.http.get<any[]>('http://localhost:5000/users', { headers: this.getAuthHeaders() }).subscribe(
+      (data) => {
+        this.users = data.filter(user => user.role !== 'admin');
       },
       (error) => {
-        console.error('Erro ao buscar usuários:', error);
+        console.error("Erro ao buscar usuários:", error);
+        alert("Erro ao buscar usuários. Verifique sua autenticação.");
       }
     );
   }
 
-  handleUserClick(user: any): void {
-    this.selectedUser = user === this.selectedUser ? null : user;
-    if (this.selectedUser) {
-      this.clienteSelecionadoId = this.selectedUser._id;
-      this.selectUser.emit(this.selectedUser._id);
-    } else {
-      this.clienteSelecionadoId = '';
-      this.selectUser.emit('');
-    }
+  editUser(user: any) {
+    this.selectedUser = { ...user };
+    this.isEditing = true;
   }
 
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
+  closeEdit() {
+    this.isEditing = false;
+  }
+
+  submitForm() {
+    this.http.put(`http://localhost:5000/users/${this.selectedUser._id}`, this.selectedUser, { headers: this.getAuthHeaders() })
+      .subscribe(
+        () => {
+          alert('Usuário atualizado com sucesso!');
+          this.fetchUsers();
+          this.isEditing = false;
+        },
+        (error) => {
+          console.error("Erro ao atualizar usuário:", error);
+          alert("Erro ao atualizar usuário. Verifique sua autenticação.");
+        }
+      );
+  }
+
+  deleteUser(userId: string) {
+    if (confirm('Tem certeza que deseja deletar este usuário?')) {
+      this.http.delete(`http://localhost:5000/users/${userId}`, { headers: this.getAuthHeaders() })
+        .subscribe(
+          () => this.fetchUsers(),
+          (error) => {
+            console.error("Erro ao deletar usuário:", error);
+            alert("Erro ao deletar usuário. Verifique sua autenticação.");
+          }
+        );
+    }
   }
 }
