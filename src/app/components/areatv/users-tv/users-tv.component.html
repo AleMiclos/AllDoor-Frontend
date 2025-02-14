@@ -1,13 +1,12 @@
-<div *ngIf="loading">Carregando...</div>
+<div *ngIf="loading">Carregando usuários...</div>
 <div *ngIf="errorMessage">{{ errorMessage }}</div>
-<div *ngIf="!loading && !errorMessage">
-  <h2>TVs</h2>
-  <ul>
-    <li *ngFor="let tv of tvs">
-      <span>{{ tv.name }}</span>
-      <button (click)="openTvDetails(tv._id)">Ver Detalhes</button>
-      <button (click)="updateTv(tv._id, { name: 'Novo Nome' })">Atualizar</button>
-      <button (click)="deleteTv(tv._id)">Deletar</button>
-    </li>
-  </ul>
-</div>
+
+<ul *ngIf="!loading && users.length > 0">
+  <li *ngFor="let user of users" class="user-item">
+    <h3>👤 {{ user.name }}</h3>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <button (click)="openUserTvs(user._id)">📺 Ver TVs</button>
+  </li>
+</ul>
+
+<p *ngIf="!loading && users.length === 0">Nenhum usuário com permissão para TV encontrado.</p>

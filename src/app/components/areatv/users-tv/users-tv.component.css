@@ -1,0 +1,16 @@
+.ativo {
+  color: green;
+  font-weight: bold;
+}
+
+.inativo {
+  color: red;
+  font-weight: bold;
+}
+
+.tv-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}

@@ -1,32 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersTvService {
-  private apiUrl = 'http://localhost:5000/users';
+  private apiUrl = 'http://localhost:5000'; // Sem `/api` pois não existe no backend
 
   constructor(private http: HttpClient) {}
 
-  getTvs(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/tv`);
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
   }
 
-  getTvsByUser(tvId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/tv/${tvId}`);
+  // 🔹 Buscar usuários com permissão para TV
+  getUsersWithTvPermission(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/users/tv`, { headers: this.getHeaders() });
   }
 
-  addTv(tvData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/tv`, tvData);
+  // 🔹 Buscar TVs atribuídas a um usuário específico
+  getTvsByUser(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user/${userId}/tvs`, { headers: this.getHeaders() });
   }
 
-  updateTv(tvId: string, tvData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/tv/${tvId}`, tvData);
-  }
-
-  deleteTv(tvId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/tv/${tvId}`);
+  // 🔹 Atualizar permissões do usuário (admin)
+  updateUserPermissions(userId: string, permissions: { tvs: boolean, totens: boolean }): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/permissions/${userId}`, permissions, { headers: this.getHeaders() });
   }
 }
