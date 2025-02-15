@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class UsersTvService {
       'Content-Type': 'application/json'
     });
   }
+
 
   // 🔹 Buscar usuários com permissão para TV
   getUsersWithTvPermission(): Observable<any[]> {

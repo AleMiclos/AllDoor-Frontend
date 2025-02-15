@@ -1,13 +1,62 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { TvsService } from '../../../services/tvs.service';
 
 @Component({
   selector: 'app-tv-view',
   templateUrl: './tv-view.component.html',
   styleUrls: ['./tv-view.component.css']
 })
-export class TvViewComponent {
-  @Input() youtubeLink!: string;
-  @Input() vimeoLink!: string;
+export class TvViewComponent implements OnInit {
+  @Input() tvId!: string; // Adicionado @Input para tvId
+  userId!: string;
+  youtubeLink: string = '';
+  vimeoLink: string = '';
+  safeYoutubeUrl!: SafeResourceUrl;
+  safeVimeoUrl!: SafeResourceUrl;
+
+  constructor(
+    private route: ActivatedRoute,
+    private tvsService: TvsService,
+    private sanitizer: DomSanitizer
+  ) {}
+
+  ngOnInit(): void {
+    // Se o tvId for passado como @Input, carregue os links diretamente
+    if (this.tvId) {
+      this.loadTvLinks();
+    } else {
+      // Caso contrário, obtenha o tvId da rota
+      this.route.params.subscribe(params => {
+        this.userId = params['userId'];
+        this.tvId = params['tvId'];
+
+        if (this.tvId) {
+          this.loadTvLinks();
+        }
+      });
+    }
+  }
+
+  // Carrega as informações da TV
+  loadTvLinks(): void {
+    this.tvsService.getTvLinks(this.tvId).subscribe((tv) => {
+      if (tv) {
+        this.youtubeLink = tv.youtubeLink;
+        this.vimeoLink = tv.vimeoLink;
+
+        // Fazendo a sanitização dos links
+        this.safeYoutubeUrl = this.getSafeVideoUrl(this.youtubeLink);
+        this.safeVimeoUrl = this.getSafeVideoUrl(this.vimeoLink);
+      }
+    });
+  }
+
+  // Função para garantir que o link do vídeo seja seguro
+  getSafeVideoUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
 
   toggleFullscreen(): void {
     const elem = document.getElementById('screenContainer');

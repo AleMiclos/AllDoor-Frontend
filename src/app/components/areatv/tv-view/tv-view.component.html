@@ -1,7 +1,7 @@
 <div class="container" id="screenContainer">
   <div class="tv">
     <iframe
-      src="https://www.youtube.com/embed/kQj2KZHrjzc?si=_W6P-tLediA3xdrk"
+      [src]="safeYoutubeUrl"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -11,7 +11,7 @@
   </div>
   <div class="ad">
     <iframe
-      src="https://player.vimeo.com/video/1047889050?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+      [src]="safeVimeoUrl"
       width="1080"
       height="1920"
       frameborder="0"

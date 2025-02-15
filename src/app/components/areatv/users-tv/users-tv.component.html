@@ -1,12 +1,25 @@
 <div *ngIf="loading">Carregando usuários...</div>
-<div *ngIf="errorMessage">{{ errorMessage }}</div>
 
-<ul *ngIf="!loading && users.length > 0">
-  <li *ngFor="let user of users" class="user-item">
-    <h3>👤 {{ user.name }}</h3>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <button (click)="openUserTvs(user._id)">📺 Ver TVs</button>
-  </li>
-</ul>
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
 
-<p *ngIf="!loading && users.length === 0">Nenhum usuário com permissão para TV encontrado.</p>
+<div *ngIf="!loading && !errorMessage">
+  <h2>Usuários com Permissão de TV</h2>
+
+  <ul class="user-list">
+    <li *ngFor="let user of users">
+      <div>
+        <span>{{ user.name }}</span>
+        <button (click)="openUserTvs(user._id)">
+          {{ showUserTvs[user._id] ? 'Esconder TVs' : 'Abrir TVs' }}
+        </button>
+      </div>
+
+      <!-- Mostrar o componente tvsComponent se showUserTvs for true -->
+      <div *ngIf="showUserTvs[user._id]" class="tvs">
+        <app-tvs [userId]="user._id"></app-tvs>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -1,22 +1,64 @@
-<div class="container">
-  <h2>Gerenciar TVs do Usuário</h2>
+<div *ngIf="loading">Carregando TVs...</div>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-  <div class="tv-form">
-    <input [(ngModel)]="newTv.youtubeLink" placeholder="YouTube Link">
-    <input [(ngModel)]="newTv.vimeoLink" placeholder="Vimeo Link">
-    <input [(ngModel)]="newTv.address" placeholder="Endereço">
-    <button (click)="addTv()">Adicionar TV</button>
-  </div>
+<!-- Botão para adicionar TV -->
+<button class="add-tv-button" (click)="showAddForm()">+ Adicionar TV</button>
 
-  <div class="tv-cards">
-    <div *ngFor="let tv of tvs" class="tv-card">
-      <h3>Endereço: {{ tv.address }}</h3>
-      <p>YouTube: {{ tv.youtubeLink }}</p>
-      <p>Vimeo: {{ tv.vimeoLink }}</p>
+<!-- Lista de TVs em cards -->
+<div *ngIf="!loading && tvs.length" class="tv-list">
+  <div *ngFor="let tv of tvs" class="tv-card">
+    <div class="tv-details">
+      <h3>TV #{{ tv.id }}</h3>
+      <p><strong>YouTube:</strong> {{ tv.youtubeLink || "N/A" }}</p>
+      <p><strong>Vimeo:</strong> {{ tv.vimeoLink || "N/A" }}</p>
+      <p><strong>Endereço:</strong> {{ tv.address }}</p>
+    </div>
+    <div class="tv-actions">
+      <button (click)="editTv(tv)">Editar</button>
+      <button (click)="deleteTv(tv.id)">Excluir</button>
+      <button (click)="viewTv(tv.id)">Visualizar</button> <!-- Alterado para chamar viewTv -->
     </div>
   </div>
+</div>
 
-  <div *ngIf="errorMessage" class="error">
-    {{ errorMessage }}
+<!-- Mensagem caso não haja TVs -->
+<p *ngIf="!loading && tvs.length === 0" class="no-tvs-message">
+  Nenhuma TV encontrada para este usuário.
+</p>
+
+<!-- Modal para adicionar/editar TV -->
+<div *ngIf="showAddTvForm" class="modal-overlay">
+  <div class="modal">
+    <h2>{{ tvToEdit ? "Editar TV" : "Adicionar TV" }}</h2>
+    <form (ngSubmit)="saveTv()">
+      <div class="form-group">
+        <label for="youtubeLink">Link do YouTube:</label>
+        <input
+          id="youtubeLink"
+          [(ngModel)]="newTv.youtubeLink"
+          name="youtubeLink"
+        />
+      </div>
+      <div class="form-group">
+        <label for="vimeoLink">Link do Vimeo:</label>
+        <input id="vimeoLink" [(ngModel)]="newTv.vimeoLink" name="vimeoLink" />
+      </div>
+      <div class="form-group">
+        <label for="address">Endereço:</label>
+        <input
+          id="address"
+          [(ngModel)]="newTv.address"
+          name="address"
+          required
+        />
+      </div>
+      <div class="form-actions">
+        <button type="submit">Salvar</button>
+        <button type="button" (click)="resetForm()">Cancelar</button>
+      </div>
+    </form>
   </div>
 </div>
+
+<!-- Componente de Visualização de TV -->
+<app-tv-view *ngIf="selectedTvId" [tvId]="selectedTvId"></app-tv-view>
