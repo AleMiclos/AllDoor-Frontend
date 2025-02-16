@@ -19,7 +19,7 @@ export const appRoutes: Routes = [
   { path: 'usuario', component: UsuarioComponent },
   { path: 'users-tv', component: UsersTvComponent },
   { path: 'tvs/:id', component: TvsComponent },
-  { path: 'tv-view/:userId/:tvId', component: TvViewComponent },
+  { path: 'view-tv/:id', component: TvViewComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Redireciona rotas não encontradas para a raiz
 ];
 

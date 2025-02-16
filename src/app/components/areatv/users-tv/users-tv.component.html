@@ -16,7 +16,6 @@
         </button>
       </div>
 
-      <!-- Mostrar o componente tvsComponent se showUserTvs for true -->
       <div *ngIf="showUserTvs[user._id]" class="tvs">
         <app-tvs [userId]="user._id"></app-tvs>
       </div>

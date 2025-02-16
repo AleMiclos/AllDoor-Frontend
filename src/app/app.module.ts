@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { appRoutes, AppRoutingModule } from './app-routing/app-routing.module';
@@ -10,6 +10,8 @@ import { TotemDetailsComponent } from './components/areatotem/totem-details/tote
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { TvsComponent } from './components/areatv/tvs/tvs.component';
 import { RouterModule } from '@angular/router';
+import { UsersTvComponent } from './components/areatv/users-tv/users-tv.component';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -26,10 +28,13 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     AppRoutingModule, // Já contém o RouterModule com as rotas
     FormsModule,
+    CommonModule,
     FontAwesomeModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    UsersTvComponent
   ],
   providers: [],
-  bootstrap: [] // Certifique-se de definir o componente principal
+  bootstrap: [], // Certifique-se de definir o componente principal
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

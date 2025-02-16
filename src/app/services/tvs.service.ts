@@ -1,48 +1,61 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, catchError, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TvsService {
-  private apiUrl = 'http://localhost:5000'; // Ajuste a URL conforme necessário
+  private apiUrl = 'http://localhost:5000'; // Altere conforme necessário
 
   constructor(private http: HttpClient) {}
 
-  // Buscar todas as TVs
-  getTvs(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/tv`); // Rota para buscar todas as TVs
-  }
-
-  // Buscar TVs por usuário
   getTvsByUserId(userId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/tv/${userId}`).pipe(
-      catchError((error) => {
+    return this.http.get<any[]>(`${this.apiUrl}/tv/user/${userId}`).pipe(
+      catchError(error => {
         console.error('Erro ao buscar TVs:', error);
-        return of([]); // Retorna uma lista vazia em caso de erro
+        return of([]);
       })
     );
   }
 
-  // Função para buscar TV específica pelo ID
+  getTvById(tvId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/tv/${tvId}`);
+  }
   getTvLinks(tvId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/tv/${tvId}`); // Rota para buscar uma TV específica
+    return this.http.get<any>(`${this.apiUrl}/tv/${tvId}/links`).pipe(
+      catchError(error => {
+        console.error('Erro ao buscar links da TV:', error);
+        return of(null);
+      })
+    );
   }
 
-  // Adicionar uma nova TV
-  addTv(tv: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/tv`, tv); // Rota para adicionar uma nova TV
+
+  createTv(tvData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/tv`, tvData).pipe(
+      catchError(error => {
+        console.error('Erro ao criar TV:', error);
+        return of(null);
+      })
+    );
   }
 
-  // Atualizar TV
-  updateTv(tvId: string, tv: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/tv/${tvId}`, tv); // Rota para atualizar uma TV
+  updateTv(tvId: string, tvData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/tv/${tvId}`, tvData).pipe(
+      catchError(error => {
+        console.error('Erro ao atualizar TV:', error);
+        return of(null);
+      })
+    );
   }
 
-  // Excluir TV
   deleteTv(tvId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/tv/${tvId}`); // Rota para excluir uma TV
+    return this.http.delete(`${this.apiUrl}/tv/${tvId}`).pipe(
+      catchError(error => {
+        console.error('Erro ao deletar TV:', error);
+        return of(null);
+      })
+    );
   }
 }

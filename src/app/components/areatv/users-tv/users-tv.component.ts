@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UsersTvService } from '../../../services/users-tv.service';
-import { TvsService } from '../../../services/tvs.service'; // Serviço para buscar TVs
+import { TvsService } from '../../../services/tvs.service';
 import { CommonModule } from '@angular/common';
-import { TvsComponent } from '../tvs/tvs.component';
+import { TvsComponent } from "../tvs/tvs.component";
 
 @Component({
   selector: 'app-users-tv',
@@ -11,22 +11,22 @@ import { TvsComponent } from '../tvs/tvs.component';
   imports: [CommonModule, TvsComponent]
 })
 export class UsersTvComponent implements OnInit {
-  users: any[] = []; // Lista de usuários
-  loading = true; // Estado de carregamento
-  errorMessage = ''; // Mensagem de erro
-  userTvs: { [key: string]: any[] } = {}; // TVs de cada usuário (armazenadas por userId)
-  showUserTvs: { [key: string]: boolean } = {}; // Controle de exibição das TVs por usuário
+  @Input() userId: string | undefined;
+  loading = true;
+  errorMessage = '';
+  users: any[] = []; // Propriedade users adicionada
+  userTvs: { [key: string]: any[] } = {};
+  showUserTvs: { [key: string]: boolean } = {};
 
   constructor(
     private usersTvService: UsersTvService,
-    private tvsService: TvsService // Serviço de TVs
+    private tvsService: TvsService
   ) {}
 
   ngOnInit(): void {
     this.fetchUsers();
   }
 
-  // Método para carregar os usuários com permissão de TV
   fetchUsers(): void {
     this.usersTvService.getUsersWithTvPermission().subscribe({
       next: (data) => {
@@ -40,23 +40,19 @@ export class UsersTvComponent implements OnInit {
     });
   }
 
-  // Método para abrir/fechar as TVs do usuário selecionado
   openUserTvs(userId: string): void {
-    // Alterna a visibilidade das TVs para o usuário selecionado
     this.showUserTvs[userId] = !this.showUserTvs[userId];
 
-    // Se as TVs estão sendo mostradas, carrega as TVs do usuário
     if (this.showUserTvs[userId]) {
       this.tvsService.getTvsByUserId(userId).subscribe({
         next: (data) => {
-          this.userTvs[userId] = data; // Armazena as TVs do usuário
+          this.userTvs[userId] = data;
         },
         error: () => {
           this.errorMessage = "Erro ao carregar TVs do usuário";
         }
       });
     } else {
-      // Se as TVs estão sendo escondidas, limpa a lista de TVs do usuário
       this.userTvs[userId] = [];
     }
   }

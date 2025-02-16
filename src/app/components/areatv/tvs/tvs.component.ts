@@ -1,129 +1,117 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { TvsService } from '../../../services/tvs.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { TvViewComponent } from '../tv-view/tv-view.component';
 
 @Component({
   selector: 'app-tvs',
   templateUrl: './tvs.component.html',
   styleUrls: ['./tvs.component.css'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, TvViewComponent], // Importe o TvViewComponent aqui
+  imports: [CommonModule, FormsModule, TvViewComponent]
 })
 export class TvsComponent implements OnInit {
-  @Input() userId: string = '';
+
   tvs: any[] = [];
-  newTv = {
-    youtubeLink: '',
-    vimeoLink: '',
-    address: '',
-    user: ''
-  };
-  loading = true;
+  loading = false;
   errorMessage = '';
   showAddTvForm = false;
+  newTv: any = { youtubeLink: '', vimeoLink: '', address: '' };
   tvToEdit: any = null;
-  selectedTvId: string | null = null; // ID da TV selecionada para visualização
+  selectedTvId: string | null = null;
+  @Input() userId: string | undefined;
+tvToView: any;
+  constructor(private tvsService: TvsService, private router: Router) {}
 
-  constructor(private router: Router, private tvsService: TvsService) {}
+  ngOnInit() {
+    this.fetchTvs();
+  }
 
-  ngOnInit(): void {
+  fetchTvs() {
     if (this.userId) {
-      this.fetchTvs();
+      this.loading = true;
+      this.tvsService.getTvsByUserId(this.userId).subscribe({
+        next: (data: any[]) => {
+          this.tvs = data;
+          this.loading = false;
+        },
+        error: (err: any) => {
+          this.errorMessage = 'Erro ao carregar TVs.';
+          console.error(err);
+          this.loading = false;
+        }
+      });
+    } else {
+      console.error('userId não está definido.');
     }
   }
 
-  fetchTvs(): void {
-    this.loading = true;
-    this.tvsService.getTvsByUserId(this.userId).subscribe({
-      next: (data) => {
-        this.tvs = data;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar TVs:', error);
-        this.errorMessage = 'Erro ao buscar TVs';
-        this.loading = false;
-      }
-    });
-  }
-
-  showAddForm(): void {
+  showAddForm() {
     this.showAddTvForm = true;
+    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
     this.tvToEdit = null;
-    this.newTv = { youtubeLink: '', vimeoLink: '', address: '', user: this.userId };
   }
 
-  editTv(tv: any): void {
-    this.tvToEdit = { ...tv };
+  editTv(tv: any) {
+    this.tvToEdit = tv;
     this.newTv = { ...tv };
     this.showAddTvForm = true;
   }
 
-  saveTv(): void {
-    this.errorMessage = '';
-
-    if (!this.newTv.address.trim()) {
-      this.errorMessage = 'O endereço é obrigatório!';
-      return;
-    }
-    if (!this.userId) {
-      this.errorMessage = 'Erro: ID do usuário não encontrado.';
-      return;
-    }
-
-    this.newTv.user = this.userId;
-
+  saveTv() {
     if (this.tvToEdit) {
-      this.tvsService.updateTv(this.tvToEdit.id, this.newTv).subscribe({
-        next: (updatedTv) => {
-          const index = this.tvs.findIndex(tv => tv.id === updatedTv.id);
-          if (index !== -1) {
-            this.tvs[index] = updatedTv;
-          }
+      // Editar TV
+      this.tvsService.updateTv(this.tvToEdit._id, this.newTv).subscribe({
+        next: () => {
+          this.fetchTvs();
           this.resetForm();
         },
-        error: (error) => {
-          console.error('Erro ao editar TV:', error.error || error.message);
-          this.errorMessage = 'Erro ao editar TV';
+        error: (err: any) => {
+          this.errorMessage = err.error.message || 'Erro ao atualizar TV.';
+          console.error(err);
         }
       });
     } else {
-      this.tvsService.addTv(this.newTv).subscribe({
-        next: (tv: any) => {
-          this.tvs.push(tv);
-          this.resetForm();
+      // Criar nova TV
+      if (this.userId) {
+        this.newTv.user = this.userId;
+        this.tvsService.createTv(this.newTv).subscribe({
+          next: () => {
+            this.fetchTvs();
+            this.resetForm();
+          },
+          error: (err: any) => {
+            this.errorMessage = err.error.message || 'Erro ao criar TV.';
+            console.error(err);
+          }
+        });
+      } else {
+        console.error('userId não está definido.');
+      }
+    }
+  }
+
+  deleteTv(tvId: string) {
+    if (confirm('Tem certeza que deseja excluir esta TV?')) {
+      this.tvsService.deleteTv(tvId).subscribe({
+        next: () => {
+          this.fetchTvs();
         },
-        error: (error) => {
-          console.error('Erro ao adicionar TV:', error.error || error.message);
-          this.errorMessage = 'Erro ao adicionar TV';
+        error: (err) => {
+          console.error('Erro ao deletar TV:', err);
         }
       });
     }
   }
 
-  deleteTv(tvId: string): void {
-    this.tvsService.deleteTv(tvId).subscribe({
-      next: () => {
-        this.tvs = this.tvs.filter(tv => tv.id !== tvId);
-      },
-      error: (error) => {
-        console.error('Erro ao excluir TV:', error.error || error.message);
-        this.errorMessage = 'Erro ao excluir TV';
-      }
-    });
+  viewTv(tvId: string) {
+    this.router.navigate(['/view-tv', tvId]);
   }
 
-  resetForm(): void {
-    this.tvToEdit = null;
-    this.newTv = { youtubeLink: '', vimeoLink: '', address: '', user: this.userId };
+  resetForm() {
     this.showAddTvForm = false;
-  }
-
-  // Método para visualizar a TV
-  viewTv(tvId: string): void {
-    this.selectedTvId = tvId; // Define o ID da TV selecionada
+    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
+    this.tvToEdit = null;
   }
 }

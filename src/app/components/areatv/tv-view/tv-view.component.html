@@ -1,26 +1,28 @@
-<div class="container" id="screenContainer">
-  <div class="tv">
-    <iframe
-      [src]="safeYoutubeUrl"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen
-    ></iframe>
-  </div>
-  <div class="ad">
-    <iframe
-      [src]="safeVimeoUrl"
-      width="1080"
-      height="1920"
-      frameborder="0"
-      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-      title="Anuncio"
-    ></iframe>
+<div *ngIf="tv" class="container">
+  <!-- Div do anúncio (esquerda) -->
 
-    <button class="fullscreen-btn" (click)="toggleFullscreen()">
-      🔳 Tela Cheia
-    </button>
+    <div *ngIf="tv.vimeoLink" class="ad">
+      <iframe
+        [src]="sanitizeUrl(tv.vimeoLink)"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    <!-- <button class="fullscreen-btn" (click)="toggleFullscreen()">Tela Cheia</button> -->
+
   </div>
+
+  <!-- Div do vídeo (direita) -->
+    <!-- Exibir link do YouTube -->
+    <div *ngIf="tv.youtubeLink" class="tv">
+      <iframe
+        [src]="sanitizeUrl(tv.youtubeLink)"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+</div>
+
+<div *ngIf="!tv">
+  <p>Carregando dados da TV...</p>
 </div>

@@ -7,40 +7,26 @@ body {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background-color: antiquewhite;
+  background-color: rgb(0, 0, 0);
 }
 
 .tv {
-  background-color: black;
-  width: 50%;
+  background-color: rgb(0, 0, 0);
+  width: 70%;
   height: 100%;
-  display: flex;
   align-items: center;
   justify-content: center;
+  display: flex;
 }
 
 .tv iframe {
   width: 100%;
-  height: 50%;
-}
-
-.ad {
-  width: 50%;
-  height: 100%;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ad iframe {
-  width: 90%;
-  height: 90%;
+  height: 70%;
 }
 
 .fullscreen-btn {
   margin-top: 10px;
-  padding: 10px 20px;
+  padding: 10px;
   font-size: 16px;
   cursor: pointer;
   border: none;
@@ -51,4 +37,19 @@ body {
 
 .fullscreen-btn:hover {
   background-color: #e64a19;
+
+}
+
+.ad {
+  width: 32%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad iframe {
+  width: 100%;
+  height: 100%;
 }
