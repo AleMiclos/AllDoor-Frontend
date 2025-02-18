@@ -55,7 +55,7 @@ export class UsuarioComponent {
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     // Correção da URL
-    const apiUrl = `http://localhost:5000/services/${type}/`;
+    const apiUrl = `https://outdoor-backend.onrender.com/services/${type}/`;
 
     this.http.get<any[]>(apiUrl, { headers }).subscribe({
       next: (data) => {
@@ -89,7 +89,7 @@ export class UsuarioComponent {
     }
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    const apiUrl = `http://localhost:5000/${this.editingItem.type}/${this.editingItem._id}`;
+    const apiUrl = `https://outdoor-backend.onrender.com/${this.editingItem.type}/${this.editingItem._id}`;
 
     this.http.put(apiUrl, this.editingItem, { headers }).subscribe({
       next: () => {
