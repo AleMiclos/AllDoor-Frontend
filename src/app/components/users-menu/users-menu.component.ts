@@ -26,7 +26,7 @@ export class UsersMenuComponent implements OnInit {
   }
 
   fetchUsers() {
-    this.http.get<any[]>('http://localhost:5000/users', { headers: this.getAuthHeaders() }).subscribe(
+    this.http.get<any[]>('https://outdoor-backend.onrender.com/users', { headers: this.getAuthHeaders() }).subscribe(
       (data) => {
         this.users = data.filter(user => user.role !== 'admin');
       },
@@ -47,7 +47,7 @@ export class UsersMenuComponent implements OnInit {
   }
 
   submitForm() {
-    this.http.put(`http://localhost:5000/users/${this.selectedUser._id}`, this.selectedUser, { headers: this.getAuthHeaders() })
+    this.http.put(`https://outdoor-backend.onrender.com/users/${this.selectedUser._id}`, this.selectedUser, { headers: this.getAuthHeaders() })
       .subscribe(
         () => {
           alert('Usuário atualizado com sucesso!');
@@ -63,7 +63,7 @@ export class UsersMenuComponent implements OnInit {
 
   deleteUser(userId: string) {
     if (confirm('Tem certeza que deseja deletar este usuário?')) {
-      this.http.delete(`http://localhost:5000/users/${userId}`, { headers: this.getAuthHeaders() })
+      this.http.delete(`https://outdoor-backend.onrender.com/users/${userId}`, { headers: this.getAuthHeaders() })
         .subscribe(
           () => this.fetchUsers(),
           (error) => {
