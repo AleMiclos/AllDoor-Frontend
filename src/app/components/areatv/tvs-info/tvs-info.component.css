@@ -1,0 +1,32 @@
+.tv-info-container {
+  height: 25%;
+  margin-top: 0;
+  color: white;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info-header {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.info-carousel {
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.carousel-item {
+  animation: scroll 8s linear infinite;
+}
+
+@keyframes scroll {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}

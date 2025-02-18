@@ -3,7 +3,7 @@
 
     <div *ngIf="tv.vimeoLink" class="ad">
       <iframe
-        [src]="sanitizeUrl(tv.vimeoLink)"
+        [src]="sanitizeUrl(tv.vimeoLink + '?autoplay=1&loop=1&muted=1')"
         frameborder="0"
         allowfullscreen
       ></iframe>
@@ -15,10 +15,11 @@
     <!-- Exibir link do YouTube -->
     <div *ngIf="tv.youtubeLink" class="tv">
       <iframe
-        [src]="sanitizeUrl(tv.youtubeLink)"
+        [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=1&muted=1')"
         frameborder="0"
         allowfullscreen
       ></iframe>
+      <app-tvs-info></app-tvs-info>
     </div>
 
 </div>

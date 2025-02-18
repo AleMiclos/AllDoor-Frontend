@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TvsService } from '../../../services/tvs.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import {TvsInfoComponent } from '../tvs-info/tvs-info.component'
 
 @Component({
   selector: 'app-tv-view',
   templateUrl: './tv-view.component.html',
   styleUrls: ['./tv-view.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, TvsInfoComponent]
 })
 export class TvViewComponent implements OnInit {
-  tv: any;
+  @Input() tv: any;
   tvId: string | null = null;
 
   constructor(
