@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WeatherWidgetMainComponent } from "../../weather-widget-main/weather-widget-main.component";
+import { TradingviewTickerComponent } from "../../tradingview-ticker/tradingview-ticker.component";
 
 @Component({
   selector: 'app-tvs-info',
   templateUrl: './tvs-info.component.html',
   styleUrls: ['./tvs-info.component.css'],
-  imports: [CommonModule, WeatherWidgetMainComponent]
+  imports: [CommonModule, WeatherWidgetMainComponent, TradingviewTickerComponent]
 })
 export class TvsInfoComponent implements OnInit, OnDestroy {
   currentDateTime: string = 'Carregando...';
