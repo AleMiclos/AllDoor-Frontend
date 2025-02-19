@@ -1,20 +1,17 @@
 .tv-info-container {
   margin-top: 0;
   color: white;
-  padding: 16px;
   display: flex;
   flex-direction: column;
 }
 
 .info-header {
   text-align: center;
-  font-size: 18px;
-  margin-bottom: 16px;
 }
 
 .custom-font {
   font-family: 'Arial', sans-serif; /* Altere para a fonte desejada */
-  font-size: 32px; /* Altere para o tamanho desejado */
+  font-size: 30px; /* Altere para o tamanho desejado */
   color: white; /* Altere para a cor desejada */
   text-transform: uppercase;
 }
