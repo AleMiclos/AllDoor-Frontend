@@ -1,11 +1,9 @@
 .tv-info-container {
-  height: 25%;
   margin-top: 0;
   color: white;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .info-header {
@@ -26,8 +24,9 @@
   overflow: hidden;
   white-space: nowrap;
   display: flex;
-  justify-content: space-around;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  gap:20px;
 }
 
 .carousel-item {
