@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { UsersTvComponent } from './components/areatv/users-tv/users-tv.component';
 import { CommonModule } from '@angular/common';
 import { WeatherWidgetMainComponent } from './components/weather-widget-main/weather-widget-main.component';
+import { TradingviewTickerComponent } from './components/tradingview-ticker/tradingview-ticker.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { WeatherWidgetMainComponent } from './components/weather-widget-main/wea
     RouterModule.forRoot(appRoutes),
     UsersTvComponent,
     WeatherWidgetMainComponent,
+    TradingviewTickerComponent
   ],
   providers: [],
   bootstrap: [], // Certifique-se de definir o componente principal
