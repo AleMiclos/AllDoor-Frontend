@@ -6,7 +6,7 @@ import { Observable, catchError, of } from 'rxjs';
   providedIn: 'root'
 })
 export class TvsService {
-  private apiUrl = 'https://outdoor-backend.onrender.com'; // Altere conforme necessário
+  private apiUrl = 'http://localhost:5000'; // Altere conforme necessário
 
   constructor(private http: HttpClient) {}
 

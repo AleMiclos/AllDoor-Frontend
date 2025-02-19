@@ -1,11 +1,13 @@
 <div class="tv-info-container">
   <div class="info-header">
-    <h2>{{ currentDateTime }}</h2>
-    <!-- <p>{{ weatherInfo }}</p> -->
+    <h2 class="custom-font">{{ currentDateTime }}</h2>
   </div>
   <div class="info-carousel">
-    <div class="carousel-item" *ngFor="let item of carouselItems">
+    <!-- <div class="carousel-item" *ngFor="let item of carouselItems">
       {{ item }}
-    </div>
+    </div> -->
+
+    <app-weather-widget-main></app-weather-widget-main>
+
   </div>
 </div>

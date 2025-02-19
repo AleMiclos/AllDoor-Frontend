@@ -14,19 +14,27 @@
   margin-bottom: 16px;
 }
 
+.custom-font {
+  font-family: 'Arial', sans-serif; /* Altere para a fonte desejada */
+  font-size: 32px; /* Altere para o tamanho desejado */
+  color: white; /* Altere para a cor desejada */
+  text-transform: uppercase;
+}
+
+
 .info-carousel {
   overflow: hidden;
   white-space: nowrap;
   display: flex;
-  flex-direction: column;
+  justify-content: space-around;
   gap: 10px;
 }
 
 .carousel-item {
-  animation: scroll 8s linear infinite;
+  animation: scroll 4s linear infinite;
 }
 
 @keyframes scroll {
-  0% { transform: translateY(100%); }
-  100% { transform: translateY(-100%); }
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }

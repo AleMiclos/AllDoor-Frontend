@@ -12,6 +12,7 @@ import { TvsComponent } from './components/areatv/tvs/tvs.component';
 import { RouterModule } from '@angular/router';
 import { UsersTvComponent } from './components/areatv/users-tv/users-tv.component';
 import { CommonModule } from '@angular/common';
+import { WeatherWidgetMainComponent } from './components/weather-widget-main/weather-widget-main.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     FontAwesomeModule,
     RouterModule.forRoot(appRoutes),
-    UsersTvComponent
+    UsersTvComponent,
+    WeatherWidgetMainComponent,
   ],
   providers: [],
   bootstrap: [], // Certifique-se de definir o componente principal
