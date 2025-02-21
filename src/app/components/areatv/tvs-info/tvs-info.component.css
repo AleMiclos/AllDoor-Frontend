@@ -1,8 +1,8 @@
+
 .tv-info-container {
-  margin-top: 0;
-  color: white;
   display: flex;
   flex-direction: column;
+  max-height: 100%;
 }
 
 .info-header {
@@ -19,18 +19,55 @@
 
 .info-carousel {
   overflow: hidden;
-  white-space: nowrap;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap:20px;
+  justify-content: space-around;
+}
+
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  color: white;
+}
+
+.carousel-track {
+  display: flex;
+  width: max-content;
+  animation: scrollText 10s linear infinite;
 }
 
 .carousel-item {
-  animation: scroll 4s linear infinite;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 0 50px;
+  white-space: nowrap;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@keyframes scroll {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+@keyframes scrollText {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
+
+
+
+.fullscreen-btn {
+  margin-left: auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.3s;
+  background-color: black;
+}
+
+
+
