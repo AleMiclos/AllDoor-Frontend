@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TvsService } from '../../../services/tvs.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import {TvsInfoComponent } from '../tvs-info/tvs-info.component'
+import { TvsInfoComponent } from '../tvs-info/tvs-info.component';
 
 @Component({
   selector: 'app-tv-view',
@@ -33,16 +33,14 @@ export class TvViewComponent implements OnInit {
   fetchTv(tvId: string) {
     this.tvsService.getTvById(tvId).subscribe({
       next: (data: any) => {
-        // Transforma o link do YouTube, se existir
         if (data.youtubeLink) {
           data.youtubeLink = this.transformYoutubeLink(data.youtubeLink);
         }
-        // Transforma o link do Vimeo, se existir
         if (data.vimeoLink) {
           data.vimeoLink = this.transformVimeoLink(data.vimeoLink);
         }
         this.tv = data;
-        console.log(this.tv); // Verificar os dados no console
+        console.log(this.tv);
       },
       error: (err: any) => {
         console.error('Erro ao carregar TV:', err);
@@ -51,9 +49,7 @@ export class TvViewComponent implements OnInit {
   }
 
   transformYoutubeLink(url: string): string {
-    // Extrai o ID do vídeo do link do YouTube
     const videoId = url.split('v=')[1];
-    // Remove possíveis parâmetros adicionais (como &list=...)
     const ampersandPosition = videoId.indexOf('&');
     if (ampersandPosition !== -1) {
       return `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}`;
@@ -62,11 +58,12 @@ export class TvViewComponent implements OnInit {
   }
 
   transformVimeoLink(url: string): string {
-    const videoId = url.split('/').pop(); // Extrai o ID do vídeo
+    const videoId = url.split('/').pop();
     return `https://player.vimeo.com/video/${videoId}`;
   }
 
   sanitizeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
+
 }

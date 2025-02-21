@@ -3,12 +3,33 @@
     <h2 class="custom-font">{{ currentDateTime }}</h2>
   </div>
   <div class="info-carousel">
-    <!-- <div class="carousel-item" *ngFor="let item of carouselItems">
-      {{ item }}
-    </div> -->
+    <!-- Carrossel de Mensagens -->
 
     <app-weather-widget-main></app-weather-widget-main>
     <app-tradingview-ticker></app-tradingview-ticker>
+
+
+  </div>
+  <button class="fullscreen-btn" (click)="toggleFullscreen()">
+    <fa-icon [icon]="isFullscreen ? faCompress : faExpand"></fa-icon>
+  </button>
+  <div class="carousel-container">
+    <div class="carousel-track">
+      <div
+        class="carousel-item"
+        *ngFor="let item of carouselItems; let i = index; trackBy: trackByFn"
+      >
+        {{ item }}
+      </div>
+      <!-- Duplicação dos itens para criar efeito contínuo -->
+      <div
+        class="carousel-item"
+        *ngFor="let item of carouselItems; let i = index; trackBy: trackByFn"
+      >
+        {{ item }}
+      </div>
+
+    </div>
 
   </div>
 </div>
