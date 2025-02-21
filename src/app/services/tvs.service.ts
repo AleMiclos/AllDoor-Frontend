@@ -6,12 +6,13 @@ import { Observable, catchError, of } from 'rxjs';
   providedIn: 'root'
 })
 export class TvsService {
-  private apiUrl = 'https://outdoor-backend.onrender.com'; // Altere conforme necessário
+  private apiUrl = 'http://localhost:5000/tv'; // Corrigido para a URL correta de TVs
 
   constructor(private http: HttpClient) {}
 
+  // 🔹 Buscar TVs atribuídas a um usuário específico
   getTvsByUserId(userId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/tv/user/${userId}`).pipe(
+    return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`).pipe(
       catchError(error => {
         console.error('Erro ao buscar TVs:', error);
         return of([]);
@@ -19,21 +20,19 @@ export class TvsService {
     );
   }
 
+  // 🔹 Buscar uma TV específica
   getTvById(tvId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/tv/${tvId}`);
-  }
-  getTvLinks(tvId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/tv/${tvId}/links`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/${tvId}`).pipe(
       catchError(error => {
-        console.error('Erro ao buscar links da TV:', error);
+        console.error('Erro ao buscar TV:', error);
         return of(null);
       })
     );
   }
 
-
+  // 🔹 Criar uma nova TV
   createTv(tvData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/tv`, tvData).pipe(
+    return this.http.post<any>(`${this.apiUrl}`, tvData).pipe(
       catchError(error => {
         console.error('Erro ao criar TV:', error);
         return of(null);
@@ -41,8 +40,9 @@ export class TvsService {
     );
   }
 
+  // 🔹 Atualizar informações de uma TV
   updateTv(tvId: string, tvData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/tv/${tvId}`, tvData).pipe(
+    return this.http.put<any>(`${this.apiUrl}/${tvId}`, tvData).pipe(
       catchError(error => {
         console.error('Erro ao atualizar TV:', error);
         return of(null);
@@ -50,8 +50,9 @@ export class TvsService {
     );
   }
 
+  // 🔹 Deletar uma TV
   deleteTv(tvId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/tv/${tvId}`).pipe(
+    return this.http.delete<any>(`${this.apiUrl}/${tvId}`).pipe(
       catchError(error => {
         console.error('Erro ao deletar TV:', error);
         return of(null);

@@ -7,7 +7,7 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class UsersTvService {
-  private apiUrl = 'https://outdoor-backend.onrender.com'; // Sem `/api` pois não existe no backend
+  private apiUrl = 'http://localhost:5000/users'; // Sem `/api` pois não existe no backend
 
   constructor(private http: HttpClient) {}
 
@@ -19,10 +19,9 @@ export class UsersTvService {
     });
   }
 
-
   // 🔹 Buscar usuários com permissão para TV
   getUsersWithTvPermission(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/users/tv`, { headers: this.getHeaders() });
+    return this.http.get<any[]>(`${this.apiUrl}/permissions/tvs`, { headers: this.getHeaders() });
   }
 
   // 🔹 Buscar TVs atribuídas a um usuário específico

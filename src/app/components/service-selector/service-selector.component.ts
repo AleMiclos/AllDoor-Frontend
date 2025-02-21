@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsersTotemComponent } from '../areatotem/users-menu-totem/users-menu-totem.component';
+import { UsersMenuComponent } from '../areatotem/users-menu-totem/users-menu-totem.component';
 import { UsersTvComponent } from '../areatv/users-tv/users-tv.component';
 
 @Component({
@@ -8,7 +8,7 @@ import { UsersTvComponent } from '../areatv/users-tv/users-tv.component';
   templateUrl: './service-selector.component.html',
   styleUrls: ['./service-selector.component.css'],
   standalone: true,
-  imports: [CommonModule, UsersTvComponent, UsersTotemComponent]
+  imports: [CommonModule, UsersTvComponent, UsersMenuComponent]
 })
 export class ServiceSelectorComponent {
   selectedService: string | null = null;

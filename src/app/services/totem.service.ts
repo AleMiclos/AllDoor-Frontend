@@ -6,7 +6,7 @@ import { Observable, catchError, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class TotemService {
-  private apiUrl = 'http://localhost:5000/totems'; // URL base da API
+  private apiUrl = 'http://localhost:5000/totem/totem'; // URL base da API ajustada para corresponder ao backend
 
   constructor(private http: HttpClient) {}
 
@@ -23,34 +23,9 @@ export class TotemService {
     });
   }
 
-  // Buscar um totem por ID
-  getTotemById(id: string): Observable<any> {
-    return this.http
-      .get<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError((error) => {
-          console.error('Erro ao buscar totem por ID:', error);
-          return throwError(() => new Error('Erro ao buscar totem por ID'));
-        })
-      );
-  }
-
-  // Buscar totens de um usuário específico
-  getTotemsByUserId(userId: string): Observable<any[]> {
-    return this.http
-      .get<any[]>(`${this.apiUrl}/by-user-id/${userId}`, { headers: this.getAuthHeaders() })
-      .pipe(
-        catchError((error) => {
-          console.error('Erro ao buscar totens por usuário:', error);
-          return throwError(() => new Error('Erro ao buscar totens por usuário'));
-        })
-      );
-  }
-
-  // Buscar todos os totens (admin)
+  // Buscar todos os totens de um usuário
   getAllTotems(userId: string): Observable<any[]> {
-    return this.http
-      .get<any[]>(`${this.apiUrl}`, { headers: this.getAuthHeaders() })
+    return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`, { headers: this.getAuthHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Erro ao buscar todos os totens:', error);
@@ -59,10 +34,20 @@ export class TotemService {
       );
   }
 
+  // Buscar um totem por ID
+  getTotemById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
+      .pipe(
+        catchError((error) => {
+          console.error('Erro ao buscar totem por ID:', error);
+          return throwError(() => new Error('Erro ao buscar totem por ID'));
+        })
+      );
+  }
+
   // Adicionar um novo totem
   addTotem(totem: any): Observable<any> {
-    return this.http
-      .post<any>(`${this.apiUrl}/new-totem`, totem, { headers: this.getAuthHeaders() })
+    return this.http.post<any>(this.apiUrl, totem, { headers: this.getAuthHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Erro ao adicionar totem:', error);
@@ -73,8 +58,7 @@ export class TotemService {
 
   // Atualizar um totem existente
   updateTotem(id: string, totem: any): Observable<any> {
-    return this.http
-      .put(`${this.apiUrl}/${id}`, totem, { headers: this.getAuthHeaders() })
+    return this.http.put<any>(`${this.apiUrl}/${id}`, totem, { headers: this.getAuthHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Erro ao atualizar totem:', error);
@@ -85,8 +69,7 @@ export class TotemService {
 
   // Deletar um totem
   deleteTotem(id: string): Observable<any> {
-    return this.http
-      .delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
+    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Erro ao deletar totem:', error);
@@ -95,10 +78,9 @@ export class TotemService {
       );
   }
 
-  // Atualizar o status do totem
+  // Atualizar o status do totem (se necessário)
   updateTotemStatus(id: string, status: string): Observable<any> {
-    return this.http
-      .patch(`${this.apiUrl}/${id}/status`, { status }, { headers: this.getAuthHeaders() })
+    return this.http.patch(`${this.apiUrl}/${id}/status`, { status }, { headers: this.getAuthHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Erro ao atualizar status do totem:', error);
