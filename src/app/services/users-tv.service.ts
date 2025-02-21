@@ -7,7 +7,7 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class UsersTvService {
-  private apiUrl = 'http://localhost:5000/users'; // Sem `/api` pois não existe no backend
+  private apiUrl = 'https://outdoor-backend.onrender.com/users'; // Sem `/api` pois não existe no backend
 
   constructor(private http: HttpClient) {}
 

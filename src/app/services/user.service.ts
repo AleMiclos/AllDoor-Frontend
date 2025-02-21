@@ -7,7 +7,7 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:5000'; // Substitua pela URL correta da API
+  private apiUrl = 'https://outdoor-backend.onrender.com'; // Substitua pela URL correta da API
 
   constructor(private http: HttpClient) {}
 
