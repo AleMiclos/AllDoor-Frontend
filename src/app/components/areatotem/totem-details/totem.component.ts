@@ -1,20 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TotemService } from '../../../services/totem.service'; // Importe o serviço
 import { ActivatedRoute } from '@angular/router'; // Importe ActivatedRoute para acessar parâmetros de rota
-import { CommonModule } from '@angular/common'; // Importe o CommonModule
+import { CommonModule } from '@angular/common';
+import { WeatherWidgetMainComponent } from "../../weather-widget-main/weather-widget-main.component"; // Importe o CommonModule
 
 @Component({
   selector: 'app-totem-details',
   templateUrl: './totem.component.html', // Certifique-se de que o caminho está correto
   styleUrls: ['./totem.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class TotemDetailsComponent implements OnInit {
   totem: any = null;
   loading = true;
   error: string | null = null;
+
+condominio = {
+  nome: 'Residencial Jardim das Flores',
+  endereco: 'Rua das Palmeiras, 123, São Paulo - SP',
+  horario_funcionamento: '08:00 - 18:00',
+  contato: '(11) 99999-9999'
+};
 
   constructor(
     private totemService: TotemService, // Injete o serviço
