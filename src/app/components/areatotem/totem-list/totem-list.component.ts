@@ -73,24 +73,18 @@ export class TotemListComponent implements OnInit {
     );
   }
 
-
-  debugAddTotem() {
-    console.log('Botão Adicionar Totem clicado!');
-  }
-
   // Adiciona um novo totem
   handleAddTotem() {
-    console.log('Adicionar Totem chamado'); // Verifique se essa mensagem aparece no console
-    console.log('Formulário válido?', this.newTotemForm.valid);
-    console.log('Valores do formulário:', this.newTotemForm.value);
-
     if (this.newTotemForm.invalid || !this.isValidObjectId(this.userId)) {
       this.errorMessage = 'Preencha todos os campos corretamente e selecione um usuário válido.';
       console.log(this.errorMessage);
       return;
     }
 
-    const newTotem = { ...this.newTotemForm.value, userId: this.userId };
+    const newTotem = {
+      ...this.newTotemForm.value,
+      user: this.userId, // Corrigido para 'user' conforme o backend
+    };
 
     this.totemService.addTotem(newTotem).subscribe(
       (data) => {
@@ -105,8 +99,6 @@ export class TotemListComponent implements OnInit {
       }
     );
   }
-
-
 
   // Define o totem em edição
   setEditingTotem(totem: any) {
@@ -124,7 +116,11 @@ export class TotemListComponent implements OnInit {
   handleEditTotem() {
     if (this.editTotemForm.invalid || !this.editingTotem) return;
 
-    const updatedTotem = { ...this.editTotemForm.value, userId: this.userId };
+    const updatedTotem = {
+      ...this.editTotemForm.value,
+      user: this.userId, // Corrigido para 'user' conforme o backend
+      status: this.editingTotem.status // Mantendo o status atual
+    };
 
     this.totemService.updateTotem(this.editingTotem._id, updatedTotem).subscribe(
       (data) => {
@@ -160,7 +156,6 @@ export class TotemListComponent implements OnInit {
       }
     );
   }
-
 
   // Valida se o ID é um ObjectId válido (MongoDB)
   isValidObjectId(id: string): boolean {
