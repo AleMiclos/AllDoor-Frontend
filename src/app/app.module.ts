@@ -14,6 +14,8 @@ import { UsersTvComponent } from './components/areatv/users-tv/users-tv.componen
 import { CommonModule } from '@angular/common';
 import { WeatherWidgetMainComponent } from './components/weather-widget-main/weather-widget-main.component';
 import { TradingviewTickerComponent } from './components/tradingview-ticker/tradingview-ticker.component';
+import { GoogleAnalyticsService } from './services/google-analytics.service';
+
 
 
 @NgModule({
@@ -35,9 +37,9 @@ import { TradingviewTickerComponent } from './components/tradingview-ticker/trad
     RouterModule.forRoot(appRoutes),
     UsersTvComponent,
     WeatherWidgetMainComponent,
-    TradingviewTickerComponent
+    TradingviewTickerComponent,
   ],
-  providers: [],
+  providers: [GoogleAnalyticsService],
   bootstrap: [], // Certifique-se de definir o componente principal
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

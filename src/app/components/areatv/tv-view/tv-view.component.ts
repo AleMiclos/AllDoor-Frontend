@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TvsService } from '../../../services/tvs.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { TvsInfoComponent } from '../tvs-info/tvs-info.component';
+import { TvStatusService } from '../../../services/tv-status.service';
 
 @Component({
   selector: 'app-tv-view',
@@ -11,20 +12,61 @@ import { TvsInfoComponent } from '../tvs-info/tvs-info.component';
   styleUrls: ['./tv-view.component.css'],
   imports: [CommonModule, TvsInfoComponent]
 })
-export class TvViewComponent implements OnInit {
+export class TvViewComponent implements OnInit, OnDestroy {
+
   @Input() tv: any;
   tvId: string | null = null;
+
+  private visibilitySubscription: any;
 
   constructor(
     private route: ActivatedRoute,
     private tvsService: TvsService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private tvStatusService: TvStatusService,
   ) {}
 
   ngOnInit() {
+    document.addEventListener('visibilitychange', this.monitorarVisibilidade);
+
     this.tvId = this.route.snapshot.paramMap.get('id');
+    console.log('tvId:', this.tvId, 'Tipo:', typeof this.tvId); // Log para depuração
     if (this.tvId) {
       this.fetchTv(this.tvId);
+    } else {
+      console.error('tvId não está definido.');
+    }
+
+    if (this.tvId) {
+      this.tvStatusService.updateVisibility(this.tvId, true).subscribe({
+        next: () => {
+          console.log('Página aberta, visibilidade atualizada: true');
+        },
+        error: (err: any) => {
+          console.error('Erro ao atualizar visibilidade ao abrir a página:', err);
+        }
+      });
+    }
+
+    this.visibilitySubscription = this.tvStatusService.tvVisibility$.subscribe(
+      (isVisible: boolean) => {
+        console.log('Visibilidade:', isVisible);
+      }
+    );
+  }
+
+  handleVisibilityChange() {
+    const isVisible = document.visibilityState === 'visible';
+    console.log('Visibilidade do documento:', document.visibilityState, 'isVisible:', isVisible); // Log para depuração
+    if (this.tvId) {
+      this.tvStatusService.updateVisibility(this.tvId, isVisible).subscribe({
+        next: () => {
+          console.log('Visibilidade alterada:', isVisible);
+        },
+        error: (err: any) => {
+          console.error('Erro ao atualizar visibilidade:', err);
+        }
+      });
     } else {
       console.error('tvId não está definido.');
     }
@@ -40,7 +82,7 @@ export class TvViewComponent implements OnInit {
           data.vimeoLink = this.transformVimeoLink(data.vimeoLink);
         }
         this.tv = data;
-        console.log(this.tv);
+        console.log('TV carregada:', this.tv); // Log para depuração
       },
       error: (err: any) => {
         console.error('Erro ao carregar TV:', err);
@@ -66,4 +108,12 @@ export class TvViewComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
+  monitorarVisibilidade = this.handleVisibilityChange.bind(this);
+
+  ngOnDestroy() {
+    document.removeEventListener('visibilitychange', this.monitorarVisibilidade);
+    if (this.visibilitySubscription) {
+      this.visibilitySubscription.unsubscribe();
+    }
+  }
 }
