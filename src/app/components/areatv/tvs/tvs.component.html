@@ -1,4 +1,4 @@
-<div *ngIf="loading">Carregando TVs...</div>
+<div *ngIf="loading" class="loading-message">Carregando TVs...</div>
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
 <!-- Botão para adicionar TV -->
@@ -12,11 +12,18 @@
       <p><strong>YouTube:</strong> {{ tv.youtubeLink || 'N/A' }}</p>
       <p><strong>Vimeo:</strong> {{ tv.vimeoLink || 'N/A' }}</p>
       <p><strong>Endereço:</strong> {{ tv.address }}</p>
+      <p>
+        <strong>Status:</strong>
+        <span [ngClass]="{'online': tv.status === 'online', 'offline': tv.status === 'offline'}">
+          {{ tv.status === 'online' ? '🟢 Online' : '🔴 Offline' }}
+        </span>
+      </p>
     </div>
     <div class="tv-actions">
       <button (click)="editTv(tv)">Editar</button>
       <button (click)="deleteTv(tv._id)">Excluir</button>
-      <button (click)="viewTv(tv._id)">Visualizar</button>    </div>
+      <button (click)="viewTv(tv._id)">Visualizar</button>
+    </div>
   </div>
 </div>
 
@@ -32,11 +39,7 @@
     <form (ngSubmit)="saveTv()">
       <div class="form-group">
         <label for="youtubeLink">Link do YouTube:</label>
-        <input
-          id="youtubeLink"
-          [(ngModel)]="newTv.youtubeLink"
-          name="youtubeLink"
-        />
+        <input id="youtubeLink" [(ngModel)]="newTv.youtubeLink" name="youtubeLink" />
       </div>
       <div class="form-group">
         <label for="vimeoLink">Link do Vimeo:</label>
@@ -44,12 +47,7 @@
       </div>
       <div class="form-group">
         <label for="address">Endereço:</label>
-        <input
-          id="address"
-          [(ngModel)]="newTv.address"
-          name="address"
-          required
-        />
+        <input id="address" [(ngModel)]="newTv.address" name="address" required />
       </div>
       <div class="form-actions">
         <button type="submit">Salvar</button>
@@ -58,6 +56,3 @@
     </form>
   </div>
 </div>
-
-<!-- Componente de Visualização de TV -->
-<app-tv-view *ngIf="tvToView" [tv]="tvToView"></app-tv-view>

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
+import { environment } from '../../enviroments/environment'
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class TotemService {
-  private apiUrl = 'https://outdoor-backend.onrender.com/totem/totem'; // URL base da API ajustada para corresponder ao backend
+  private apiUrl = `${environment.apiUrl}/totem/totem`; // URL base da API ajustada para corresponder ao backend
 
   constructor(private http: HttpClient) {}
 

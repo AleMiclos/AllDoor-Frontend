@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { environment } from '../../enviroments/environment'
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'https://outdoor-backend.onrender.com'; // Substitua pela URL correta da API
+  private apiUrl = environment.apiUrl; // Substitua pela URL correta da API
 
   constructor(private http: HttpClient) {}
 

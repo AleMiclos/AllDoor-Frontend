@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../enviroments/environment'; // Corrigido o caminho
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,8 @@ import { BehaviorSubject, tap } from 'rxjs';
 export class AuthService {
   private currentUserRole = new BehaviorSubject<string>(''); // Armazena a role do usuário
   currentUserRole$ = this.currentUserRole.asObservable(); // Expõe a role como um Observable
+
+  private apiUrl = environment.apiUrl; // Define a URL dinamicamente
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -25,8 +28,7 @@ export class AuthService {
         userId: string; // userId está presente aqui
       }
     }>(
-      'https://outdoor-backend.onrender.com/auth/login',
-      // 'https://outdoor-backend.onrender.com/auth/login',
+      `${this.apiUrl}/auth/login`, // Usa a variável de ambiente
       { email, password }
     ).pipe(
       tap((response) => {
@@ -49,7 +51,7 @@ export class AuthService {
 
   // Método de registro
   register(name: string, email: string, password: string, role: string) {
-    return this.http.post('https://outdoor-backend.onrender.com/auth/register', { name, email, password, role });
+    return this.http.post(`${this.apiUrl}/auth/register`, { name, email, password, role }); // Usa a variável de ambiente
   }
 
   // Atualiza a role do usuário
