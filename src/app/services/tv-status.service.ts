@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { environment } from '../../enviroments/environment';
 
@@ -14,18 +14,11 @@ export class TvStatusService {
 
   constructor(private http: HttpClient) { }
 
-  private getHeaders() {
-    const token = localStorage.getItem('token');  // Obtém o token do localStorage ou onde estiver armazenado
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`  // Adiciona o token nos headers
-    });
-  }
-
   updateVisibility(tvId: string, isVisible: boolean): Observable<any> {
     this.visibilitySubject.next(isVisible);
     const payload = { tvId, status: isVisible };
     console.log('Payload enviado:', payload);
-    return this.http.post(`${this.apiUrl}/status-tv`, payload, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/status-tv`, payload);
   }
 
   private tvStatusSubject = new Subject<{ tvId: string; status: string }>();
@@ -39,7 +32,7 @@ export class TvStatusService {
   }
 
   getTvStatus(tvId: string) {
-    this.http.get<{ status: string }>(`${this.apiUrl}/status-tv/${tvId}`, { headers: this.getHeaders() }).subscribe({
+    this.http.get<{ status: string }>(`${this.apiUrl}/status-tv/${tvId}`).subscribe({
       next: (response) => {
         this.tvStatusSubject.next({ tvId, status: response.status });
       },
