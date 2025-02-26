@@ -64,12 +64,13 @@
 
 /* Status */
 .online {
-  color: green;
+  color: green; /* Cor para status online */
 }
 
 .offline {
-  color: red;
+  color: red; /* Cor para status offline */
 }
+
 
 /* Modal */
 .modal-overlay {

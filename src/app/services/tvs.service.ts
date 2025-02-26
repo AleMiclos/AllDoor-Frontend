@@ -7,7 +7,7 @@ import { environment } from '../../enviroments/environment'
   providedIn: 'root'
 })
 export class TvsService {
-  
+
   private apiUrl = environment.apiUrl; // Corrigido para a URL correta de TVs
 
   constructor(private http: HttpClient) {}
@@ -33,13 +33,8 @@ export class TvsService {
   }
 
   // 🔹 Criar uma nova TV
-  createTv(tvData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/tv`, tvData).pipe(
-      catchError(error => {
-        console.error('Erro ao criar TV:', error);
-        return of(null);
-      })
-    );
+  createTv(newTv: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/tv`, newTv);
   }
 
   // 🔹 Atualizar informações de uma TV
@@ -65,7 +60,15 @@ export class TvsService {
   atualizarStatusTv(tvId: string, status: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/tv/status-tv`, { tvId, status });
   }
-  
+  getTvStatus(tvId: string): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/tv/status-tv/${tvId}`).pipe(
+      catchError(error => {
+        console.error('Erro ao buscar status da TV:', error);
+        return of('');
+      })
+    );
+  }
 
- 
+
+
 }
