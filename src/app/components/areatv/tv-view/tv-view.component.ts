@@ -51,6 +51,12 @@ export class TvViewComponent implements OnInit, OnDestroy {
     this.visibilitySubscription = this.tvStatusService.tvVisibility$.subscribe(
       (isVisible: boolean) => {
         console.log('Visibilidade:', isVisible);
+        // Atualiza o status da TV com base na visibilidade
+        this.tv.status = isVisible ? 'online' : 'offline';
+        if (this.tvId) {
+          // Notifica o TvsComponent sobre a mudança de status
+          this.tvStatusService.updateTvStatus(this.tvId, status);
+        }
       }
     );
   }
@@ -62,6 +68,8 @@ export class TvViewComponent implements OnInit, OnDestroy {
       this.tvStatusService.updateVisibility(this.tvId, isVisible).subscribe({
         next: () => {
           console.log('Visibilidade alterada:', isVisible);
+          // Atualiza o status da TV com base na visibilidade
+          this.tv.status = isVisible ? 'online' : 'offline';
         },
         error: (err: any) => {
           console.error('Erro ao atualizar visibilidade:', err);
@@ -81,6 +89,8 @@ export class TvViewComponent implements OnInit, OnDestroy {
         if (data.vimeoLink) {
           data.vimeoLink = this.transformVimeoLink(data.vimeoLink);
         }
+        // Inicializa o status da TV
+        data.status = data.status ? 'online' : 'offline';
         this.tv = data;
         console.log('TV carregada:', this.tv); // Log para depuração
       },

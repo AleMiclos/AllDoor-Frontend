@@ -14,10 +14,11 @@
       <p><strong>Endereço:</strong> {{ tv.address }}</p>
       <p>
         <strong>Status:</strong>
-        <span [ngClass]="{'online': tv.status === 'online', 'offline': tv.status === 'offline'}">
-          {{ tv.status === 'online' ? '🟢 Online' : '🔴 Offline' }}
+        <span [ngClass]="{'true': tv.status === 'online', 'false': tv.status === 'offline'}">
+          {{ tv.status === 'true' ? '🟢 Online' : '🔴 Offline' }}
         </span>
       </p>
+
     </div>
     <div class="tv-actions">
       <button (click)="editTv(tv)">Editar</button>

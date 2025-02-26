@@ -22,8 +22,9 @@ export class TvsComponent implements OnInit, OnDestroy {
   selectedTvId: string | null = null;
   @Input() userId: string | undefined;
   tvToView: any;
-  isOnline: boolean = true; // Status da TV (exemplo: online ou offline)
-  private visibilitySubscription: Subscription | undefined;
+
+  // Declaração da propriedade tvStatusSubscription
+  private tvStatusSubscription: Subscription | undefined;
 
   constructor(
     private tvsService: TvsService,
@@ -33,47 +34,55 @@ export class TvsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchTvs();
-    this.monitorarVisibilidade();
 
-
-
-    // Inscreve-se no serviço para receber atualizações de visibilidade
-    this.visibilitySubscription = this.tvStatusService.tvVisibility$.subscribe(
-      (isVisible) => {
-        const status = isVisible ? 'online' : 'offline';
-        this.atualizarStatusTvs(status);
+    // Inscreve-se para receber atualizações de status em tempo real
+    this.tvStatusSubscription = this.tvStatusService.tvStatus$.subscribe(
+      ({ tvId, status }) => {
+        this.updateTvStatus(tvId, status);
       }
     );
+
+    // Atualiza o status das TVs a cada 5 segundos
+    setInterval(() => {
+      this.tvs.forEach((tv) => {
+        this.tvStatusService.getTvStatus(tv._id);
+      });
+    }, 5000); // Atualiza a cada 5 segundos
   }
+
 
   ngOnDestroy() {
     // Cancela a inscrição ao destruir o componente
-    if (this.visibilitySubscription) {
-      this.visibilitySubscription.unsubscribe();
+    if (this.tvStatusSubscription) {
+      this.tvStatusSubscription.unsubscribe();
     }
   }
 
-  atualizarStatusTvs(status: string) {
-    if (this.tvs.length === 0) {
-      console.warn('Nenhuma TV cadastrada para atualização de status.');
-      return;
-    }
-  
-    this.tvs.forEach((tv) => {
-      if (tv._id) {
-        this.tvsService.atualizarStatusTv(tv._id, status).subscribe({
-          next: (res) => {
-            console.log(`Status da TV ${tv._id} atualizado:`, res);
-            // Atualiza o status no frontend
-            tv.status = status;
-          },
-          error: (err: any) => {
-            console.error(`Erro ao atualizar status da TV ${tv._id}:`, err);
-          },
-        });
-      }
+  // Método para buscar o status de uma TV específica
+  fetchTvStatus(tvId: string) {
+    this.tvsService.getTvStatus(tvId).subscribe({
+      next: (status: string) => {
+        this.updateTvStatus(tvId, status);
+      },
+      error: (err: any) => {
+        this.errorMessage = `Erro ao buscar status da TV ${tvId}: ${err.message}`;
+        console.error(`Erro ao buscar status da TV ${tvId}:`, err);
+      },
     });
   }
+
+
+  // Método para atualizar o status de uma TV na lista
+  updateTvStatus(tvId: string, status: boolean | string) {
+    const tv = this.tvs.find((tv) => tv._id === tvId);
+    if (tv) {
+      tv.status = typeof status === 'boolean' ? (status ? 'online' : 'offline') : status;
+      console.log(`Status da TV ${tvId} atualizado para:`, tv.status); // Log para depuração
+    } else {
+      console.log(`TV com ID ${tvId} não encontrada na lista.`);
+    }
+  }
+
 
   fetchTvs() {
     if (this.userId) {
@@ -81,16 +90,11 @@ export class TvsComponent implements OnInit, OnDestroy {
       this.tvsService.getTvsByUserId(this.userId).subscribe({
         next: (data: any[]) => {
           this.loading = false;
-  
-          // Atualiza a lista de TVs
-          this.tvs = data.map((newTv) => {
-            const existingTv = this.tvs.find((tv) => tv._id === newTv._id);
-            return existingTv ? { ...existingTv, ...newTv } : newTv;
-          });
-  
-          // Se ainda não houver uma TV selecionada, escolher a primeira
-          if (!this.tvToView && this.tvs.length > 0) {
-            this.tvToView = this.tvs[0];
+          this.tvs = data;
+
+          if (this.tvs.length > 0) {
+            console.log('Buscando status das TVs...');
+            this.tvs.forEach((tv) => this.fetchTvStatus(tv._id));
           }
         },
         error: (err: any) => {
@@ -104,12 +108,8 @@ export class TvsComponent implements OnInit, OnDestroy {
     }
   }
 
-  monitorarVisibilidade() {
-    document.addEventListener('visibilitychange', () => {
-      const isVisible = document.visibilityState === 'visible';
-      this.tvStatusService.updateVisibility(isVisible);
-    });
-  }
+
+
 
   showAddForm() {
     this.showAddTvForm = true;
@@ -124,8 +124,25 @@ export class TvsComponent implements OnInit, OnDestroy {
   }
 
   saveTv() {
+    if (!this.newTv.address) {
+      this.errorMessage = 'O endereço é obrigatório.';
+      return;
+    }
+
+    // Adiciona os campos obrigatórios ao objeto newTv
+    const payload = {
+      ...this.newTv, // Copia os campos já existentes (youtubeLink, vimeoLink, address)
+      user: this.userId, // Adiciona o ID do usuário
+      status: 'offline', // Define o status inicial como 'offline'
+      createdAt: new Date().toISOString(), // Adiciona a data de criação
+      updatedAt: new Date().toISOString(), // Adiciona a data de atualização
+    };
+
+    console.log('Payload enviado:', payload); // Log para depuração
+
     if (this.tvToEdit) {
-      this.tvsService.updateTv(this.tvToEdit._id, this.newTv).subscribe({
+      // Atualiza a TV existente
+      this.tvsService.updateTv(this.tvToEdit._id, payload).subscribe({
         next: () => {
           this.fetchTvs();
           this.resetForm();
@@ -136,22 +153,25 @@ export class TvsComponent implements OnInit, OnDestroy {
         },
       });
     } else {
-      if (this.userId) {
-        this.newTv.user = this.userId;
-        this.tvsService.createTv(this.newTv).subscribe({
-          next: () => {
-            this.fetchTvs();
-            this.resetForm();
-          },
-          error: (err: any) => {
-            this.errorMessage = err.error.message || 'Erro ao criar TV.';
-            console.error(err);
-          },
-        });
-      } else {
-        console.error('userId não está definido.');
-      }
+      // Cria uma nova TV
+      this.tvsService.createTv(payload).subscribe({
+        next: () => {
+          this.fetchTvs();
+          this.resetForm();
+        },
+        error: (err: any) => {
+          this.errorMessage = err.error.message || 'Erro ao criar TV.';
+          console.error(err);
+        },
+      });
     }
+  }
+
+  resetForm() {
+    this.showAddTvForm = false;
+    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
+    this.tvToEdit = null;
+    this.errorMessage = '';
   }
 
   deleteTv(tvId: string) {
@@ -160,8 +180,9 @@ export class TvsComponent implements OnInit, OnDestroy {
         next: () => {
           this.fetchTvs();
         },
-        error: (err) => {
-          console.error('Erro ao deletar TV:', err);
+        error: (err: any) => {
+          this.errorMessage = 'Erro ao excluir TV.';
+          console.error(err);
         },
       });
     }
@@ -169,11 +190,5 @@ export class TvsComponent implements OnInit, OnDestroy {
 
   viewTv(tvId: string) {
     this.router.navigate(['/view-tv', tvId]);
-  }
-
-  resetForm() {
-    this.showAddTvForm = false;
-    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
-    this.tvToEdit = null;
   }
 }
