@@ -27,9 +27,12 @@ export class TvStatusService {
   tvStatus$ = this.tvStatusSubject.asObservable();
 
   // Método para atualizar o status de uma TV
-  updateTvStatus(tvId: string, status: string) {
-    this.tvStatusSubject.next({ tvId, status });
+  updateTvStatus(tvId: string, status: string): Observable<any> {
+    const payload = { tvId, status };
+    console.log('Enviando atualização de status:', payload);
+    return this.http.post(`${this.apiUrl}/status-tv`, payload);
   }
+  
 
   getTvStatus(tvId: string) {
     this.http.get<{ status: string }>(`${this.apiUrl}/status-tv/${tvId}`).subscribe({
