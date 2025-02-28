@@ -34,7 +34,7 @@ export class UsersTvComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = "Erro ao carregar usuários";
+        this.errorMessage = "Erro ao carregar usuários!";
         this.loading = false;
       }
     });
