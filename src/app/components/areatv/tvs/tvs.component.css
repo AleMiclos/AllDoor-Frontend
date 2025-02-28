@@ -64,12 +64,15 @@
 
 /* Status */
 .online {
-  color: green; /* Cor para status online */
+  color: green;
+  font-weight: bold;
 }
 
 .offline {
-  color: red; /* Cor para status offline */
+  color: red;
+  font-weight: bold;
 }
+
 
 
 /* Modal */

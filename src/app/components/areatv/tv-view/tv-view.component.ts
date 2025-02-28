@@ -13,12 +13,9 @@ import { TvStatusService } from '../../../services/tv-status.service';
   imports: [CommonModule, TvsInfoComponent]
 })
 export class TvViewComponent implements OnInit, OnDestroy {
-
   @Input() tv: any;
   tvId: string | null = null;
   private visibilitySubscription: any;
-
-  // Armazenando as funções de callback como propriedades da classe
   private handleVisibilityChangeBound = this.handleVisibilityChange.bind(this);
   private handleBeforeUnloadBound = this.handleBeforeUnload.bind(this);
   private handleOfflineBound = this.handleOffline.bind(this);
@@ -33,7 +30,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.tvId = this.route.snapshot.paramMap.get('id');
-
     if (this.tvId) {
       this.fetchTv(this.tvId);
       this.atualizarStatus(true); // Define o status inicial como "online"
@@ -51,7 +47,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
     this.visibilitySubscription = this.tvStatusService.tvVisibility$.subscribe(
       (isVisible: boolean) => {
         console.log('Visibilidade:', isVisible);
-        
         if (this.tv) {
           this.tv.status = isVisible ? 'online' : 'offline';
           if (this.tvId) {
@@ -62,13 +57,29 @@ export class TvViewComponent implements OnInit, OnDestroy {
         }
       }
     );
+
+    // Ativar tela cheia automaticamente
+    this.enterFullscreen();
+  }
+
+  // Função para entrar em tela cheia
+  enterFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if ((elem as any).mozRequestFullScreen) { // Para Firefox
+      (elem as any).mozRequestFullScreen();
+    } else if ((elem as any).webkitRequestFullscreen) { // Para Chrome, Safari e Opera
+      (elem as any).webkitRequestFullscreen();
+    } else if ((elem as any).msRequestFullscreen) { // Para IE/Edge
+      (elem as any).msRequestFullscreen();
+    }
   }
 
   // Monitoramento de visibilidade da aba
   handleVisibilityChange() {
     const isVisible = document.visibilityState === 'visible';
     console.log('Visibilidade do documento:', document.visibilityState, 'isVisible:', isVisible);
-  
     if (this.tvId) {
       this.tvStatusService.updateVisibility(this.tvId, isVisible).subscribe({
         next: () => {
@@ -107,11 +118,9 @@ export class TvViewComponent implements OnInit, OnDestroy {
     if (this.tvId) {
       const status = isOnline ? 'online' : 'offline';
       const data = { tvId: this.tvId, status };
-
-      // Usa navigator.sendBeacon para enviar dados ao servidor
-      const url = 'https://outdoor-backend.onrender.com/tv/status-tv'; // URL do backend
-      const success = navigator.sendBeacon(url, JSON.stringify(data));
-
+      const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+      const url = 'https://outdoor-backend.onrender.com/tv/status-tv';
+      const success = navigator.sendBeacon(url, blob);
       if (success) {
         console.log(`✅ Status da TV atualizado para ${status}`);
       } else {
