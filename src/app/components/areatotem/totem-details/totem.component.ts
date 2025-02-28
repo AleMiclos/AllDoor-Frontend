@@ -3,7 +3,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TotemService } from '../../../services/totem.service'; // Importe o serviço
 import { ActivatedRoute } from '@angular/router'; // Importe ActivatedRoute para acessar parâmetros de rota
 import { CommonModule } from '@angular/common';
-import { WeatherWidgetMainComponent } from "../../weather-widget-main/weather-widget-main.component"; // Importe o CommonModule
 
 @Component({
   selector: 'app-totem-details',
