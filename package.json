@@ -22,12 +22,13 @@
     "@fortawesome/angular-fontawesome": "^1.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "core-js": "^3.41.0",
     "install": "^0.13.0",
     "npm": "^11.1.0",
     "rxjs": "~7.8.0",
     "shaka-player": "^4.13.1",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "zone.js": "^0.15.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.1.3",
