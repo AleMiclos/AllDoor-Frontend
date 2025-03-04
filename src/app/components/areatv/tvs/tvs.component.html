@@ -2,7 +2,7 @@
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
 <!-- Botão para adicionar TV -->
-<button class="add-tv-button" (click)="showAddForm()">+ Adicionar TV</button>
+<button class="add-tv-button" (click)="showAddForm()"> Adicionar TV</button>
 
 <!-- Lista de TVs em cards -->
 <div *ngIf="!loading && tvs.length" class="tv-list">
@@ -24,10 +24,17 @@
 
     </div>
     <div class="tv-actions">
-      <button (click)="editTv(tv)">Editar</button>
-      <button (click)="deleteTv(tv._id)">Excluir</button>
-      <button (click)="viewTv(tv._id)">Visualizar</button>
+      <button (click)="editTv(tv)" title="Editar">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button (click)="deleteTv(tv._id)" title="Excluir">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      <button (click)="viewTv(tv._id)" title="Visualizar">
+        <i class="fas fa-eye"></i>
+      </button>
     </div>
+
   </div>
 </div>
 
