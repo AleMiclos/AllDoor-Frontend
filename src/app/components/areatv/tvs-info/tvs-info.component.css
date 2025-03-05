@@ -7,14 +7,25 @@
 
 .info-header {
   text-align: center;
+  display: flex;
 }
 
 .custom-font {
-  font-family: 'Arial', sans-serif; /* Altere para a fonte desejada */
-  font-size: 30px; /* Altere para o tamanho desejado */
-  color: white; /* Altere para a cor desejada */
+  font-family: 'Poppins', sans-serif; /* Fonte moderna e vibrante */
+  font-size: 16px;
+  color: white;
   text-transform: uppercase;
+  text-shadow:  
+    -2px -2px 0 black,  
+     2px -2px 0 black,  
+    -2px  2px 0 black,  
+     2px  2px 0 black; /* Contorno preto */
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6); /* Sombra branca ao redor do elemento */
+  padding: 10px;
+  border-radius: 5px;
+  width: 60%;
 }
+
 
 
 .info-carousel {
