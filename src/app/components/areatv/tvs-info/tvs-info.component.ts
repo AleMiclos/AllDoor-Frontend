@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TradingviewTickerComponent } from '../../tradingview-ticker/tradingview-ticker.component';
 
 @Component({
   selector: 'app-tvs-info',
   templateUrl: './tvs-info.component.html',
   styleUrls: ['./tvs-info.component.css'],
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, TradingviewTickerComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TvsInfoComponent implements OnInit, OnDestroy {
