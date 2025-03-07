@@ -32,7 +32,7 @@
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: right;
+  justify-content: center;
   gap: 20px;
 }
 
