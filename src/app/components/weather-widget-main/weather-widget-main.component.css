@@ -13,6 +13,7 @@
     display:block;
     margin: auto ;
     width: fit-content;
+    width: 20px;
 }
 
 .sun{
@@ -29,6 +30,8 @@
 
 .cloudDiv{
     margin-top: -40px;
+    width: 20px;
+
 }
 
 .cloud{
