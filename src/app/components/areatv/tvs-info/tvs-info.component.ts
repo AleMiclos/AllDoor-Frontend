@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { WeatherWidgetMainComponent } from '../../weather-widget-main/weather-widget-main.component';
 
 @Component({
   selector: 'app-tvs-info',
   templateUrl: './tvs-info.component.html',
   styleUrls: ['./tvs-info.component.css'],
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, WeatherWidgetMainComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TvsInfoComponent implements OnInit, OnDestroy {
