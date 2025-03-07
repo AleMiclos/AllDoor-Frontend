@@ -48,6 +48,9 @@
   display: flex;
   width: max-content;
   animation: scrollText 10s linear infinite;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6); /* Sombra branca ao redor do elemento */
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .carousel-item {
@@ -56,8 +59,6 @@
   padding: 0 50px;
   white-space: nowrap;
   font-family: Arial, Helvetica, sans-serif;
-  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6); /* Sombra branca ao redor do elemento */
-  text-align: center;
 
 }
 
