@@ -1,9 +1,0 @@
-{
-  "id": "com.seuapp.webos",
-  "version": "1.0.0",
-  "vendor": "allDoor",
-  "type": "web",
-  "main": "index.html",
-  "title": "allDoor",
-  "icon": "icon.png"
-}
