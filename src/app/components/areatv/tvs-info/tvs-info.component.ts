@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { WeatherWidgetMainComponent } from '../../weather-widget-main/weather-widget-main.component';
-// import { TradingviewTickerComponent } from '../../tradingview-ticker/tradingview-ticker.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';

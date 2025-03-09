@@ -7,14 +7,25 @@
 
 .info-header {
   text-align: center;
+  display: flex;
 }
 
 .custom-font {
-  font-family: 'Arial', sans-serif; /* Altere para a fonte desejada */
-  font-size: 30px; /* Altere para o tamanho desejado */
-  color: white; /* Altere para a cor desejada */
+  font-family: 'Poppins', sans-serif; /* Fonte moderna e vibrante */
+  font-size: 14px;
+  color: white;
   text-transform: uppercase;
+  text-shadow:  
+    -2px -2px 0 black,  
+     2px -2px 0 black,  
+    -2px  2px 0 black,  
+     2px  2px 0 black; /* Contorno preto */
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6); /* Sombra branca ao redor do elemento */
+  padding: 10px;
+  border-radius: 5px;
+  width: 70%;
 }
+
 
 
 .info-carousel {
@@ -37,14 +48,21 @@
   display: flex;
   width: max-content;
   animation: scrollText 10s linear infinite;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .carousel-item {
-  font-size: 1.5rem;
+  font-size: 16px;
   font-weight: bold;
   padding: 0 50px;
   white-space: nowrap;
   font-family: Arial, Helvetica, sans-serif;
+  text-shadow:  
+  -2px -2px 0 black,  
+   2px -2px 0 black,  
+  -2px  2px 0 black,  
+   2px  2px 0 black;
 }
 
 @keyframes scrollText {
