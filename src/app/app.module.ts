@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { WeatherWidgetMainComponent } from './components/weather-widget-main/weather-widget-main.component';
 import { TradingviewTickerComponent } from './components/tradingview-ticker/tradingview-ticker.component';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
+import { AdFullComponent } from './components/areatv/ad-full/ad-full.component';
 
 
 
@@ -38,6 +39,7 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
     UsersTvComponent,
     WeatherWidgetMainComponent,
     TradingviewTickerComponent,
+    AdFullComponent
   ],
   providers: [GoogleAnalyticsService],
   bootstrap: [], // Certifique-se de definir o componente principal

@@ -2,26 +2,22 @@
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
 <!-- Botão para adicionar TV -->
-<button class="add-tv-button" (click)="showAddForm()"> Adicionar TV</button>
+<button class="add-tv-button" (click)="showAddForm()">Adicionar TV</button>
 
 <!-- Lista de TVs em cards -->
 <div *ngIf="!loading && tvs.length" class="tv-list">
   <div *ngFor="let tv of tvs" class="tv-card">
     <div class="tv-details">
       <h3>TV #{{ tv._id }}</h3>
-      <p><strong>YouTube:</strong> {{ tv.youtubeLink || 'N/A' }}</p>
-      <p><strong>Vimeo:</strong> {{ tv.vimeoLink || 'N/A' }}</p>
+      <p><strong>YouTube:</strong> {{ tv.youtubeLink || "N/A" }}</p>
+      <p><strong>Vimeo:</strong> {{ tv.vimeoLink || "N/A" }}</p>
       <p><strong>Endereço:</strong> {{ tv.address }}</p>
       <p>
         <strong>Status:</strong>
-        <span [ngClass]="{'online': tv.status, 'offline': !tv.status}">
-          {{ tv.status ? '🟢 Online' : '🔴 Offline' }}
+        <span [ngClass]="{ online: tv.status, offline: !tv.status }">
+          {{ tv.status ? "🟢 Online" : "🔴 Offline" }}
         </span>
       </p>
-
-
-
-
     </div>
     <div class="tv-actions">
       <button (click)="editTv(tv)" title="Editar">
@@ -30,11 +26,13 @@
       <button (click)="deleteTv(tv._id)" title="Excluir">
         <i class="fas fa-trash-alt"></i>
       </button>
-      <button (click)="viewTv(tv._id)" title="Visualizar">
+      <!-- <button (click)="viewTv(tv._id)" title="Visualizar">
         <i class="fas fa-eye"></i>
-      </button>
-    </div>
+      </button> -->
+      <button (click)="navigateTo('view-tv', tv._id)">Tela Vimeo + YouTube</button>
+      <button (click)="navigateTo('ad-full', tv._id)">Tela Apenas Vimeo</button>
 
+    </div>
   </div>
 </div>
 
@@ -46,11 +44,15 @@
 <!-- Modal para adicionar/editar TV -->
 <div *ngIf="showAddTvForm" class="modal-overlay">
   <div class="modal">
-    <h2>{{ tvToEdit ? 'Editar TV' : 'Adicionar TV' }}</h2>
+    <h2>{{ tvToEdit ? "Editar TV" : "Adicionar TV" }}</h2>
     <form (ngSubmit)="saveTv()">
       <div class="form-group">
         <label for="youtubeLink">Link do YouTube:</label>
-        <input id="youtubeLink" [(ngModel)]="newTv.youtubeLink" name="youtubeLink" />
+        <input
+          id="youtubeLink"
+          [(ngModel)]="newTv.youtubeLink"
+          name="youtubeLink"
+        />
       </div>
       <div class="form-group">
         <label for="vimeoLink">Link do Vimeo:</label>
@@ -58,7 +60,12 @@
       </div>
       <div class="form-group">
         <label for="address">Endereço:</label>
-        <input id="address" [(ngModel)]="newTv.address" name="address" required />
+        <input
+          id="address"
+          [(ngModel)]="newTv.address"
+          name="address"
+          required
+        />
       </div>
       <div class="form-actions">
         <button type="submit">Salvar</button>

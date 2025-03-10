@@ -16,6 +16,8 @@ export class TvViewComponent implements OnInit, OnDestroy {
   @Input() tv: any;
   tvId: string | null = null;
   private visibilitySubscription: any;
+  private lastUpdate: string | null = null;
+  private checkInterval: any; // Armazena o intervalo para limpar depois
   private handleVisibilityChangeBound = this.handleVisibilityChange.bind(this);
   private handleBeforeUnloadBound = this.handleBeforeUnload.bind(this);
   private handleOfflineBound = this.handleOffline.bind(this);
@@ -25,7 +27,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private tvsService: TvsService,
     private sanitizer: DomSanitizer,
-    private tvStatusService: TvStatusService,
+    private tvStatusService: TvStatusService
   ) {}
 
   ngOnInit() {
@@ -33,17 +35,16 @@ export class TvViewComponent implements OnInit, OnDestroy {
     if (this.tvId) {
       this.fetchTv(this.tvId);
       this.atualizarStatus(true); // Define o status inicial como "online"
+      this.startCheckingForChanges();
     } else {
       console.error('tvId não está definido.');
     }
 
-    // Adicionando event listeners corretamente
     document.addEventListener('visibilitychange', this.handleVisibilityChangeBound);
     window.addEventListener('beforeunload', this.handleBeforeUnloadBound);
     window.addEventListener('offline', this.handleOfflineBound);
     window.addEventListener('online', this.handleOnlineBound);
 
-    // Inscreve-se para receber atualizações de visibilidade
     this.visibilitySubscription = this.tvStatusService.tvVisibility$.subscribe(
       (isVisible: boolean) => {
         console.log('Visibilidade:', isVisible);
@@ -58,25 +59,56 @@ export class TvViewComponent implements OnInit, OnDestroy {
       }
     );
 
-    // Ativar tela cheia automaticamente
     this.enterFullscreen();
   }
 
-  // Função para entrar em tela cheia
+  // Inicia a verificação periódica de mudanças no backend
+ // Inicia a verificação periódica de mudanças no backend
+startCheckingForChanges() {
+  this.checkInterval = setInterval(() => this.checkForChanges(), 10000); // Verifica a cada 10s
+}
+
+// Faz a requisição ao backend para verificar mudanças sem recarregar a página
+async checkForChanges() {
+  try {
+    const response = await fetch(`https://outdoor-backend.onrender.com/tv/status-tv/${this.tvId}`);
+    if (!response.ok) {
+      throw new Error(`Erro HTTP! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (this.lastUpdate && this.lastUpdate !== data.lastUpdate) {
+      console.log('⚡ Mudança detectada! Atualizando dados da TV...');
+
+      // Atualiza apenas os dados necessários sem recarregar a página inteira
+      this.tv = { ...this.tv, ...data };
+
+      // Atualiza o status de exibição no componente
+      this.tv.status = data.status ? 'online' : 'offline';
+    }
+
+    this.lastUpdate = data.lastUpdate;
+  } catch (error) {
+    console.error('❌ Erro ao verificar mudanças no backend:', error);
+  }
+}
+
+
+
   enterFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-    } else if ((elem as any).mozRequestFullScreen) { // Para Firefox
+    } else if ((elem as any).mozRequestFullScreen) {
       (elem as any).mozRequestFullScreen();
-    } else if ((elem as any).webkitRequestFullscreen) { // Para Chrome, Safari e Opera
+    } else if ((elem as any).webkitRequestFullscreen) {
       (elem as any).webkitRequestFullscreen();
-    } else if ((elem as any).msRequestFullscreen) { // Para IE/Edge
+    } else if ((elem as any).msRequestFullscreen) {
       (elem as any).msRequestFullscreen();
     }
   }
 
-  // Monitoramento de visibilidade da aba
   handleVisibilityChange() {
     const isVisible = document.visibilityState === 'visible';
     console.log('Visibilidade do documento:', document.visibilityState, 'isVisible:', isVisible);
@@ -96,24 +128,20 @@ export class TvViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Quando o usuário fecha a aba ou navegador
   handleBeforeUnload(event: Event) {
-    this.atualizarStatus(false); // Define o status como "offline"
+    this.atualizarStatus(false);
   }
 
-  // Quando a internet cai
   handleOffline() {
     console.log('Internet caiu!');
-    this.atualizarStatus(false); // Define o status como "offline"
+    this.atualizarStatus(false);
   }
 
-  // Quando a internet volta
   handleOnline() {
     console.log('Internet voltou!');
-    this.atualizarStatus(true); // Define o status como "online"
+    this.atualizarStatus(true);
   }
 
-  // Atualiza o status da TV no backend
   atualizarStatus(isOnline: boolean) {
     if (this.tvId) {
       const status = isOnline ? 'online' : 'offline';
@@ -129,7 +157,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Busca os dados da TV
   fetchTv(tvId: string) {
     this.tvsService.getTvById(tvId).subscribe({
       next: (data: any) => {
@@ -149,7 +176,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Transforma o link do YouTube em um link embed
   transformYoutubeLink(url: string): string {
     const videoId = url.split('v=')[1];
     const ampersandPosition = videoId.indexOf('&');
@@ -159,27 +185,27 @@ export class TvViewComponent implements OnInit, OnDestroy {
     return `https://www.youtube.com/embed/${videoId}`;
   }
 
-  // Transforma o link do Vimeo em um link embed
   transformVimeoLink(url: string): string {
     const videoId = url.split('/').pop();
     return `https://player.vimeo.com/video/${videoId}`;
   }
 
-  // Sanitiza a URL para evitar problemas de segurança
   sanitizeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   ngOnDestroy() {
-    // Removendo event listeners corretamente
     document.removeEventListener('visibilitychange', this.handleVisibilityChangeBound);
     window.removeEventListener('beforeunload', this.handleBeforeUnloadBound);
     window.removeEventListener('offline', this.handleOfflineBound);
     window.removeEventListener('online', this.handleOnlineBound);
 
-    // Cancela a inscrição no observable
     if (this.visibilitySubscription) {
       this.visibilitySubscription.unsubscribe();
+    }
+
+    if (this.checkInterval) {
+      clearInterval(this.checkInterval);
     }
   }
 }

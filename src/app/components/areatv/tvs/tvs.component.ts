@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TvsService } from '../../../services/tvs.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-tvs',
   templateUrl: './tvs.component.html',
   styleUrls: ['./tvs.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class TvsComponent implements OnInit, OnDestroy {
   tvs: any[] = [];
@@ -31,6 +31,7 @@ export class TvsComponent implements OnInit, OnDestroy {
     private tvsService: TvsService,
     private router: Router,
     private tvStatusService: TvStatusService,
+
   ) {}
 
   ngOnInit() {
@@ -192,7 +193,7 @@ export class TvsComponent implements OnInit, OnDestroy {
     }
   }
 
-  viewTv(tvId: string) {
-    this.router.navigate(['/view-tv', tvId]);
+  navigateTo(route: string, tvId: string): void {
+    this.router.navigate([route, tvId]);
   }
 }
