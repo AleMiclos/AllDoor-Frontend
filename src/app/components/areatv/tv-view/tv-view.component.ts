@@ -35,7 +35,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
     if (this.tvId) {
       this.fetchTv(this.tvId);
       this.atualizarStatus(true); // Define o status inicial como "online"
-      this.startCheckingForChanges();
     } else {
       console.error('tvId não está definido.');
     }
@@ -61,39 +60,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
 
     this.enterFullscreen();
   }
-
-  // Inicia a verificação periódica de mudanças no backend
- // Inicia a verificação periódica de mudanças no backend
-startCheckingForChanges() {
-  this.checkInterval = setInterval(() => this.checkForChanges(), 10000); // Verifica a cada 10s
-}
-
-// Faz a requisição ao backend para verificar mudanças sem recarregar a página
-async checkForChanges() {
-  try {
-    const response = await fetch(`https://outdoor-backend.onrender.com/tv/status-tv/${this.tvId}`);
-    if (!response.ok) {
-      throw new Error(`Erro HTTP! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (this.lastUpdate && this.lastUpdate !== data.lastUpdate) {
-      console.log('⚡ Mudança detectada! Atualizando dados da TV...');
-
-      // Atualiza apenas os dados necessários sem recarregar a página inteira
-      this.tv = { ...this.tv, ...data };
-
-      // Atualiza o status de exibição no componente
-      this.tv.status = data.status ? 'online' : 'offline';
-    }
-
-    this.lastUpdate = data.lastUpdate;
-  } catch (error) {
-    console.error('❌ Erro ao verificar mudanças no backend:', error);
-  }
-}
-
 
 
   enterFullscreen() {
