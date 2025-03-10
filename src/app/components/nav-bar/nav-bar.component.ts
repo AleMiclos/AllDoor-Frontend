@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -10,7 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css'],
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule]
+  imports: [CommonModule, FontAwesomeModule, RouterModule]
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   faSignIn = faSignInAlt; // Ícone de login
@@ -20,6 +20,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   isHeaderHidden: boolean = false;
   isHeaderScrolled: boolean = false;
   lastScrollY: number = 0;
+  userRole: string = "";
 
   constructor(private router: Router) {}
 
@@ -37,8 +38,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
   // Atualiza o nome do usuário a partir do localStorage
   updateUserName(): void {
     const storedUserName = localStorage.getItem("userName");
+    const storedUserRole = localStorage.getItem("userRole"); // Pegando o papel do usuário
     this.userName = storedUserName ? storedUserName : "";
+    this.userRole = storedUserRole ? storedUserRole : ""; // Define o papel do usuário
   }
+
+
 
   @HostListener('window:storage', ['$event'])
   onStorageChange(event: StorageEvent) {

@@ -14,6 +14,13 @@
 
   <nav class="navbar" [class.active]="isMenuOpen">
     <a routerLink="/home">Home</a>
+
+    <!-- Botão SERVIÇOS - Exibido apenas se o usuário estiver logado -->
+    <a *ngIf="userName" [routerLink]="userRole === 'admin' ? '/usuario' : '/admin'">
+      Serviços
+    </a>
+
+
     <div class="user-controls">
       <span *ngIf="userName" class="user-info">Bem-vindo, {{ userName }}</span>
       <button *ngIf="!userName" (click)="handleLoginRedirect()" class="login-btn">
