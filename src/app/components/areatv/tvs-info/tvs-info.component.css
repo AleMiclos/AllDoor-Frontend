@@ -19,7 +19,7 @@
     -2px  2px 0 black,  
      2px  2px 0 black; /* Contorno preto */
   box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6); /* Sombra branca ao redor do elemento */
-  padding: 10px;
+  padding: 7px;
   border-radius: 5px;
   
 }
