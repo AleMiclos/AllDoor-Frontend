@@ -12,10 +12,12 @@
   <!-- Div do vídeo (direita) -->
     <!-- Exibir link do YouTube -->
     <div *ngIf="tv.youtubeLink" class="tv">
+
       <iframe
-        [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=1&muted=1')"
+        [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=0&controls=0')"
         frameborder="0"
         allowfullscreen
+        
       ></iframe>
       <app-tvs-info></app-tvs-info>
     </div>

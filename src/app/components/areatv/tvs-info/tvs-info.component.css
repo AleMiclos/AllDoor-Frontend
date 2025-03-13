@@ -2,17 +2,15 @@
 .tv-info-container {
   display: flex;
   flex-direction: column;
-  max-height: 100%;
 }
 
 .info-header {
   text-align: center;
-  display: flex;
 }
 
 .custom-font {
-  font-family: 'Poppins', sans-serif; /* Fonte moderna e vibrante */
-  font-size: 14px;
+ font-family: 'Times New Roman', Times, serif;
+  font-size: 38px;
   color: white;
   text-transform: uppercase;
   text-shadow:  
@@ -23,7 +21,7 @@
   box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6); /* Sombra branca ao redor do elemento */
   padding: 10px;
   border-radius: 5px;
-  width: 70%;
+  
 }
 
 
@@ -37,23 +35,25 @@
 }
 
 .carousel-container {
-  width: 100%;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
   color: white;
+  
+
 }
 
 .carousel-track {
   display: flex;
   width: max-content;
-  animation: scrollText 10s linear infinite;
+  animation: scrollText 15s linear infinite;
   padding: 10px;
   border-radius: 5px;
+  
 }
 
 .carousel-item {
-  font-size: 16px;
+  font-size: 32px;
   font-weight: bold;
   padding: 0 50px;
   white-space: nowrap;
@@ -63,6 +63,8 @@
    2px -2px 0 black,  
   -2px  2px 0 black,  
    2px  2px 0 black;
+   margin: 40px;
+   
 }
 
 @keyframes scrollText {

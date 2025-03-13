@@ -15,13 +15,9 @@ import { TvStatusService } from '../../../services/tv-status.service';
 export class TvViewComponent implements OnInit, OnDestroy {
   @Input() tv: any;
   tvId: string | null = null;
+  videoUrl: SafeResourceUrl | null = null;
   private visibilitySubscription: any;
-  private lastUpdate: string | null = null;
-  private checkInterval: any; // Armazena o intervalo para limpar depois
-  private handleVisibilityChangeBound = this.handleVisibilityChange.bind(this);
-  private handleBeforeUnloadBound = this.handleBeforeUnload.bind(this);
-  private handleOfflineBound = this.handleOffline.bind(this);
-  private handleOnlineBound = this.handleOnline.bind(this);
+  private checkInterval: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,33 +30,14 @@ export class TvViewComponent implements OnInit, OnDestroy {
     this.tvId = this.route.snapshot.paramMap.get('id');
     if (this.tvId) {
       this.fetchTv(this.tvId);
-      this.atualizarStatus(true); // Define o status inicial como "online"
+      this.atualizarStatus(true);
     } else {
       console.error('tvId não está definido.');
     }
 
-    document.addEventListener('visibilitychange', this.handleVisibilityChangeBound);
-    window.addEventListener('beforeunload', this.handleBeforeUnloadBound);
-    window.addEventListener('offline', this.handleOfflineBound);
-    window.addEventListener('online', this.handleOnlineBound);
-
-    this.visibilitySubscription = this.tvStatusService.tvVisibility$.subscribe(
-      (isVisible: boolean) => {
-        console.log('Visibilidade:', isVisible);
-        if (this.tv) {
-          this.tv.status = isVisible ? 'online' : 'offline';
-          if (this.tvId) {
-            this.atualizarStatus(this.tv.status === 'online');
-          }
-        } else {
-          console.warn('Tentativa de definir status antes da TV ser carregada.');
-        }
-      }
-    );
 
     this.enterFullscreen();
   }
-
 
   enterFullscreen() {
     const elem = document.documentElement;
@@ -75,51 +52,13 @@ export class TvViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleVisibilityChange() {
-    const isVisible = document.visibilityState === 'visible';
-    console.log('Visibilidade do documento:', document.visibilityState, 'isVisible:', isVisible);
-    if (this.tvId) {
-      this.tvStatusService.updateVisibility(this.tvId, isVisible).subscribe({
-        next: () => {
-          console.log('✅ Visibilidade alterada:', isVisible);
-          this.tv.status = isVisible ? 'online' : 'offline';
-          this.atualizarStatus(isVisible);
-        },
-        error: (err: any) => {
-          console.error('❌ Erro ao atualizar visibilidade:', err);
-        }
-      });
-    } else {
-      console.error('❌ tvId não está definido.');
-    }
-  }
-
-  handleBeforeUnload(event: Event) {
-    this.atualizarStatus(false);
-  }
-
-  handleOffline() {
-    console.log('Internet caiu!');
-    this.atualizarStatus(false);
-  }
-
-  handleOnline() {
-    console.log('Internet voltou!');
-    this.atualizarStatus(true);
-  }
-
   atualizarStatus(isOnline: boolean) {
     if (this.tvId) {
       const status = isOnline ? 'online' : 'offline';
       const data = { tvId: this.tvId, status };
       const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
       const url = 'https://outdoor-backend.onrender.com/tv/status-tv';
-      const success = navigator.sendBeacon(url, blob);
-      if (success) {
-        console.log(`✅ Status da TV atualizado para ${status}`);
-      } else {
-        console.error('❌ Falha ao enviar status da TV.');
-      }
+      navigator.sendBeacon(url, blob);
     }
   }
 
@@ -128,27 +67,23 @@ export class TvViewComponent implements OnInit, OnDestroy {
       next: (data: any) => {
         if (data.youtubeLink) {
           data.youtubeLink = this.transformYoutubeLink(data.youtubeLink);
+          this.videoUrl = this.sanitizeUrl(data.youtubeLink);
         }
         if (data.vimeoLink) {
           data.vimeoLink = this.transformVimeoLink(data.vimeoLink);
         }
-        data.status = data.status ? 'online' : 'offline';
         this.tv = data;
-        console.log('TV carregada:', this.tv);
       },
-      error: (err: any) => {
-        console.error('Erro ao carregar TV:', err);
-      }
+      error: (err: any) => console.error('Erro ao carregar TV:', err)
     });
   }
 
   transformYoutubeLink(url: string): string {
-    const videoId = url.split('v=')[1];
-    const ampersandPosition = videoId.indexOf('&');
-    if (ampersandPosition !== -1) {
-      return `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}`;
-    }
-    return `https://www.youtube.com/embed/${videoId}`;
+    const videoIdMatch = url.match(/[?&]v=([^&#]*)/);
+    const videoId = videoIdMatch ? videoIdMatch[1] : null;
+    return videoId
+      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&enablejsapi=1&controls=0`
+      : url;
   }
 
   transformVimeoLink(url: string): string {
@@ -156,20 +91,17 @@ export class TvViewComponent implements OnInit, OnDestroy {
     return `https://player.vimeo.com/video/${videoId}`;
   }
 
+  
+
   sanitizeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
+  
   ngOnDestroy() {
-    document.removeEventListener('visibilitychange', this.handleVisibilityChangeBound);
-    window.removeEventListener('beforeunload', this.handleBeforeUnloadBound);
-    window.removeEventListener('offline', this.handleOfflineBound);
-    window.removeEventListener('online', this.handleOnlineBound);
-
     if (this.visibilitySubscription) {
       this.visibilitySubscription.unsubscribe();
     }
-
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
     }

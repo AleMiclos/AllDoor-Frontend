@@ -13,7 +13,8 @@ body {
 .tv {
   width: 68.5%;
   height: 100%;
-  background-color: rgb(46, 45, 45);
+  background-color: rgb(0, 0, 0);
+  
 }
 
 .tv iframe {
