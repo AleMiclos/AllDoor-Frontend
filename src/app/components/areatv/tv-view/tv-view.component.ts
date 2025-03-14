@@ -5,6 +5,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { TvsInfoComponent } from '../tvs-info/tvs-info.component';
 import { TvStatusService } from '../../../services/tv-status.service';
+import { WebSocketService } from '../../../services/websocket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tv-view',
@@ -18,12 +20,14 @@ export class TvViewComponent implements OnInit, OnDestroy {
   videoUrl: SafeResourceUrl | null = null;
   private visibilitySubscription: any;
   private checkInterval: any;
+  private websocketSubscription: Subscription | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private tvsService: TvsService,
     private sanitizer: DomSanitizer,
-    private tvStatusService: TvStatusService
+    private tvStatusService: TvStatusService,
+    private webSocketService: WebSocketService
   ) {}
 
   ngOnInit() {
@@ -31,12 +35,38 @@ export class TvViewComponent implements OnInit, OnDestroy {
     if (this.tvId) {
       this.fetchTv(this.tvId);
       this.atualizarStatus(true);
+      this.listenForUpdates(); // Inicia a escuta de atualizações via WebSocket
     } else {
       console.error('tvId não está definido.');
     }
 
-
     this.enterFullscreen();
+  }
+
+  // Método para escutar atualizações via WebSocket
+  private listenForUpdates(): void {
+    this.websocketSubscription = this.webSocketService.getMessages().subscribe((message) => {
+      if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
+        // Atualiza a TV com os novos dados
+        this.tv = message.tv;
+        this.updateVideoUrl(); // Atualiza o URL do vídeo, se necessário
+        window.location.reload();
+      } else if (message.type === 'tvStatusUpdate' && message.tvId === this.tvId) {
+        // Atualiza o status da TV
+        this.tv.status = message.status;
+      }
+    });
+  }
+
+  // Método para atualizar o URL do vídeo
+  private updateVideoUrl(): void {
+    if (this.tv.youtubeLink) {
+      this.tv.youtubeLink = this.transformYoutubeLink(this.tv.youtubeLink);
+      this.videoUrl = this.sanitizeUrl(this.tv.youtubeLink);
+    } else if (this.tv.vimeoLink) {
+      this.tv.vimeoLink = this.transformVimeoLink(this.tv.vimeoLink);
+      this.videoUrl = this.sanitizeUrl(this.tv.vimeoLink);
+    }
   }
 
   enterFullscreen() {
@@ -87,23 +117,30 @@ export class TvViewComponent implements OnInit, OnDestroy {
   }
 
   transformVimeoLink(url: string): string {
+    // Extrai o ID do vídeo do URL do Vimeo
     const videoId = url.split('/').pop();
-    return `https://player.vimeo.com/video/${videoId}`;
-  }
+    if (!videoId) {
+      console.error('ID do vídeo do Vimeo não encontrado.');
+      return ''; // Retorna uma string vazia em caso de erro
+    }
 
-  
+    // Gera o URL do player do Vimeo
+    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1`; // Adiciona autoplay e muted
+  }
 
   sanitizeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-  
   ngOnDestroy() {
     if (this.visibilitySubscription) {
       this.visibilitySubscription.unsubscribe();
     }
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
+    }
+    if (this.websocketSubscription) {
+      this.websocketSubscription.unsubscribe(); // Cancela a inscrição do WebSocket
     }
   }
 }
