@@ -30,18 +30,22 @@ export class TvViewComponent implements OnInit, OnDestroy {
     private webSocketService: WebSocketService
   ) {}
 
-  ngOnInit() {
-    this.tvId = this.route.snapshot.paramMap.get('id');
-    if (this.tvId) {
-      this.fetchTv(this.tvId);
-      this.atualizarStatus(true);
-      this.listenForUpdates(); // Inicia a escuta de atualizações via WebSocket
-    } else {
-      console.error('tvId não está definido.');
-    }
-
-    this.enterFullscreen();
+ ngOnInit() {
+  this.tvId = this.route.snapshot.paramMap.get('id');
+  if (this.tvId) {
+    this.atualizarStatus(true); // Enviar status online imediatamente
+    this.fetchTv(this.tvId);
+    this.listenForUpdates();
+  } else {
+    console.error('tvId não está definido.');
   }
+
+  this.enterFullscreen();
+  this.handleVisibilityChange();
+}
+
+
+
 
   // Método para escutar atualizações via WebSocket
   private listenForUpdates(): void {
@@ -57,6 +61,18 @@ export class TvViewComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  private handleVisibilityChange() {
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        this.atualizarStatus(true);
+        this.fetchTv(this.tvId!);
+      } else {
+        this.atualizarStatus(false);
+      }
+    });
+  }
+
 
   // Método para atualizar o URL do vídeo
   private updateVideoUrl(): void {
@@ -98,6 +114,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
         if (data.youtubeLink) {
           data.youtubeLink = this.transformYoutubeLink(data.youtubeLink);
           this.videoUrl = this.sanitizeUrl(data.youtubeLink);
+
         }
         if (data.vimeoLink) {
           data.vimeoLink = this.transformVimeoLink(data.vimeoLink);
