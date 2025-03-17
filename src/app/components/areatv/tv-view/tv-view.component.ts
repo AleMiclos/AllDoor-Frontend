@@ -52,7 +52,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
     this.websocketSubscription = this.webSocketService.getMessages().subscribe((message) => {
       if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
         // Atualiza apenas a TV correspondente sem recarregar a página
-        this.tv = { ...this.tv, ...message.tv };
+        this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
         this.updateVideoUrl();
       } else if (message.type === 'tvStatusUpdate' && message.tvId === this.tvId) {
         this.tv.status = message.status;
