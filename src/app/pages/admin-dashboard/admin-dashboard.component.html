@@ -13,8 +13,9 @@
         <button class="close-btn" (click)="closeView()">X</button>
         <app-users-menu *ngIf="selectedView === 'users'"></app-users-menu>
         <app-service-selector *ngIf="selectedView === 'services'"></app-service-selector>
-
+        
       </div>
+      <app-tv-list></app-tv-list> 
     </div>
   </div>
 

@@ -1,0 +1,31 @@
+<div>
+    <h2>Lista de TVs</h2>
+  
+    <!-- Exibe um spinner enquanto os dados estão sendo carregados -->
+    <div *ngIf="loading">Carregando TVs...</div>
+  
+    <!-- Exibe uma mensagem de erro, se houver -->
+    <div *ngIf="error" class="error">{{ error }}</div>
+  
+    <!-- Exibe a tabela de TVs -->
+    <table *ngIf="!loading && !error && tvs.length > 0">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Usuário</th>
+          <th>Endereço</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tv of tvs">
+          <td>{{ tv.online ? 'Online' : 'Offline' }}</td>
+          <td>{{ tv.user }}</td>
+          <td>{{ tv.address }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Exibe uma mensagem se não houver TVs -->
+    <div *ngIf="!loading && !error && tvs.length === 0">Nenhuma TV encontrada.</div>
+  </div>
+  
