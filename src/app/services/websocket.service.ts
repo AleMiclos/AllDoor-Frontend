@@ -19,7 +19,7 @@ export class WebSocketService {
   // Conecta ao WebSocket
   private connect(): void {
     const token = localStorage.getItem('token') || ''; // Fornece um valor padrão (string vazia) se o token for null
-    this.socket = new WebSocket('ws://localhost:5000', [token]); // Envia o token no cabeçalh
+    this.socket = new WebSocket('ws://outdoor-backend.onrender.com', [token]); // Envia o token no cabeçalh
 
     this.socket.addEventListener('open', () => {
       console.log('Conexão WebSocket estabelecida.');
