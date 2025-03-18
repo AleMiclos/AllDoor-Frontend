@@ -1,31 +1,33 @@
-<div>
-    <h2>Lista de TVs</h2>
-  
-    <!-- Exibe um spinner enquanto os dados estão sendo carregados -->
-    <div *ngIf="loading">Carregando TVs...</div>
-  
-    <!-- Exibe uma mensagem de erro, se houver -->
-    <div *ngIf="error" class="error">{{ error }}</div>
-  
-    <!-- Exibe a tabela de TVs -->
-    <table *ngIf="!loading && !error && tvs.length > 0">
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Usuário</th>
-          <th>Endereço</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tv of tvs">
-          <td>{{ tv.online ? 'Online' : 'Offline' }}</td>
-          <td>{{ tv.user }}</td>
-          <td>{{ tv.address }}</td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <!-- Exibe uma mensagem se não houver TVs -->
-    <div *ngIf="!loading && !error && tvs.length === 0">Nenhuma TV encontrada.</div>
+<div *ngIf="loading" class="loading-message">Carregando usuários e TVs...</div>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+<!-- Exibe os usuários e suas respectivas TVs -->
+<div *ngIf="!loading && users?.length" class="users-list">
+  <div *ngFor="let user of users" class="user-card">
+    <h2>Usuário: {{ user.name }}</h2>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <div *ngIf="user.tvs?.length" class="tv-list">
+      <div *ngFor="let tv of user.tvs" class="tv-card">
+        <h3>TV #{{ tv._id }}</h3>
+        <p><strong>Endereço:</strong> {{ tv.address }}</p>
+        <p>
+          <strong>Status:</strong>
+          <span [ngClass]="{ online: tv.status, offline: !tv.status }">
+            {{ tv.status ? "🟢 Online" : "🔴 Offline" }}
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Mensagem caso o usuário não tenha TVs -->
+    <p *ngIf="!user.tvs?.length" class="no-tvs-message">
+      Nenhuma TV cadastrada para este usuário.
+    </p>
   </div>
-  
+</div>
+
+<!-- Mensagem caso nenhum usuário seja encontrado -->
+<p *ngIf="!loading && users.length === 0" class="no-users-message">
+  Nenhum usuário encontrado.
+</p>

@@ -19,8 +19,7 @@ import { TvListComponent } from "../../../app/components/areatv/tv-list/tv-list.
     FooterComponent,
     NavBarComponent,
     UsersMenuComponent,
-    ServiceSelectorComponent // Adicionando o componente no array de imports
-    ,
+    ServiceSelectorComponent, // Adicionando o componente no array de imports
     TvListComponent
 ],
 })

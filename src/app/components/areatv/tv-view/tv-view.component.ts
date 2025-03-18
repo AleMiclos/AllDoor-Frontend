@@ -45,8 +45,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
 }
 
 
-
-
   // Método para escutar atualizações via WebSocket
   private listenForUpdates(): void {
     this.websocketSubscription = this.webSocketService.getMessages().subscribe((message) => {
@@ -54,12 +52,13 @@ export class TvViewComponent implements OnInit, OnDestroy {
         // Atualiza apenas a TV correspondente sem recarregar a página
         this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
         this.updateVideoUrl();
+        window.location.reload();
       } else if (message.type === 'tvStatusUpdate' && message.tvId === this.tvId) {
         this.tv.status = message.status;
       }
     });
   }
-  
+
 
   private handleVisibilityChange() {
     document.addEventListener('visibilitychange', () => {
