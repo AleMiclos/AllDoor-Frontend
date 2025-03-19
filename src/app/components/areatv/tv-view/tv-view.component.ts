@@ -7,6 +7,7 @@ import { TvsInfoComponent } from '../tvs-info/tvs-info.component';
 import { TvStatusService } from '../../../services/tv-status.service';
 import { WebSocketService } from '../../../services/websocket.service';
 import { Subscription } from 'rxjs';
+import Player from '@vimeo/player';
 
 @Component({
   selector: 'app-tv-view',
@@ -14,6 +15,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./tv-view.component.css'],
   imports: [CommonModule, TvsInfoComponent]
 })
+
 export class TvViewComponent implements OnInit, OnDestroy {
   @Input() tv: any;
   tvId: string | null = null;
@@ -21,35 +23,36 @@ export class TvViewComponent implements OnInit, OnDestroy {
   private visibilitySubscription: any;
   private checkInterval: any;
   private websocketSubscription: Subscription | null = null;
+  private youtubePlayer: any; 
+  private vimeoPlayer: Player | null = null;
+
+  private isYoutubePlaying: boolean = false;
+  private isVimeoPlaying: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private tvsService: TvsService,
     private sanitizer: DomSanitizer,
-    private tvStatusService: TvStatusService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
   ) {}
 
- ngOnInit() {
-  this.tvId = this.route.snapshot.paramMap.get('id');
-  if (this.tvId) {
-    this.atualizarStatus(true); // Enviar status online imediatamente
-    this.fetchTv(this.tvId);
-    this.listenForUpdates();
-  } else {
-    console.error('tvId não está definido.');
+  ngOnInit() {
+    this.tvId = this.route.snapshot.paramMap.get('id');
+    if (this.tvId) {
+      this.atualizarStatus(true); // Enviar status online imediatamente
+      this.fetchTv(this.tvId);
+      this.listenForUpdates();
+    } else {
+      console.error('tvId não está definido.');
+    }
+
+    this.enterFullscreen();
+    this.handleVisibilityChange();
   }
 
-  this.enterFullscreen();
-  this.handleVisibilityChange();
-}
-
-
-  // Método para escutar atualizações via WebSocket
   private listenForUpdates(): void {
     this.websocketSubscription = this.webSocketService.getMessages().subscribe((message) => {
       if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
-        // Atualiza apenas a TV correspondente sem recarregar a página
         this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
         this.updateVideoUrl();
         window.location.reload();
@@ -58,7 +61,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
       }
     });
   }
-
 
   private handleVisibilityChange() {
     document.addEventListener('visibilitychange', () => {
@@ -71,15 +73,19 @@ export class TvViewComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  // Método para atualizar o URL do vídeo
   private updateVideoUrl(): void {
+    let newUrl: SafeResourceUrl | null = null;
+
     if (this.tv.youtubeLink) {
-      this.tv.youtubeLink = this.transformYoutubeLink(this.tv.youtubeLink);
-      this.videoUrl = this.sanitizeUrl(this.tv.youtubeLink);
+      const transformedUrl = this.transformYoutubeLink(this.tv.youtubeLink);
+      if (this.videoUrl !== transformedUrl) {
+        this.videoUrl = this.sanitizeUrl(transformedUrl);
+      }
     } else if (this.tv.vimeoLink) {
-      this.tv.vimeoLink = this.transformVimeoLink(this.tv.vimeoLink);
-      this.videoUrl = this.sanitizeUrl(this.tv.vimeoLink);
+      const transformedUrl = this.transformVimeoLink(this.tv.vimeoLink);
+      if (this.videoUrl !== transformedUrl) {
+        this.videoUrl = this.sanitizeUrl(transformedUrl);
+      }
     }
   }
 
@@ -96,28 +102,40 @@ export class TvViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  atualizarStatus(isOnline: boolean) {
+  atualizarStatus(isOnline: boolean): void {
     if (this.tvId) {
       const status = isOnline ? 'online' : 'offline';
       const data = { tvId: this.tvId, status };
       const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
       const url = 'https://outdoor-backend.onrender.com/tv/status-tv';
       navigator.sendBeacon(url, blob);
+      console.log(`Status atualizado: ${status}`);
     }
   }
 
   fetchTv(tvId: string) {
     this.tvsService.getTvById(tvId).subscribe({
       next: (data: any) => {
-        if (data.youtubeLink) {
-          data.youtubeLink = this.transformYoutubeLink(data.youtubeLink);
-          this.videoUrl = this.sanitizeUrl(data.youtubeLink);
-
-        }
-        if (data.vimeoLink) {
-          data.vimeoLink = this.transformVimeoLink(data.vimeoLink);
-        }
         this.tv = data;
+        console.log('TV carregada:', this.tv);
+
+        if (this.tv.youtubeLink) {
+          this.tv.youtubeLink = this.transformYoutubeLink(this.tv.youtubeLink);
+          this.videoUrl = this.sanitizeUrl(this.tv.youtubeLink);
+          setTimeout(() => {
+            console.log('Inicializando YouTube Player...');
+            this.initializeYoutubePlayer();
+          }, 10000);
+        }
+
+        if (this.tv.vimeoLink) {
+          this.tv.vimeoLink = this.transformVimeoLink(this.tv.vimeoLink);
+          this.videoUrl = this.sanitizeUrl(this.tv.vimeoLink);
+          setTimeout(() => {
+            console.log('Inicializando Vimeo Player...');
+            this.initializeVimeoPlayer();
+          }, 10000);
+        }
       },
       error: (err: any) => console.error('Erro ao carregar TV:', err)
     });
@@ -132,19 +150,97 @@ export class TvViewComponent implements OnInit, OnDestroy {
   }
 
   transformVimeoLink(url: string): string {
-    // Extrai o ID do vídeo do URL do Vimeo
     const videoId = url.split('/').pop();
     if (!videoId) {
       console.error('ID do vídeo do Vimeo não encontrado.');
-      return ''; // Retorna uma string vazia em caso de erro
+      return ''; 
     }
-
-    // Gera o URL do player do Vimeo
-    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1`; // Adiciona autoplay e muted
+    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1`;
   }
 
   sanitizeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  private initializeYoutubePlayer(): void {
+    if (this.youtubePlayer) {
+      console.log("YouTube Player já inicializado!");
+      return;
+    }
+
+    const iframe = document.querySelector('#youtube-player iframe') as HTMLIFrameElement;
+    if (!iframe) {
+      console.error("Iframe do YouTube não encontrado!");
+      return;
+    }
+
+    this.youtubePlayer = new (window as any).YT.Player(iframe, {
+      events: {
+        'onStateChange': (event: any) => this.handleYoutubeStateChange(event),
+      },
+    });
+
+    console.log("YouTube Player inicializado!");
+  }
+
+  private handleYoutubeStateChange(event: any): void {
+    console.log('Evento do YouTube:', event.data);
+  
+    if (event.data === (window as any).YT.PlayerState.PAUSED || event.data === (window as any).YT.PlayerState.ENDED) {
+      console.log('O vídeo do YouTube foi pausado ou terminou.');
+      this.atualizarStatus(false);  // Marca como offline
+    } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
+      console.log('O vídeo do YouTube está tocando.');
+      this.atualizarStatus(true);  // Marca como online
+    } else if (event.data === (window as any).YT.PlayerState.BUFFERING) {
+      console.log('O vídeo do YouTube está carregando.');
+    }
+  }
+  
+  private initializeVimeoPlayer(): void {
+    if (this.vimeoPlayer) {
+      console.log("Vimeo Player já inicializado!");
+      return;
+    }
+  
+    const iframe = document.querySelector('#ad') as HTMLIFrameElement;
+    if (!iframe) {
+      console.error("Iframe do Vimeo não encontrado!");
+      return;
+    }
+  
+    this.vimeoPlayer = new Player(iframe);
+  
+    this.vimeoPlayer.on('play', () => {
+      console.log('O vídeo do Vimeo começou a tocar.');
+      this.atualizarStatus(true);  // Marca como online
+    });
+  
+    this.vimeoPlayer.on('pause', () => {
+      console.log('O vídeo do Vimeo foi pausado.');
+      this.atualizarStatus(false);  // Marca como offline
+    });
+  
+    this.vimeoPlayer.on('ended', () => {
+      console.log('O vídeo do Vimeo terminou.');
+      this.atualizarStatus(false);  // Marca como offline
+    });
+  
+    this.vimeoPlayer.on('error', (error: any) => {
+      console.error('Erro no Vimeo:', error);
+    });
+  
+    console.log("Vimeo Player inicializado!");
+  }
+  
+
+  private checkPlayersStatus(): void {
+    const isBothPlaying = this.isYoutubePlaying && this.isVimeoPlaying;
+    if (isBothPlaying) {
+      this.atualizarStatus(true); // Ambos estão tocando, TV online
+    } else {
+      this.atualizarStatus(false); // Se um deles parar, TV offline
+    }
   }
 
   ngOnDestroy() {
@@ -155,7 +251,17 @@ export class TvViewComponent implements OnInit, OnDestroy {
       clearInterval(this.checkInterval);
     }
     if (this.websocketSubscription) {
-      this.websocketSubscription.unsubscribe(); // Cancela a inscrição do WebSocket
+      this.websocketSubscription.unsubscribe();
+    }
+
+    if (this.youtubePlayer) {
+      this.youtubePlayer.destroy();
+      this.youtubePlayer = null;
+    }
+
+    if (this.vimeoPlayer) {
+      this.vimeoPlayer.destroy();
+      this.vimeoPlayer = null;
     }
   }
 }
