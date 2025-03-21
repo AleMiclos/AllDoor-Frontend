@@ -18,38 +18,40 @@ export class WebSocketService {
 
   // Conecta ao WebSocket
   private connect(): void {
-    const token = localStorage.getItem('token'); 
-    const isTvView = window.location.pathname.includes('tv-view'); 
-  
+    const token = localStorage.getItem('token');
+    const isTvView = window.location.pathname.includes('tv-view');
+
     // Verifica se o token existe antes de adicioná-lo
     this.socket = isTvView || !token
       ? new WebSocket('wss://outdoor-backend.onrender.com') // Sem token para tv-view ou caso o token esteja ausente
       : new WebSocket('wss://outdoor-backend.onrender.com', [token]); // Com token para outras páginas
-  
+
+    //localhost:5000
+    //outdoor-backend.onrender.com
     this.socket.addEventListener('open', () => {
       console.log('Conexão WebSocket estabelecida.');
       this.reconnectAttempts = 0;
     });
-  
+
     this.socket.addEventListener('message', (event) => {
       const data = JSON.parse(event.data);
       this.messageSubject.next(data);
     });
-  
+
     this.socket.addEventListener('close', () => {
       if (!this.isManualClose) {
         console.log('Conexão WebSocket fechada. Tentando reconectar...');
         this.handleReconnect();
       }
     });
-  
+
     this.socket.addEventListener('error', (error) => {
       console.error('Erro na conexão WebSocket:', error);
       this.socket?.close();
     });
   }
-  
-  
+
+
 
   // Lógica de reconexão
   private handleReconnect(): void {

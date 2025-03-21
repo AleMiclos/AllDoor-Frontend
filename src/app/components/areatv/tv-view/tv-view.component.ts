@@ -23,7 +23,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
   private visibilitySubscription: any;
   private checkInterval: any;
   private websocketSubscription: Subscription | null = null;
-  private youtubePlayer: any; 
+  private youtubePlayer: any;
   private vimeoPlayer: Player | null = null;
 
   private isYoutubePlaying: boolean = false;
@@ -102,6 +102,8 @@ export class TvViewComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
   atualizarStatus(isOnline: boolean): void {
     if (this.tvId) {
       const status = isOnline ? 'online' : 'offline';
@@ -125,7 +127,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             console.log('Inicializando YouTube Player...');
             this.initializeYoutubePlayer();
-          }, 10000);
+          }, 5000);
         }
 
         if (this.tv.vimeoLink) {
@@ -134,7 +136,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             console.log('Inicializando Vimeo Player...');
             this.initializeVimeoPlayer();
-          }, 10000);
+          }, 5000);
         }
       },
       error: (err: any) => console.error('Erro ao carregar TV:', err)
@@ -145,7 +147,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
     const videoIdMatch = url.match(/[?&]v=([^&#]*)/);
     const videoId = videoIdMatch ? videoIdMatch[1] : null;
     return videoId
-      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&enablejsapi=1&controls=0`
+      ? `https://www.youtube.com/embed/${videoId}?&playlist=${videoId}&enablejsapi=1&controls=0`
       : url;
   }
 
@@ -153,9 +155,9 @@ export class TvViewComponent implements OnInit, OnDestroy {
     const videoId = url.split('/').pop();
     if (!videoId) {
       console.error('ID do vídeo do Vimeo não encontrado.');
-      return ''; 
+      return '';
     }
-    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1`;
+    return `https://player.vimeo.com/video/${videoId}`;
   }
 
   sanitizeUrl(url: string): SafeResourceUrl {
@@ -185,61 +187,66 @@ export class TvViewComponent implements OnInit, OnDestroy {
 
   private handleYoutubeStateChange(event: any): void {
     console.log('Evento do YouTube:', event.data);
-  
-    if (event.data === (window as any).YT.PlayerState.PAUSED || event.data === (window as any).YT.PlayerState.ENDED) {
-      console.log('O vídeo do YouTube foi pausado ou terminou.');
-      this.atualizarStatus(false);  // Marca como offline
+
+    if (event.data === (window as any).YT.PlayerState.PAUSED) {
+      console.log('O vídeo do YouTube foi pausado.');
+      this.isYoutubePlaying = false;
+    } else if (event.data === (window as any).YT.PlayerState.ENDED) {
+      console.log('O vídeo do YouTube terminou.');
+      this.isYoutubePlaying = false;
     } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
       console.log('O vídeo do YouTube está tocando.');
-      this.atualizarStatus(true);  // Marca como online
-    } else if (event.data === (window as any).YT.PlayerState.BUFFERING) {
-      console.log('O vídeo do YouTube está carregando.');
+      this.isYoutubePlaying = true;
     }
+
+    this.checkPlayersStatus();
   }
-  
+
   private initializeVimeoPlayer(): void {
     if (this.vimeoPlayer) {
       console.log("Vimeo Player já inicializado!");
       return;
     }
-  
+
     const iframe = document.querySelector('#ad') as HTMLIFrameElement;
     if (!iframe) {
       console.error("Iframe do Vimeo não encontrado!");
       return;
     }
-  
+
     this.vimeoPlayer = new Player(iframe);
-  
+
     this.vimeoPlayer.on('play', () => {
       console.log('O vídeo do Vimeo começou a tocar.');
-      this.atualizarStatus(true);  // Marca como online
+      this.isVimeoPlaying = true;
+      this.checkPlayersStatus();
     });
-  
+
     this.vimeoPlayer.on('pause', () => {
       console.log('O vídeo do Vimeo foi pausado.');
-      this.atualizarStatus(false);  // Marca como offline
+      this.isVimeoPlaying = false;
+      this.checkPlayersStatus();
     });
-  
+
     this.vimeoPlayer.on('ended', () => {
       console.log('O vídeo do Vimeo terminou.');
-      this.atualizarStatus(false);  // Marca como offline
+      this.isVimeoPlaying = false;
+      this.checkPlayersStatus();
     });
-  
+
     this.vimeoPlayer.on('error', (error: any) => {
       console.error('Erro no Vimeo:', error);
     });
-  
+
     console.log("Vimeo Player inicializado!");
   }
-  
+
 
   private checkPlayersStatus(): void {
-    const isBothPlaying = this.isYoutubePlaying && this.isVimeoPlaying;
-    if (isBothPlaying) {
-      this.atualizarStatus(true); // Ambos estão tocando, TV online
+    if (this.isYoutubePlaying || this.isVimeoPlaying) {
+      this.atualizarStatus(true); // Pelo menos um player está tocando, TV online
     } else {
-      this.atualizarStatus(false); // Se um deles parar, TV offline
+      this.atualizarStatus(false); // Nenhum player está tocando, TV offline
     }
   }
 

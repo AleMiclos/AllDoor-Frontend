@@ -68,8 +68,8 @@ export class TvsComponent implements OnInit, OnDestroy {
   // Método para buscar o status de uma TV específica
   fetchTvStatus(tvId: string) {
     this.tvsService.getTvStatus(tvId).subscribe({
-      next: (status: boolean) => { // Agora espera um booleano
-        this.updateTvStatus(tvId, status);
+      next: (statusResponse: any) => {
+        this.updateTvStatus(tvId, statusResponse);
       },
       error: (err: any) => {
         this.errorMessage = `Erro ao buscar status da TV ${tvId}: ${err.message}`;
@@ -78,21 +78,22 @@ export class TvsComponent implements OnInit, OnDestroy {
     });
   }
 
+
   // Método para atualizar o status de uma TV na lista
-  updateTvStatus(tvId: string, status: boolean | string) {
+  updateTvStatus(tvId: string, statusResponse: any) {
     const tv = this.tvs.find((tv) => tv._id === tvId);
     if (tv) {
-      // Converte o status para booleano, se necessário
-      if (typeof status === 'string') {
-        tv.status = status === 'online'; // Converte 'online' para true e 'offline' para false
-      } else {
-        tv.status = status; // Já é booleano
-      }
-      console.log(`Status da TV ${tvId} atualizado para:`, tv.status); // Log para depuração
+      // Atualizando os status corretamente
+      tv.status = statusResponse.status === 'online';
+      tv.youtubeStatus = statusResponse.youtubeStatus === 'online';
+      tv.vimeoStatus = statusResponse.vimeoStatus === 'online';
+
+      console.log(`Status atualizado para TV ${tvId}:`, tv);
     } else {
       console.log(`TV com ID ${tvId} não encontrada na lista.`);
     }
   }
+
 
   fetchTvs() {
     if (this.userId) {
