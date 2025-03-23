@@ -26,6 +26,7 @@ export class TvsComponent implements OnInit, OnDestroy {
   // Declaração da propriedade tvStatusSubscription
   private tvStatusSubscription: Subscription | undefined;
   private intervalId: any; // Armazena o ID do intervalo
+  cdr: any;
 
   constructor(
     private tvsService: TvsService,
@@ -41,6 +42,7 @@ export class TvsComponent implements OnInit, OnDestroy {
     this.tvStatusSubscription = this.tvStatusService.tvStatus$.subscribe(
       ({ tvId, status }) => {
         this.updateTvStatus(tvId, status);
+
       }
     );
 
@@ -49,6 +51,8 @@ export class TvsComponent implements OnInit, OnDestroy {
       if (this.tvs.length > 0) {
         this.tvs.forEach((tv) => {
           this.tvStatusService.getTvStatus(tv._id);
+          this.tvStatusService.getVimeoStatus(tv._id);
+          this.tvStatusService.getYouTubeStatus(tv._id);
         });
       }
     }, 5000); // Atualiza a cada 5 segundos
@@ -65,59 +69,84 @@ export class TvsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Método para buscar o status de uma TV específica
-  fetchTvStatus(tvId: string) {
-    this.tvsService.getTvStatus(tvId).subscribe({
-      next: (statusResponse: any) => {
-        this.updateTvStatus(tvId, statusResponse);
-      },
-      error: (err: any) => {
-        this.errorMessage = `Erro ao buscar status da TV ${tvId}: ${err.message}`;
-        console.error(`Erro ao buscar status da TV ${tvId}:`, err);
-      },
-    });
-  }
-
-
-  // Método para atualizar o status de uma TV na lista
-  updateTvStatus(tvId: string, statusResponse: any) {
+  updateTvStatus(tvId: string, status: string) {
     const tv = this.tvs.find((tv) => tv._id === tvId);
     if (tv) {
-      // Atualizando os status corretamente
-      tv.status = statusResponse.status === 'online';
-      tv.youtubeStatus = statusResponse.youtubeStatus === 'online';
-      tv.vimeoStatus = statusResponse.vimeoStatus === 'online';
+      tv.status = status === 'online'; // Converte para booleano
+      console.log(`Status atualizado para TV ${tvId}: ${tv.status}`);
 
-      console.log(`Status atualizado para TV ${tvId}:`, tv);
-    } else {
-      console.log(`TV com ID ${tvId} não encontrada na lista.`);
+      // Garante que a UI seja atualizada corretamente
+
     }
   }
 
-
-  fetchTvs() {
-    if (this.userId) {
-      this.loading = true;
-      this.tvsService.getTvsByUserId(this.userId).subscribe({
-        next: (data: any[]) => {
-          this.loading = false;
-          this.tvs = data;
-
-          if (this.tvs.length > 0) {
-            console.log('Buscando status das TVs...');
-            this.tvs.forEach((tv) => this.fetchTvStatus(tv._id));
-          }
-        },
-        error: (err: any) => {
-          this.errorMessage = 'Erro ao carregar TVs.';
-          console.error(err);
-          this.loading = false;
-        },
-      });
-    } else {
-      console.error('userId não está definido.');
+ // Método para atualizar o status geral da TV
+ fetchTvStatus(tvId: string) {
+  this.tvStatusService.getTvStatus(tvId);
+  this.tvStatusService.tvStatus$.subscribe(({ tvId: updatedTvId, status }) => {
+    if (updatedTvId === tvId) {
+      const tv = this.tvs.find((tv) => tv._id === tvId);
+      if (tv) {
+        tv.status = status === 'online';
+        console.log(`Status geral atualizado para TV ${tvId}: ${tv.status}`);
+      }
     }
+  });
+}
+
+// Atualiza o status do Vimeo
+fetchVimeoStatus(tvId: string) {
+  this.tvStatusService.getVimeoStatus(tvId);
+  this.tvStatusService.vimeoStatus$.subscribe(({ tvId: updatedTvId, status }) => {
+    const tv = this.tvs.find((tv) => tv._id === updatedTvId);
+    if (tv) {
+      tv.vimeoStatus = status === 'online' ? 'online' : 'offline'; // 🔹 Garante valores corretos
+      console.log(`Status do Vimeo atualizado para TV ${tvId}}`);
+    }
+  });
+}
+
+
+// Atualiza o status do YouTube
+fetchYoutubeStatus(tvId: string) {
+  this.tvStatusService.getYouTubeStatus(tvId);
+  this.tvStatusService.youtubeStatus$.subscribe(({ tvId: updatedTvId, status }) => {
+    const tv = this.tvs.find((tv) => tv._id === updatedTvId);
+    if (tv) {
+      tv.youtubeStatus = status === 'online' ? 'online' : 'offline'; // 🔹 Garante valores corretos
+      console.log(`Status do YouTube atualizado para TV ${tvId}: ${tv.youtubeStatus}`);
+    }
+  });
+}
+
+
+fetchTvs() {
+  if (this.userId) {
+    this.loading = true;
+    this.tvsService.getTvsByUserId(this.userId).subscribe({
+      next: (data: any[]) => {
+        this.loading = false;
+        this.tvs = data;
+
+        if (this.tvs.length > 0) {
+          console.log('Buscando status das TVs...');
+          this.tvs.forEach((tv) => {
+            this.fetchTvStatus(tv._id);
+            this.fetchVimeoStatus(tv._id);  // 🔹 Adicionando atualização do Vimeo
+            this.fetchYoutubeStatus(tv._id); // 🔹 Adicionando atualização do YouTube
+          });
+        }
+      },
+      error: (err: any) => {
+        this.errorMessage = 'Erro ao carregar TVs.';
+        console.error(err);
+        this.loading = false;
+      },
+    });
+  } else {
+    console.error('userId não está definido.');
   }
+}
 
 
   showAddForm() {

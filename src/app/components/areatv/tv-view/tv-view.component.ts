@@ -4,7 +4,6 @@ import { TvsService } from '../../../services/tvs.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { TvsInfoComponent } from '../tvs-info/tvs-info.component';
-import { TvStatusService } from '../../../services/tv-status.service';
 import { WebSocketService } from '../../../services/websocket.service';
 import { Subscription } from 'rxjs';
 import Player from '@vimeo/player';
@@ -15,13 +14,11 @@ import Player from '@vimeo/player';
   styleUrls: ['./tv-view.component.css'],
   imports: [CommonModule, TvsInfoComponent]
 })
-
 export class TvViewComponent implements OnInit, OnDestroy {
   @Input() tv: any;
   tvId: string | null = null;
   videoUrl: SafeResourceUrl | null = null;
   private visibilitySubscription: any;
-  private checkInterval: any;
   private websocketSubscription: Subscription | null = null;
   private youtubePlayer: any;
   private vimeoPlayer: Player | null = null;
@@ -102,17 +99,58 @@ export class TvViewComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
   atualizarStatus(isOnline: boolean): void {
     if (this.tvId) {
       const status = isOnline ? 'online' : 'offline';
       const data = { tvId: this.tvId, status };
+
+      // Envia o status via Beacon para o backend
       const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
       const url = 'https://outdoor-backend.onrender.com/tv/status-tv';
       navigator.sendBeacon(url, blob);
+
+      // Envia a atualização via WebSocket para o painel de administração
+      this.webSocketService.sendMessage({
+        type: 'tvStatusUpdate',
+        tvId: this.tvId,
+        status
+      });
+
       console.log(`Status atualizado: ${status}`);
     }
+  }
+
+  private updateYoutubeStatus(isPlaying: boolean): void {
+    const status = isPlaying ? 'online' : 'offline'; // Status de reprodução
+
+    const data = {
+      tvId: this.tvId,
+      status: status, // Enviar status de "playing" ou "paused"
+    };
+
+    // Envia o status via Beacon para o backend (endpoint do YouTube)
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    const url = 'http://localhost:5000/tv/status-youtube'; // Endpoint para o YouTube
+    navigator.sendBeacon(url, blob);
+
+    console.log(`Status do YouTube enviado: ${status}`);
+  }
+
+  // Método auxiliar para atualizar o status do Vimeo
+  private updateVimeoStatus(isPlaying: boolean): void {
+    const status = isPlaying ? 'online' : 'offline'; // Status de reprodução
+
+    const data = {
+      tvId: this.tvId,
+      status: status, // Enviar status de "playing" ou "paused"
+    };
+
+    // Envia o status via Beacon para o backend (endpoint do Vimeo)
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    const url = 'http://localhost:5000/tv/status-vimeo'; // Endpoint para o Vimeo
+    navigator.sendBeacon(url, blob);
+    //localhost:5000/tv/status-vimeo
+    console.log(`Status do Vimeo enviado: ${status}`);
   }
 
   fetchTv(tvId: string) {
@@ -191,15 +229,18 @@ export class TvViewComponent implements OnInit, OnDestroy {
     if (event.data === (window as any).YT.PlayerState.PAUSED) {
       console.log('O vídeo do YouTube foi pausado.');
       this.isYoutubePlaying = false;
+      this.updateYoutubeStatus(false); // Envia status "paused"
     } else if (event.data === (window as any).YT.PlayerState.ENDED) {
       console.log('O vídeo do YouTube terminou.');
       this.isYoutubePlaying = false;
+      this.updateYoutubeStatus(false); // Envia status "paused"
     } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
       console.log('O vídeo do YouTube está tocando.');
       this.isYoutubePlaying = true;
+      this.updateYoutubeStatus(true); // Envia status "playing"
     }
 
-    this.checkPlayersStatus();
+    this.checkPlayersStatus(); // Atualiza o status geral da TV
   }
 
   private initializeVimeoPlayer(): void {
@@ -219,18 +260,21 @@ export class TvViewComponent implements OnInit, OnDestroy {
     this.vimeoPlayer.on('play', () => {
       console.log('O vídeo do Vimeo começou a tocar.');
       this.isVimeoPlaying = true;
+      this.updateVimeoStatus(true); // Envia status "playing"
       this.checkPlayersStatus();
     });
 
     this.vimeoPlayer.on('pause', () => {
       console.log('O vídeo do Vimeo foi pausado.');
       this.isVimeoPlaying = false;
+      this.updateVimeoStatus(false); // Envia status "paused"
       this.checkPlayersStatus();
     });
 
     this.vimeoPlayer.on('ended', () => {
       console.log('O vídeo do Vimeo terminou.');
       this.isVimeoPlaying = false;
+      this.updateVimeoStatus(false); // Envia status "paused"
       this.checkPlayersStatus();
     });
 
@@ -240,7 +284,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
 
     console.log("Vimeo Player inicializado!");
   }
-
 
   private checkPlayersStatus(): void {
     if (this.isYoutubePlaying || this.isVimeoPlaying) {
@@ -253,9 +296,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.visibilitySubscription) {
       this.visibilitySubscription.unsubscribe();
-    }
-    if (this.checkInterval) {
-      clearInterval(this.checkInterval);
     }
     if (this.websocketSubscription) {
       this.websocketSubscription.unsubscribe();
