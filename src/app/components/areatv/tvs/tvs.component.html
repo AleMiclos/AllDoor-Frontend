@@ -16,21 +16,21 @@
         <p>
           <strong>Página:</strong>
           <span [ngClass]="{ online: tv.status, offline: !tv.status }">
-            {{ tv.status ? "🟢 Online" : "🔴 Offline" }} (Status: {{ tv.status }})
+            {{ tv.status ? "🟢 Online" : "🔴 Offline" }} 
           </span>
         </p>
 
         <p>
           <strong>YT:</strong>
           <span [ngClass]="{ online: tv.youtubeStatus === 'online', offline: tv.youtubeStatus !== 'online' }">
-            {{ tv.youtubeStatus === 'online' ? "🟢 Online" : "🔴 Offline" }} (Status: {{ tv.youtubeStatus }})
+            {{ tv.youtubeStatus === 'online' ? "🟢 Online" : "🔴 Offline" }} 
           </span>
         </p>
 
         <p>
           <strong>Vimeo:</strong>
           <span [ngClass]="{ online: tv.vimeoStatus === 'online', offline: tv.vimeoStatus !== 'online' }">
-            {{ tv.vimeoStatus === 'online' ? "🟢 Online" : "🔴 Offline" }} (Status: {{ tv.vimeoStatus }})
+            {{ tv.vimeoStatus === 'online' ? "🟢 Online" : "🔴 Offline" }} 
           </span>
         </p>
 
