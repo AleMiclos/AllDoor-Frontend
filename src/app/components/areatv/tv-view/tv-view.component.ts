@@ -136,11 +136,10 @@ export class TvViewComponent implements OnInit, OnDestroy {
     const videoId = url.split('/').pop();
     if (!videoId) {
       console.error('ID do vídeo do Vimeo não encontrado.');
-      return ''; // Retorna uma string vazia em caso de erro
+      return ''; 
     }
 
-    // Gera o URL do player do Vimeo
-    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1`; // Adiciona autoplay e muted
+    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1`; 
   }
 
   sanitizeUrl(url: string): SafeResourceUrl {
@@ -155,7 +154,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
       clearInterval(this.checkInterval);
     }
     if (this.websocketSubscription) {
-      this.websocketSubscription.unsubscribe(); // Cancela a inscrição do WebSocket
+      this.websocketSubscription.unsubscribe(); 
     }
   }
 }
