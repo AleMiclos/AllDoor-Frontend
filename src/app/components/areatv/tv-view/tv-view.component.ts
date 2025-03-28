@@ -272,7 +272,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
   }
 
   private verificarStatusPlayers(): void {
-    setTimeout(() => {
+    setInterval (() => {
       if (this.youtubePlayer) {
         const playerState = this.youtubePlayer.getPlayerState();
         const isPlaying = playerState === (window as any).YT.PlayerState.PLAYING;
