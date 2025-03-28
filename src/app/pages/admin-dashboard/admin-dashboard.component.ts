@@ -6,6 +6,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 import { UsersMenuComponent } from '../../components/users-menu/users-menu.component'; // Import correto
 import { ServiceSelectorComponent } from '../../components/service-selector/service-selector.component';
+import { TvListComponent } from "../../../app/components/areatv/tv-list/tv-list.component";
 
 @Component({
   selector: 'app-admin',
@@ -18,8 +19,9 @@ import { ServiceSelectorComponent } from '../../components/service-selector/serv
     FooterComponent,
     NavBarComponent,
     UsersMenuComponent,
-    ServiceSelectorComponent // Adicionando o componente no array de imports
-  ],
+    ServiceSelectorComponent, // Adicionando o componente no array de imports
+    TvListComponent
+],
 })
 export class AdminDashboardComponent implements OnInit {
   selectedView: string | null = null;

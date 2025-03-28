@@ -1,0 +1,21 @@
+<div *ngIf="loading" class="loading-message">Carregando TVs...</div>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+<!-- Exibe todas as TVs, independentemente de usuário -->
+<div *ngIf="!loading && users?.length" class="tv-list">
+  <div *ngFor="let user of users">
+    <div *ngFor="let tv of user.tvs" class="tv-card">
+      <h3>TV {{ user.name }} / {{ tv._id }} </h3>
+
+      <p> <strong></strong> ...{{ tv.address }} </p>
+      <p>
+        <span [ngClass]="{ online: tv.status, offline: !tv.status }">
+          {{ tv.status ? "🟢 Online" : "🔴 Offline" }}
+        </span>
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<!-- Mensagem caso nenhuma TV seja encontrada -->

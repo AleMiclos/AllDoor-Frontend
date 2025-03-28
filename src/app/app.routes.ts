@@ -9,6 +9,7 @@ import { UsuarioComponent } from './pages/usuario/usuario.component';
 import { UsersTvComponent } from './components/areatv/users-tv/users-tv.component';
 import { TvsComponent } from './components/areatv/tvs/tvs.component';
 import { TvViewComponent } from './components/areatv/tv-view/tv-view.component';
+import { AdFullComponent } from './components/areatv/ad-full/ad-full.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,6 +21,7 @@ export const appRoutes: Routes = [
   { path: 'users-tv', component: UsersTvComponent },
   { path: 'tvs/:id', component: TvsComponent },
   { path: 'view-tv/:id', component: TvViewComponent },
+  { path: 'ad-full/:id', component: AdFullComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Redireciona rotas não encontradas para a raiz
 ];
 

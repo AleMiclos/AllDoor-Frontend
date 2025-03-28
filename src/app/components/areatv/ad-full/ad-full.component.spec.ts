@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TotemDetailsComponent } from './totem.component';
+import { AdFullComponent } from './ad-full.component';
 
-describe('TotemComponent', () => {
-  let component: TotemDetailsComponent;
-  let fixture: ComponentFixture<TotemDetailsComponent>;
+describe('AdFullComponent', () => {
+  let component: AdFullComponent;
+  let fixture: ComponentFixture<AdFullComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TotemDetailsComponent]
+      imports: [AdFullComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TotemDetailsComponent);
+    fixture = TestBed.createComponent(AdFullComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
