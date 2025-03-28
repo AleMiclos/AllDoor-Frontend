@@ -163,7 +163,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             console.log('Inicializando YouTube Player...');
             this.initializeYoutubePlayer();
-          }, 15000);
+          }, 60000);
         }
 
         if (this.tv.vimeoLink) {
@@ -172,7 +172,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             console.log('Inicializando Vimeo Player...');
             this.initializeVimeoPlayer();
-          }, 15000);
+          }, 60000);
         }
       },
       error: (err: any) => console.error('Erro ao carregar TV:', err)
@@ -292,7 +292,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
       } else {
         console.log('Vimeo Player ainda não foi inicializado.');
       }
-    }, 20000); // Tempo para garantir que os players foram carregados
+    }, 70000); // Tempo para garantir que os players foram carregados
   }
 
 
