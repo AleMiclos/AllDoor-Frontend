@@ -22,17 +22,19 @@ export class TvStatusService {
   }
 
   private tvStatusSubject = new Subject<{ tvId: string; status: string }>();
-
-  // Observable para que os componentes possam se inscrever
   tvStatus$ = this.tvStatusSubject.asObservable();
 
-  // Método para atualizar o status de uma TV
+  private vimeoStatusSubject = new Subject<{ tvId: string; status: string }>();
+  vimeoStatus$ = this.vimeoStatusSubject.asObservable();
+
+  private youtubeStatusSubject = new Subject<{ tvId: string; status: string }>();
+  youtubeStatus$ = this.youtubeStatusSubject.asObservable();
+
   updateTvStatus(tvId: string, status: string): Observable<any> {
     const payload = { tvId, status };
     console.log('Enviando atualização de status:', payload);
     return this.http.post(`${this.apiUrl}/status-tv`, payload);
   }
-  
 
   getTvStatus(tvId: string) {
     this.http.get<{ status: string }>(`${this.apiUrl}/status-tv/${tvId}`).subscribe({
@@ -41,6 +43,30 @@ export class TvStatusService {
       },
       error: (err) => {
         console.error(`Erro ao buscar status da TV ${tvId}:`, err);
+      }
+    });
+  }
+
+  // 🔹 Pega o status do Vimeo
+  getVimeoStatus(tvId: string) {
+    this.http.get<{ status: string }>(`${this.apiUrl}/status-vimeo/${tvId}`).subscribe({
+      next: (response) => {
+        this.vimeoStatusSubject.next({ tvId, status: response.status });
+      },
+      error: (err) => {
+        console.error(`Erro ao buscar status do Vimeo na TV ${tvId}:`, err);
+      }
+    });
+  }
+
+  // 🔹 Pega o status do YouTube
+  getYouTubeStatus(tvId: string) {
+    this.http.get<{ status: string }>(`${this.apiUrl}/status-youtube/${tvId}`).subscribe({
+      next: (response) => {
+        this.youtubeStatusSubject.next({ tvId, status: response.status });
+      },
+      error: (err) => {
+        console.error(`Erro ao buscar status do YouTube na TV ${tvId}:`, err);
       }
     });
   }
