@@ -132,7 +132,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
   }
 
   transformVimeoLink(url: string): string {
-    // Extrai o ID do vídeo do URL do Vimeo
     const videoId = url.split('/').pop();
     if (!videoId) {
       console.error('ID do vídeo do Vimeo não encontrado.');
