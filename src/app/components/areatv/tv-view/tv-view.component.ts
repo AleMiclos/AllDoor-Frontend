@@ -72,7 +72,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
   }
 
 
-  // Método para atualizar o URL do vídeo
+  // Método para atualizar o URL do víde
   private updateVideoUrl(): void {
     if (this.tv.youtubeLink) {
       this.tv.youtubeLink = this.transformYoutubeLink(this.tv.youtubeLink);
