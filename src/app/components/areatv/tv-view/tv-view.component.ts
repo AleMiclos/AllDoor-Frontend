@@ -53,7 +53,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
       if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
         this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
         this.updateVideoUrl();
-        window.location.reload();
+        // window.location.reload();
       } else if (message.type === 'tvStatusUpdate' && message.tvId === this.tvId) {
         this.tv.status = message.status;
       }
