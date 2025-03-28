@@ -36,7 +36,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.tvId = this.route.snapshot.paramMap.get('id');
     if (this.tvId) {
-      this.atualizarStatus(true); // Enviar status online imediatamente
+      this.atualizarStatus(true); // Enviar status online imediatament
       this.fetchTv(this.tvId);
       this.listenForUpdates();
       this.verificarStatusPlayers();
