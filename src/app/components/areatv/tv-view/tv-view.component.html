@@ -12,7 +12,7 @@
   <div *ngIf="tv.youtubeLink" class="tv" id="youtube-player">
     <iframe
       id="youtube-player"
-      [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=1&controls=0&enablejsapi=1')"
+      [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=1&controls=0')"
       frameborder="0"
       allowfullscreen
     ></iframe>
