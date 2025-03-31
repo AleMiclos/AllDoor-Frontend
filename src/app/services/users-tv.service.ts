@@ -8,7 +8,7 @@ import { environment } from '../../enviroments/environment'
   providedIn: 'root'
 })
 export class UsersTvService {
-private apiUrl = `${environment.apiUrl}/users`;  
+private apiUrl = `${environment.apiUrl}/users`;
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
@@ -33,7 +33,7 @@ private apiUrl = `${environment.apiUrl}/users`;
   updateUserPermissions(userId: string, permissions: { tvs: boolean, totens: boolean }): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/permissions/${userId}`, permissions, { headers: this.getHeaders() });
   }
-  
+
   atualizarStatusTotem(totemId: string, status: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/tv/status-tv`, { totemId, status });
   }

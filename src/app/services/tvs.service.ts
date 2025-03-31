@@ -56,7 +56,7 @@ export class TvsService {
     console.log('Atualizando TV:', tvId, tvData); // Verifique qual TV está sendo enviada
 
     return this.http.put<any>(`${this.apiUrl}/tv/${tvId}`, tvData, { headers: this.getHeaders() }).pipe(
-      
+
       catchError(error => {
         console.error('Erro ao atualizar TV:', error);
         return of(null); // Retorna null em caso de erro

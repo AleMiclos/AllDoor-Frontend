@@ -4,7 +4,6 @@ import { TvsService } from '../../../services/tvs.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { TvsInfoComponent } from '../tvs-info/tvs-info.component';
-import { TvStatusService } from '../../../services/tv-status.service';
 import { WebSocketService } from '../../../services/websocket.service';
 import { Subscription } from 'rxjs';
 
@@ -12,8 +11,9 @@ import { Subscription } from 'rxjs';
   selector: 'app-tv-view',
   templateUrl: './tv-view.component.html',
   styleUrls: ['./tv-view.component.css'],
-  imports: [CommonModule, TvsInfoComponent],
+  imports: [CommonModule, TvsInfoComponent]
 })
+
 export class TvViewComponent implements OnInit, OnDestroy {
   @Input() tv: any;
   tvId: string | null = null;
@@ -26,14 +26,13 @@ export class TvViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private tvsService: TvsService,
     private sanitizer: DomSanitizer,
-    private tvStatusService: TvStatusService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
   ) {}
 
   ngOnInit() {
     this.tvId = this.route.snapshot.paramMap.get('id');
     if (this.tvId) {
-      this.atualizarStatus(true);
+      this.atualizarStatus(true); // Enviar status online imediatamente
       this.fetchTv(this.tvId);
       this.listenForUpdates();
     } else {
@@ -44,22 +43,16 @@ export class TvViewComponent implements OnInit, OnDestroy {
     this.handleVisibilityChange();
   }
 
-  // Método para escutar atualizações via WebSocket
   private listenForUpdates(): void {
-    this.websocketSubscription = this.webSocketService
-      .getMessages()
-      .subscribe((message) => {
-        if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
-          this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
-          this.updateVideoUrl();
-          window.location.reload();
-        } else if (
-          message.type === 'tvStatusUpdate' &&
-          message.tvId === this.tvId
-        ) {
-          this.tv.status = message.status;
-        }
-      });
+    this.websocketSubscription = this.webSocketService.getMessages().subscribe((message) => {
+      if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
+        this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
+        this.updateVideoUrl();
+        window.location.reload();
+      } else if (message.type === 'tvStatusUpdate' && message.tvId === this.tvId) {
+        this.tv.status = message.status;
+      }
+    });
   }
 
   private handleVisibilityChange() {
@@ -72,8 +65,6 @@ export class TvViewComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  // Método para atualizar o URL do víde
 
   private updateVideoUrl(): void {
     let newUrl: SafeResourceUrl | null = null;
@@ -104,34 +95,39 @@ export class TvViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  atualizarStatus(isOnline: boolean) {
+  atualizarStatus(isOnline: boolean): void {
     if (this.tvId) {
       const status = isOnline ? 'online' : 'offline';
       const data = { tvId: this.tvId, status };
-      const blob = new Blob([JSON.stringify(data)], {
-        type: 'application/json',
-      });
+      const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
       const url = 'https://outdoor-backend.onrender.com/tv/status-tv';
       navigator.sendBeacon(url, blob);
       console.log(`Status atualizado: ${status}`);
+
     }
   }
+
+
 
   fetchTv(tvId: string) {
     this.tvsService.getTvById(tvId).subscribe({
       next: (data: any) => {
-        if (data.youtubeLink) {
-          this.tv = data;
-          console.log('TV carregada:', this.tv);
-          data.youtubeLink = this.transformYoutubeLink(data.youtubeLink);
-          this.videoUrl = this.sanitizeUrl(data.youtubeLink);
-        }
-        if (data.vimeoLink) {
-          data.vimeoLink = this.transformVimeoLink(data.vimeoLink);
-        }
         this.tv = data;
+        console.log('TV carregada:', this.tv);
+
+        if (this.tv.youtubeLink) {
+          this.tv.youtubeLink = this.transformYoutubeLink(this.tv.youtubeLink);
+          this.videoUrl = this.sanitizeUrl(this.tv.youtubeLink);
+
+        }
+
+        if (this.tv.vimeoLink) {
+          this.tv.vimeoLink = this.transformVimeoLink(this.tv.vimeoLink);
+          this.videoUrl = this.sanitizeUrl(this.tv.vimeoLink);
+
+        }
       },
-      error: (err: any) => console.error('Erro ao carregar TV:', err),
+      error: (err: any) => console.error('Erro ao carregar TV:', err)
     });
   }
 
@@ -156,6 +152,10 @@ export class TvViewComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
+
+
+
+
   ngOnDestroy() {
     if (this.visibilitySubscription) {
       this.visibilitySubscription.unsubscribe();
@@ -166,5 +166,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
     if (this.websocketSubscription) {
       this.websocketSubscription.unsubscribe();
     }
+
+
   }
 }

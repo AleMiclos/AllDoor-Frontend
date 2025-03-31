@@ -22,17 +22,14 @@ export class TvStatusService {
   }
 
   private tvStatusSubject = new Subject<{ tvId: string; status: string }>();
-
-  // Observable para que os componentes possam se inscrever
   tvStatus$ = this.tvStatusSubject.asObservable();
 
-  // Método para atualizar o status de uma TV
+
   updateTvStatus(tvId: string, status: string): Observable<any> {
     const payload = { tvId, status };
     console.log('Enviando atualização de status:', payload);
     return this.http.post(`${this.apiUrl}/status-tv`, payload);
   }
-  
 
   getTvStatus(tvId: string) {
     this.http.get<{ status: string }>(`${this.apiUrl}/status-tv/${tvId}`).subscribe({
@@ -44,4 +41,6 @@ export class TvStatusService {
       }
     });
   }
+
+
 }
