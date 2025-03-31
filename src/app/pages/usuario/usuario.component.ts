@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpHeaders
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 
@@ -11,19 +11,27 @@ import { FooterComponent } from '../../components/footer/footer.component';
   templateUrl: './usuario.component.html',
   styleUrls: ['./usuario.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NavBarComponent, FooterComponent]
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    NavBarComponent,
+    FooterComponent,
+  ],
 })
 export class UsuarioComponent {
   selectedUserId: string | null = null;
   statusMessage: string = '';
   loading = false;
   totems: any[] = [];
-  editingTotem: any = null;
+  tvs: any[] = []; // Adicionada a lista de TVs
+  editingItem: any = null; // Agora pode ser tanto Totem quanto TV
+  editingTotem: any;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.selectedUserId = localStorage.getItem('userId'); // Obtém o userId salvo após login
+    this.selectedUserId = localStorage.getItem('userId');
     console.log('userId recuperado:', this.selectedUserId);
 
     if (!this.selectedUserId) {
@@ -31,54 +39,73 @@ export class UsuarioComponent {
       return;
     }
 
-    this.fetchTotens();
+    this.fetchData('totens');
+    this.fetchData('tvs');
   }
 
-  fetchTotens(): void {
+  fetchData(type: 'totens' | 'tvs'): void {
     this.loading = true;
-
-    // Recupera o token do localStorage
     const token = localStorage.getItem('token');
 
-    // Verifica se o token está presente
     if (!token) {
       this.statusMessage = 'Erro: Token de autenticação não encontrado.';
       this.loading = false;
       return;
     }
 
-    // Configura o cabeçalho com o token
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}` // Adiciona o token no cabeçalho
-    });
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    // Correção da URL
+    const apiUrl = `https://outdoor-backend.onrender.com/services/${type}/`;
 
-    // Faz a requisição com o cabeçalho
-    this.http.get<any[]>(`https://outdoor-backend.onrender.com/totems/by-user-id/${this.selectedUserId}`, { headers })
-      .subscribe({
-        next: (data) => {
+    this.http.get<any[]>(apiUrl, { headers }).subscribe({
+      next: (data) => {
+        if (type === 'totens') {
           this.totems = data;
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Erro ao buscar os totens:', error);
-          this.statusMessage = 'Erro ao carregar os totens.';
-          this.loading = false;
+        } else {
+          this.tvs = data;
         }
-      });
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error(`Erro ao buscar ${type}:`, error);
+        this.statusMessage = `Erro ao carregar ${type}.`;
+        this.loading = false;
+      },
+    });
   }
 
-  handleStartEditing(totem: any) {
-    this.editingTotem = { ...totem };
+
+  handleStartEditing(item: any) {
+    this.editingItem = { ...item };
   }
 
   handleSaveChanges() {
-    const index = this.totems.findIndex(t => t._id === this.editingTotem._id);
-    if (index !== -1) {
-      this.totems[index] = this.editingTotem;
-      this.editingTotem = null;
-      this.statusMessage = 'Totem atualizado com sucesso!';
-    } else {
-      this.statusMessage = 'Erro ao atualizar o totem.';
+    if (!this.editingItem) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.statusMessage = 'Erro: Token de autenticação não encontrado.';
+      return;
     }
+
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    const apiUrl = `https://outdoor-backend.onrender.com/${this.editingItem.type}/${this.editingItem._id}`;
+
+    this.http.put(apiUrl, this.editingItem, { headers }).subscribe({
+      next: () => {
+        const list =
+          this.editingItem.type === 'totens' ? this.totems : this.tvs;
+        const index = list.findIndex((t) => t._id === this.editingItem._id);
+        if (index !== -1) {
+          list[index] = { ...this.editingItem };
+        }
+        this.editingItem = null;
+        this.statusMessage = 'Atualização realizada com sucesso!';
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar:', error);
+        this.statusMessage = 'Erro ao atualizar.';
+      },
+    });
   }
 }

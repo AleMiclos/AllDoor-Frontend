@@ -1,0 +1,52 @@
+.service-selector {
+  text-align: center;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+h2 {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+button:nth-child(1) {
+  background: #007bff;
+  color: white;
+}
+
+button:nth-child(1):hover {
+  background: #0056b3;
+}
+
+button:nth-child(2) {
+  background: #28a745;
+  color: white;
+}
+
+button:nth-child(2):hover {
+  background: #1d7a30;
+}
+
+.service-content {
+  margin-top: 20px;
+}

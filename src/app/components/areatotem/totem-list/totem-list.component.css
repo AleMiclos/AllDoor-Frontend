@@ -1,44 +1,35 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  margin: 0;
-  padding: 20px;
-}
+
 
 .totem-container {
-  max-width: 800px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o conteúdo */
+  padding: 10px;
+
 }
 
 .totem-form {
   background: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px; /* Mantém uma largura confortável em telas grandes */
 }
 
 .totem-input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.totem-input:focus {
-  border-color: #3498db;
-  outline: none;
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
 .totem-checkbox {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
   font-size: 16px;
 }
 
@@ -47,12 +38,14 @@ body {
 }
 
 .totem-button {
-  padding: 10px 20px;
+  width: 100%; /* Ocupa toda a largura no mobile */
+  padding: 12px;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-align: center;
 }
 
 .totem-button--primary {
@@ -80,22 +73,29 @@ body {
   border-radius: 4px;
   margin-bottom: 20px;
   border: 1px solid #f5c6cb;
+  text-align: center;
 }
 
 .totem-list {
-  list-style-type: none;
-  padding: 0;
+  width: 100%;
+  max-width: 600px;
+  overflow-y: auto;
+  padding-bottom: 26px;
+  padding-top: 20px;
+  margin-bottom: auto;
+
 }
 
 .totem-item {
   background: white;
-  padding: 20px;
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .totem-title {
+  font-size: 18px;
   margin-top: 0;
   color: #3498db;
 }
@@ -104,10 +104,57 @@ body {
 .totem-video-url,
 .totem-address {
   margin: 10px 0;
+  font-size: 14px;
 }
 
 .totem-buttons {
   display: flex;
+  flex-wrap: wrap; /* Permite que os botões se ajustem em telas pequenas */
   gap: 10px;
   margin-top: 20px;
+}
+
+.totem-buttons button {
+  flex: 1; /* Faz com que os botões tenham o mesmo tamanho */
+  min-width: 100px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .totem-form,
+  .totem-list {
+    width: 100%;
+  }
+
+  .totem-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .totem-item {
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    margin: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .totem-container {
+    padding: 5px;
+  }
+
+  .totem-form,
+  .totem-list {
+    width: 70%;
+  }
+
+  .totem-buttons {
+    align-items: center;
+
+  }
 }

@@ -1,0 +1,24 @@
+<div *ngIf="loading">Carregando usuários...</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
+<div *ngIf="!loading && !errorMessage">
+  <h2>Usuários com Permissão de TV</h2>
+
+  <ul class="user-list">
+    <li *ngFor="let user of users">
+      <div>
+        <span>{{ user.name }}</span>
+        <button (click)="openUserTvs(user._id)">
+          {{ showUserTvs[user._id] ? 'Esconder TVs' : 'Abrir TVs' }}
+        </button>
+      </div>
+
+      <div *ngIf="showUserTvs[user._id]" class="tvs">
+        <app-tvs [userId]="user._id"></app-tvs>
+      </div>
+    </li>
+  </ul>
+</div>

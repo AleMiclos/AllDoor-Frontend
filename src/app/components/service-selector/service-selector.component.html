@@ -1,0 +1,13 @@
+<div class="service-selector">
+  <h2>Selecione um Serviço</h2>
+
+  <div class="buttons">
+    <button (click)="selectService('totem')">Totem</button>
+    <button (click)="selectService('tv')">TV</button>
+  </div>
+
+  <div class="service-content">
+    <app-users-totem *ngIf="selectedService === 'totem'"></app-users-totem>
+    <app-users-tv *ngIf="selectedService === 'tv'"></app-users-tv>
+  </div>
+</div>

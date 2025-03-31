@@ -1,0 +1,13 @@
+<div id="divWeatherMain" >
+    <div *ngIf="WeatherData.isDay" class="weatherWidgetRow">
+        <i class="fas fa-3x fa-sun sun" style="font-size: 36px;"></i>  
+    </div>   
+    <div *ngIf="!WeatherData.isDay" class="weatherWidgetRow">
+        <i class="fas fa-3x fa-moon moon" style="font-size: 36px;"></i>  
+    </div>   
+    <div class="weatherWidgetRow cloudDiv">
+        <i class="fas fa-cloud fa-3x cloud" style="font-size: 36px;"></i>
+    </div>
+    <div class="weatherWidgetRow" style="font-size: 12px; margin-top: 5px;">{{WeatherData.temp_celcius}}°</div>
+    <div class="weatherWidgetRow" style="font-size: 8px;">{{WeatherData.name}}</div>
+</div>

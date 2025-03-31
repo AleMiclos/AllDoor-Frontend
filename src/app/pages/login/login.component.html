@@ -30,13 +30,7 @@
     </div>
 
     <!-- Campo de role (somente no registro) -->
-    <div *ngIf="isRegistering" class="form-group">
-      <label for="role">Tipo de Conta</label>
-      <select id="role" [(ngModel)]="role" name="role" required>
-        <option value="cliente">Cliente</option>
-        <option value="admin">Admin</option>
-      </select>
-    </div>
+
 
     <!-- Botão de login/registro -->
     <div class="form-button">

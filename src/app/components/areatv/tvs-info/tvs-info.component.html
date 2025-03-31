@@ -1,0 +1,36 @@
+<div class="tv-info-container">
+  <div class="info-header">
+    <h2 class="custom-font">{{ currentDateTime }}</h2>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        <div
+          class="carousel-item"
+          *ngFor="let item of carouselItems; let i = index; trackBy: trackByFn"
+        >
+          {{ item }}
+        </div>
+        <!-- Duplicação dos itens para criar efeito contínuo -->
+        <div
+          class="carousel-item"
+          *ngFor="let item of carouselItems; let i = index; trackBy: trackByFn"
+        >
+          {{ item }}
+        </div>
+  
+      </div>
+  
+    </div>
+  </div>
+  <div class="info-carousel">
+    <!-- Carrossel de Mensagens -->
+
+
+    <!-- <app-tradingview-ticker></app-tradingview-ticker> -->
+
+
+  </div>
+  <!-- <button class="fullscreen-btn" (click)="toggleFullscreen()">
+    <fa-icon [icon]="isFullscreen ? faCompress : faExpand"></fa-icon>
+  </button> -->
+ 
+</div>

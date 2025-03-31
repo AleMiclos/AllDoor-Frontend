@@ -1,0 +1,94 @@
+
+.tv-info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-header {
+  text-align: center;
+}
+
+.custom-font {
+ font-family: 'Times New Roman', Times, serif;
+  font-size: 26px;
+  color: white;
+  text-transform: uppercase;
+  text-shadow:  
+    -2px -2px 0 black,  
+     2px -2px 0 black,  
+    -2px  2px 0 black,  
+     2px  2px 0 black; /* Contorno preto */
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6); /* Sombra branca ao redor do elemento */
+  padding: 7px;
+  border-radius: 5px;
+  
+}
+
+
+
+.info-carousel {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.carousel-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  color: white;
+  
+
+}
+
+.carousel-track {
+  display: flex;
+  width: max-content;
+  animation: scrollText 15s linear infinite;
+  padding: 10px;
+  border-radius: 5px;
+  
+}
+
+.carousel-item {
+  font-size: 32px;
+  font-weight: bold;
+  padding: 0 50px;
+  white-space: nowrap;
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow:  
+  -2px -2px 0 black,  
+   2px -2px 0 black,  
+  -2px  2px 0 black,  
+   2px  2px 0 black;
+   margin: 40px;
+   
+}
+
+@keyframes scrollText {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+
+
+.fullscreen-btn {
+  margin-left: auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.3s;
+  background-color: black;
+}
+
+
+

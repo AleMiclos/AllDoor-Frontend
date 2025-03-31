@@ -1,0 +1,112 @@
+/* Estilos gerais */
+.loading-message, .error-message, .no-users-message, .no-tvs-message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.loading-message {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.error-message {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.no-users-message, .no-tvs-message {
+  color: #666;
+  font-style: italic;
+}
+
+/* Estilização da lista de usuários */
+.users-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Cartão de cada usuário */
+.user-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+
+
+.user-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.user-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Estilização da lista de TVs */
+.tv-list {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center; /* Centraliza as TVs */
+ 
+}
+
+/* Cartão de cada TV */
+.tv-card {
+  background: #f8f9fa;
+  border-left: 5px solid #6c757d;
+  padding: 8px;
+  border-radius: 8px;
+  min-width: 200px;
+  width:1200px; /* Limita o tamanho máximo */
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+
+.tv-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.tv-card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 3px 0;
+}
+
+/* Indicadores de status */
+.online {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.offline {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .tv-list {
+    flex-direction: column; /* Em telas menores, as TVs ficam empilhadas */
+  }
+
+  .tv-card {
+    max-width: 100%; /* Ocupa toda a largura disponível */
+  }
+}

@@ -1,67 +1,138 @@
-.sidebar-container {
-  position: relative;
-  margin-left: 0;
-  top: 18px;
-  width: 250px;
-  height: 95vh;
-  background: seagreen;
-  color: white;
-  padding: 1rem;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
+/* ======== Estilização Global ======== */
+.user-form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
 }
 
-.sidebar-container.open {
-  transform: translateX(0);
+h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 15px;
 }
 
-.toggle-btn {
-  display: flex;
-  align-items: center;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 4px;
-  position: absolute;
-  top: 10px;
-  right: -190px;
-  transition: transform 0.3s;
-}
-
-.toggle-btn i {
-  font-size: 1.2em;
-  margin-right: 5px;
-}
-
-
-.users-container {
-  display: flex;
-}
-
-.users-menu ul {
-  list-style: none;
-  padding: 0;
-}
-
-.users-menu li {
-  cursor: pointer;
-  padding: 8px;
-  transition: background 0.3s;
-  border-bottom: 1px solid white;
-}
-
-.users-menu li:hover, .users-menu li.selected {
-  background: #374151;
-}
-
-.totem-list-container {
+/* ======== Formulário ======== */
+form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  text-align: center;
-  width: 25%;
+  gap: 12px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+input:focus, select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+/* ======== Botões ======== */
+button {
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+button[type="submit"] {
+  background: #007bff;
+  color: white;
+}
+
+button[type="submit"]:hover {
+  background: #0056b3;
+}
+
+button[type="button"] {
+  background: #dc3545;
+  color: white;
+  margin-top: 5px;
+}
+
+button[type="button"]:hover {
+  background: #a71d2a;
+}
+
+/* ======== Tabela de Usuários ======== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+thead {
+  background: #007bff;
+  color: white;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+  background: rgba(0, 123, 255, 0.1);
+}
+
+/* ======== Botões da Tabela ======== */
+td button {
+  margin-right: 5px;
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+td button:first-child {
+  background: #28a745;
+  color: white;
+}
+
+td button:first-child:hover {
+  background: #1d7a30;
+}
+
+td button:last-child {
+  background: #dc3545;
+  color: white;
+}
+
+td button:last-child:hover {
+  background: #a71d2a;
+}
+
+/* ======== Responsividade ======== */
+@media (max-width: 768px) {
+  .user-form {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  input, select {
+    font-size: 0.9rem;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
 }

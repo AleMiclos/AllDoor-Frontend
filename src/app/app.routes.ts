@@ -1,10 +1,15 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import { TotemDetailsComponent } from './components/totem-details/totem.component';
+import { TotemDetailsComponent } from './components/areatotem/totem-details/totem.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { UsuarioComponent } from './pages/usuario/usuario.component';
+import { UsersTvComponent } from './components/areatv/users-tv/users-tv.component';
+import { TvsComponent } from './components/areatv/tvs/tvs.component';
+import { TvViewComponent } from './components/areatv/tv-view/tv-view.component';
+import { AdFullComponent } from './components/areatv/ad-full/ad-full.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,5 +18,15 @@ export const appRoutes: Routes = [
   { path: 'admin', component: AdminDashboardComponent },
   { path: 'totem/:id', component: TotemDetailsComponent },
   { path: 'usuario', component: UsuarioComponent },
+  { path: 'users-tv', component: UsersTvComponent },
+  { path: 'tvs/:id', component: TvsComponent },
+  { path: 'view-tv/:id', component: TvViewComponent },
+  { path: 'ad-full/:id', component: AdFullComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Redireciona rotas não encontradas para a raiz
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(appRoutes)], // Configura as rotas
+  exports: [RouterModule] // Exporta o RouterModule para ser usado no AppModule
+})
+export class AppRoutingModule { }

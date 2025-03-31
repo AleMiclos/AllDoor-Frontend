@@ -1,21 +1,24 @@
 <div class="admin">
-  <!-- Navbar fixo no topo -->
   <app-nav-bar></app-nav-bar>
 
-  <!-- Layout principal -->
   <div class="admin-dashboard">
     <div class="layout-container">
-      <!-- Menu Lateral -->
-      <div class="users-menu">
-        <app-users-menu (selectUser)="handleSelectUser($event)"></app-users-menu>
+      <div class="view-options">
+        <button (click)="setView('users')">Usuários</button>
+        <button (click)="setView('services')">Serviços</button>
+
       </div>
 
-      <!-- Conteúdo principal -->
-
+      <div class="content" *ngIf="selectedView">
+        <button class="close-btn" (click)="closeView()">X</button>
+        <app-users-menu *ngIf="selectedView === 'users'"></app-users-menu>
+        <app-service-selector *ngIf="selectedView === 'services'"></app-service-selector>
+        
+      </div>
+      <app-tv-list></app-tv-list> 
     </div>
   </div>
 
-  <!-- Rodapé -->
   <div class="footer">
     <app-footer></app-footer>
   </div>

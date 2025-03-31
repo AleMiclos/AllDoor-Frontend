@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TotemComponent } from './totem.component';
+import { UsersTvComponent } from './users-tv.component';
 
-describe('TotemComponent', () => {
-  let component: TotemComponent;
-  let fixture: ComponentFixture<TotemComponent>;
+describe('UsersTvComponent', () => {
+  let component: UsersTvComponent;
+  let fixture: ComponentFixture<UsersTvComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TotemComponent]
+      imports: [UsersTvComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TotemComponent);
+    fixture = TestBed.createComponent(UsersTvComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

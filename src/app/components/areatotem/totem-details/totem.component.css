@@ -1,0 +1,96 @@
+/* O container principal ocupa 100% da tela */
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+/* O container do vídeo também ocupa toda a tela */
+.video-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 180vh;
+  overflow: hidden;
+  position: relative;
+  transform: rotate(90deg);
+}
+
+/* O iframe do vídeo */
+.video-container iframe {
+  border: none;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Se o monitor estiver na vertical (portrait) */
+@media (orientation: portrait) {
+  .video-container iframe {
+    width: 100vh;  /* Inverte largura e altura */
+    height: 100vw;
+    transform: rotate(90deg); /* Rotaciona o vídeo para deixá-lo deitado */
+    transform-origin: center center;
+  }
+}
+
+/* Se o monitor estiver na horizontal (landscape) */
+@media (orientation: landscape) {
+  .video-container iframe {
+    width: 100vw;
+    height: 80vw; /* Mantém a proporção 16:9 */
+    margin-top: -20%;
+  }
+}
+
+/* Ajustes para o conteúdo de texto */
+.content {
+  position: absolute;
+  width: 100%;
+  bottom: 0; /* Posiciona o texto na parte inferior */
+  height: 20%; /* Ajuste a altura conforme necessário */
+  color: white; /* Texto em branco */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  text-align: center; /* Centraliza o texto */
+  margin: auto;
+  padding: 0 100px;
+}
+
+.content h2,
+.content p {
+  margin: 0;
+}
+
+table {
+  width: 50%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+th, td {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid white;
+  
+}
+
+
+
+
+
+
+
+

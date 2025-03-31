@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TotemService } from '../../services/totem.service';
+import { TotemService } from '../../../services/totem.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -26,7 +26,6 @@ export class TotemListComponent implements OnInit {
       description: ['', Validators.required],
       videoUrl: ['', [Validators.required, Validators.pattern('https?://.+')]], // Validação de URL
       address: ['', Validators.required],
-      isOnline: [false],
     });
 
     this.editTotemForm = this.fb.group({
@@ -34,7 +33,6 @@ export class TotemListComponent implements OnInit {
       description: ['', Validators.required],
       videoUrl: ['', [Validators.required, Validators.pattern('https?://.+')]], // Validação de URL
       address: ['', Validators.required],
-      isOnline: [false],
     });
   }
 
@@ -63,7 +61,7 @@ export class TotemListComponent implements OnInit {
       return;
     }
 
-    this.totemService.getTotems(this.userId).subscribe(
+    this.totemService.getAllTotems(this.userId).subscribe(
       (data) => {
         this.totems = data;
         console.log('Totens carregados:', this.totems);
@@ -77,20 +75,23 @@ export class TotemListComponent implements OnInit {
 
   // Adiciona um novo totem
   handleAddTotem() {
-    console.log('Adicionar Totem chamado'); // Verifique se essa mensagem aparece no console
-
     if (this.newTotemForm.invalid || !this.isValidObjectId(this.userId)) {
       this.errorMessage = 'Preencha todos os campos corretamente e selecione um usuário válido.';
+      console.log(this.errorMessage);
       return;
     }
 
-    const newTotem = { ...this.newTotemForm.value, userId: this.userId };
+    const newTotem = {
+      ...this.newTotemForm.value,
+      user: this.userId, // Corrigido para 'user' conforme o backend
+    };
 
     this.totemService.addTotem(newTotem).subscribe(
       (data) => {
-        this.totems.push(data); // Adiciona o novo totem à lista
-        this.newTotemForm.reset(); // Limpa o formulário
-        this.errorMessage = ''; // Limpa a mensagem de erro
+        this.totems.push(data);
+        this.newTotemForm.reset();
+        this.errorMessage = '';
+        console.log('Totem adicionado com sucesso:', data);
       },
       (error) => {
         console.error('Erro ao adicionar totem:', error);
@@ -98,7 +99,6 @@ export class TotemListComponent implements OnInit {
       }
     );
   }
-
 
   // Define o totem em edição
   setEditingTotem(totem: any) {
@@ -116,7 +116,11 @@ export class TotemListComponent implements OnInit {
   handleEditTotem() {
     if (this.editTotemForm.invalid || !this.editingTotem) return;
 
-    const updatedTotem = { ...this.editTotemForm.value, userId: this.userId };
+    const updatedTotem = {
+      ...this.editTotemForm.value,
+      user: this.userId, // Corrigido para 'user' conforme o backend
+      status: this.editingTotem.status // Mantendo o status atual
+    };
 
     this.totemService.updateTotem(this.editingTotem._id, updatedTotem).subscribe(
       (data) => {
@@ -152,7 +156,6 @@ export class TotemListComponent implements OnInit {
       }
     );
   }
-
 
   // Valida se o ID é um ObjectId válido (MongoDB)
   isValidObjectId(id: string): boolean {

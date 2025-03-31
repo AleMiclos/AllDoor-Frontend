@@ -5,10 +5,9 @@
     <input class="totem-input" formControlName="description" placeholder="Descrição do Totem">
     <input class="totem-input" formControlName="videoUrl" placeholder="URL do Vídeo">
     <input class="totem-input" formControlName="address" placeholder="Endereço do Totem">
-    <button class="totem-button totem-button--primary" type="submit" [disabled]="newTotemForm.invalid">
+    <button class="totem-button totem-button--primary" type="submit">
       Adicionar Totem
     </button>
-
   </form>
 
   <!-- Mensagem de erro -->
@@ -27,7 +26,7 @@
         <div class="totem-buttons">
           <button class="totem-button totem-button--primary" (click)="setEditingTotem(totem)">Editar</button>
           <button class="totem-button totem-button--danger" (click)="handleDeleteTotem(totem._id)">Deletar</button>
-          <a class="totem-button totem-button--primary" [routerLink]="['/totem', totem._id]">Ver Totem</a>
+          <a class="totem-button totem-button--primary" [routerLink]="['/totem', totem._id] " >Ver Totem</a>
                 </div>
 
         <!-- Formulário de edição dentro do card -->
