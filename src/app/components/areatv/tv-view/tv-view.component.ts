@@ -39,7 +39,7 @@ export class TvViewComponent implements OnInit, OnDestroy {
       this.atualizarStatus(true); // Enviar status online imediatamente
       this.fetchTv(this.tvId);
       this.listenForUpdates();
-      this.verificarStatusPlayers();
+      // this.verificarStatusPlayers();
     } else {
       console.error('tvId não está definido.');
     }
@@ -271,29 +271,29 @@ export class TvViewComponent implements OnInit, OnDestroy {
     console.log("Vimeo Player inicializado!");
   }
 
-  private verificarStatusPlayers(): void {
-    setTimeout(() => {
-      if (this.youtubePlayer) {
-        const playerState = this.youtubePlayer.getPlayerState();
-        const isPlaying = playerState === (window as any).YT.PlayerState.PLAYING;
-        this.updateYoutubeStatus(isPlaying);
-        console.log(`Status inicial do YouTube: ${isPlaying ? 'online' : 'offline'}`);
-      } else {
-        console.log('YouTube Player ainda não foi inicializado.');
-      }
+  // private verificarStatusPlayers(): void {
+  //   setTimeout(() => {
+  //     if (this.youtubePlayer) {
+  //       const playerState = this.youtubePlayer.getPlayerState();
+  //       const isPlaying = playerState === (window as any).YT.PlayerState.PLAYING;
+  //       this.updateYoutubeStatus(isPlaying);
+  //       console.log(`Status inicial do YouTube: ${isPlaying ? 'online' : 'offline'}`);
+  //     } else {
+  //       console.log('YouTube Player ainda não foi inicializado.');
+  //     }
 
-      if (this.vimeoPlayer) {
-        this.vimeoPlayer.getPaused().then((paused: boolean) => {
-          this.updateVimeoStatus(!paused);
-          console.log(`Status inicial do Vimeo: ${paused ? 'offline' : 'online'}`);
-        }).catch((error: any) => {
-          console.error('Erro ao obter status do Vimeo:', error);
-        });
-      } else {
-        console.log('Vimeo Player ainda não foi inicializado.');
-      }
-    }, 30000); // Tempo para garantir que os players foram carregados
-  }
+  //     if (this.vimeoPlayer) {
+  //       this.vimeoPlayer.getPaused().then((paused: boolean) => {
+  //         this.updateVimeoStatus(!paused);
+  //         console.log(`Status inicial do Vimeo: ${paused ? 'offline' : 'online'}`);
+  //       }).catch((error: any) => {
+  //         console.error('Erro ao obter status do Vimeo:', error);
+  //       });
+  //     } else {
+  //       console.log('Vimeo Player ainda não foi inicializado.');
+  //     }
+  //   }, 30000); // Tempo para garantir que os players foram carregados
+  // }
 
 
 
