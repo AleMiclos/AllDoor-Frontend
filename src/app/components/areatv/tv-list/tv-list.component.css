@@ -37,7 +37,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   width: 100%;
-  max-width: 900px; /* Ajuste para suportar TVs lado a lado */
   text-align: center;
   transition: transform 0.3s ease;
 }
@@ -62,20 +61,20 @@
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center; /* Centraliza as TVs */
+
 }
 
 /* Cartão de cada TV */
 .tv-card {
   background: #f8f9fa;
   border-left: 5px solid #6c757d;
-  padding: 12px;
+  padding: 8px;
   border-radius: 8px;
-  text-align: left;
-  transition: all 0.3s ease;
   min-width: 200px;
-  flex: 1; /* Faz com que cada TV ocupe espaço igual */
-  max-width: 250px; /* Limita o tamanho máximo */
-
+  width:1200px; /* Limita o tamanho máximo */
+  display: flex;
+  text-align: center;
+  align-items: center;
 }
 
 .tv-card h3 {

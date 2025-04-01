@@ -4,6 +4,9 @@ import { TvsService } from '../../../services/tvs.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TvStatusService } from '../../../services/tv-status.service';
 import { CommonModule } from '@angular/common';
+import { WebSocketService } from '../../../services/websocket.service';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-ad-full',
@@ -21,12 +24,16 @@ export class AdFullComponent implements OnInit, OnDestroy {
   private handleBeforeUnloadBound = this.handleBeforeUnload.bind(this);
   private handleOfflineBound = this.handleOffline.bind(this);
   private handleOnlineBound = this.handleOnline.bind(this);
+  private websocketSubscription: Subscription | null = null;
+  
 
   constructor(
     private route: ActivatedRoute,
     private tvsService: TvsService,
     private sanitizer: DomSanitizer,
-    private tvStatusService: TvStatusService
+    private tvStatusService: TvStatusService,
+    private webSocketService: WebSocketService
+    
   ) {}
 
   ngOnInit() {
@@ -34,6 +41,8 @@ export class AdFullComponent implements OnInit, OnDestroy {
     if (this.tvId) {
       this.fetchTv(this.tvId); // Carregar as informações da TV
       this.atualizarStatus(true); // Define o status inicial como "online"
+      this.listenForUpdates();
+
     } else {
       console.error('tvId não está definido.');
     }
@@ -62,6 +71,31 @@ export class AdFullComponent implements OnInit, OnDestroy {
     // Ativar tela cheia automaticamente
     this.enterFullscreen();
   }
+
+  private listenForUpdates(): void {
+    this.websocketSubscription = this.webSocketService.getMessages().subscribe((message) => {
+      if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
+        // Atualiza apenas a TV correspondente sem recarregar a página
+        this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
+        this.updateVideoUrl();
+        window.location.reload();
+      } else if (message.type === 'tvStatusUpdate' && message.tvId === this.tvId) {
+        this.tv.status = message.status;
+      }
+    });
+  }
+
+  private updateVideoUrl(): void {
+    if (this.tv.vimeoLink) {
+      this.tv.vimeoLink = this.transformVimeoLink(this.tv.vimeoLink);
+      this.vimeoUrl = this.sanitizeUrl(this.tv.vimeoLink);
+    }
+}
+
+sanitizeUrl(url: string): SafeResourceUrl {
+  return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+}
+
 
   // Função para ativar tela cheia
   enterFullscreen() {
