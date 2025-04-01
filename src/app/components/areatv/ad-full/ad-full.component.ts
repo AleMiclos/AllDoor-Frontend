@@ -147,7 +147,7 @@ sanitizeUrl(url: string): SafeResourceUrl {
   // Transforma o link do Vimeo em um link embed
   transformVimeoLink(url: string): SafeResourceUrl {
     const videoId = url.split('/').pop();
-    const embedUrl = `https://player.vimeo.com/video/${videoId}`;
+    const embedUrl = `https://player.vimeo.com/video/${videoId}?autoplay=1&loop=1&dnt=0`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
   }
 
