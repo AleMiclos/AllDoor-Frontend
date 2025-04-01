@@ -1,6 +1,6 @@
 <div *ngIf="tv" class="container">
   <!-- Div do anúncio (esquerda) -->
-  <div *ngIf="tv.vimeoLink" class="ad" id="ad">
+  <div *ngIf="tv.vimeoLink" class="ad">
     <iframe
       [src]="sanitizeUrl(tv.vimeoLink + '?autoplay=1&loop=1')"
       frameborder="0"
@@ -9,14 +9,13 @@
   </div>
 
   <!-- Div do vídeo (direita) -->
-  <div *ngIf="tv.youtubeLink" class="tv" id="youtube-player">
+  <div *ngIf="tv.youtubeLink" class="tv">
     <iframe
       id="youtube-player"
-      [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=1&controls=0')"
+      src="https://pluto.tv/br/live-tv/5f32d2db0af67400077f29c4"
       frameborder="0"
       allowfullscreen
     ></iframe>
-    <script src="https://www.youtube.com/iframe_api"></script>
     <app-tvs-info></app-tvs-info>
   </div>
 </div>
