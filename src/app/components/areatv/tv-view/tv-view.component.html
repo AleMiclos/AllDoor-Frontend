@@ -2,6 +2,7 @@
   <!-- Div do anúncio (esquerda) -->
   <div *ngIf="tv.vimeoLink" class="ad">
     <iframe
+    id="ad"
       [src]="sanitizeUrl(tv.vimeoLink + '?autoplay=1&loop=1')"
       frameborder="0"
       allowfullscreen

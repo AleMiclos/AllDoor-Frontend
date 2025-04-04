@@ -17,36 +17,35 @@ export class TvsComponent implements OnInit, OnDestroy {
   loading = false;
   errorMessage = '';
   showAddTvForm = false;
-  newTv: any = { youtubeLink: '', vimeoLink: '', address: '' };
+  newTv: any = {
+    plutoLink: '',
+    vimeoLink: '',
+    address: ''
+  };
+  
   tvToEdit: any = null;
   selectedTvId: string | null = null;
   @Input() userId: string | undefined;
   tvToView: any;
 
-  // Declaração da propriedade tvStatusSubscription
   private tvStatusSubscription: Subscription | undefined;
-  private intervalId: any; // Armazena o ID do intervalo
-  cdr: any;
+  private intervalId: any;
 
   constructor(
     private tvsService: TvsService,
     private router: Router,
-    private tvStatusService: TvStatusService,
-
+    private tvStatusService: TvStatusService
   ) {}
 
   ngOnInit() {
     this.fetchTvs();
 
-    // Inscreve-se para receber atualizações de status em tempo real
     this.tvStatusSubscription = this.tvStatusService.tvStatus$.subscribe(
       ({ tvId, status }) => {
         this.updateTvStatus(tvId, status);
-
       }
     );
 
-    // Atualiza o status das TVs a cada 5 segundos
     this.intervalId = setInterval(() => {
       if (this.tvs.length > 0) {
         this.tvs.forEach((tv) => {
@@ -55,109 +54,102 @@ export class TvsComponent implements OnInit, OnDestroy {
           this.tvStatusService.getYouTubeStatus(tv._id);
         });
       }
-    }, 5000); // Atualiza a cada 5 segundos
+    }, 50000);
   }
 
   ngOnDestroy() {
-    // Cancela a inscrição ao destruir o componente
-    if (this.tvStatusSubscription) {
-      this.tvStatusSubscription.unsubscribe();
-    }
-    // Limpa o intervalo ao destruir o componente
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    if (this.tvStatusSubscription) this.tvStatusSubscription.unsubscribe();
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 
   updateTvStatus(tvId: string, status: string) {
     const tv = this.tvs.find((tv) => tv._id === tvId);
     if (tv) {
-      tv.status = status === 'online'; // Converte para booleano
+      tv.status = status === 'online';
       console.log(`Status atualizado para TV ${tvId}: ${tv.status}`);
-
-      // Garante que a UI seja atualizada corretamente
-
     }
   }
 
- // Método para atualizar o status geral da TV
- fetchTvStatus(tvId: string) {
-  this.tvStatusService.getTvStatus(tvId);
-  this.tvStatusService.tvStatus$.subscribe(({ tvId: updatedTvId, status }) => {
-    if (updatedTvId === tvId) {
-      const tv = this.tvs.find((tv) => tv._id === tvId);
-      if (tv) {
-        tv.status = status === 'online';
-        console.log(`Status geral atualizado para TV ${tvId}: ${tv.status}`);
-      }
-    }
-  });
-}
-
-// Atualiza o status do Vimeo
-fetchVimeoStatus(tvId: string) {
-  this.tvStatusService.getVimeoStatus(tvId);
-  this.tvStatusService.vimeoStatus$.subscribe(({ tvId: updatedTvId, status }) => {
-    const tv = this.tvs.find((tv) => tv._id === updatedTvId);
-    if (tv) {
-      tv.vimeoStatus = status === 'online' ? 'online' : 'offline'; // 🔹 Garante valores corretos
-      console.log(`Status do Vimeo atualizado para TV ${tvId}}`);
-    }
-  });
-}
-
-
-// Atualiza o status do YouTube
-fetchYoutubeStatus(tvId: string) {
-  this.tvStatusService.getYouTubeStatus(tvId);
-  this.tvStatusService.youtubeStatus$.subscribe(({ tvId: updatedTvId, status }) => {
-    const tv = this.tvs.find((tv) => tv._id === updatedTvId);
-    if (tv) {
-      tv.youtubeStatus = status === 'online' ? 'online' : 'offline'; // 🔹 Garante valores corretos
-      console.log(`Status do YouTube atualizado para TV ${tvId}: ${tv.youtubeStatus}`);
-    }
-  });
-}
-
-
-fetchTvs() {
-  if (this.userId) {
-    this.loading = true;
-    this.tvsService.getTvsByUserId(this.userId).subscribe({
-      next: (data: any[]) => {
-        this.loading = false;
-        this.tvs = data;
-
-        if (this.tvs.length > 0) {
-          console.log('Buscando status das TVs...');
-          this.tvs.forEach((tv) => {
-            this.fetchTvStatus(tv._id);
-            this.fetchVimeoStatus(tv._id);  // 🔹 Adicionando atualização do Vimeo
-            this.fetchYoutubeStatus(tv._id); // 🔹 Adicionando atualização do YouTube
-          });
+  fetchTvStatus(tvId: string) {
+    this.tvStatusService.getTvStatus(tvId);
+    this.tvStatusService.tvStatus$.subscribe(({ tvId: updatedTvId, status }) => {
+      if (updatedTvId === tvId) {
+        const tv = this.tvs.find((tv) => tv._id === tvId);
+        if (tv) {
+          tv.status = status === 'online';
+          console.log(`Status geral atualizado para TV ${tvId}: ${tv.status}`);
         }
-      },
-      error: (err: any) => {
-        this.errorMessage = 'Erro ao carregar TVs.';
-        console.error(err);
-        this.loading = false;
-      },
+      }
     });
-  } else {
-    console.error('userId não está definido.');
   }
-}
 
+  fetchVimeoStatus(tvId: string) {
+    this.tvStatusService.getVimeoStatus(tvId);
+    this.tvStatusService.vimeoStatus$.subscribe(({ tvId: updatedTvId, status }) => {
+      const tv = this.tvs.find((tv) => tv._id === updatedTvId);
+      if (tv) {
+        tv.vimeoStatus = status === 'online' ? 'online' : 'offline';
+        console.log(`Status do Vimeo atualizado para TV ${tvId}`);
+      }
+    });
+  }
+
+  fetchYoutubeStatus(tvId: string) {
+    this.tvStatusService.getYouTubeStatus(tvId);
+    this.tvStatusService.youtubeStatus$.subscribe(({ tvId: updatedTvId, status }) => {
+      const tv = this.tvs.find((tv) => tv._id === updatedTvId);
+      if (tv) {
+        tv.youtubeStatus = status === 'online' ? 'online' : 'offline';
+        console.log(`Status do YouTube atualizado para TV ${tvId}: ${tv.youtubeStatus}`);
+      }
+    });
+  }
+
+  canaisPlutoTV = [
+    { nome: 'PlutoTV Notícias', link: 'https://pluto.tv/live-tv/pluto-tv-noticias' },
+    { nome: 'PlutoTV Filmes', link: 'https://pluto.tv/live-tv/pluto-tv-filmes' },
+    { nome: 'PlutoTV Cine Sucessos', link: 'https://pluto.tv/live-tv/pluto-tv-cine-sucessos' },
+    { nome: 'PlutoTV Novelas', link: 'https://pluto.tv/live-tv/pluto-tv-novelas' },
+    { nome: 'PlutoTV Comédia', link: 'https://pluto.tv/live-tv/pluto-tv-comedia' },
+  ];
+
+  fetchTvs() {
+    if (this.userId) {
+      this.loading = true;
+      this.tvsService.getTvsByUserId(this.userId).subscribe({
+        next: (data: any[]) => {
+          this.loading = false;
+          this.tvs = data;
+
+          if (this.tvs.length > 0) {
+            console.log('Buscando status das TVs...');
+            this.tvs.forEach((tv) => {
+              this.fetchTvStatus(tv._id);
+              this.fetchVimeoStatus(tv._id);
+              this.fetchYoutubeStatus(tv._id);
+            });
+          }
+        },
+        error: (err: any) => {
+          this.errorMessage = 'Erro ao carregar TVs.';
+          console.error(err);
+          this.loading = false;
+        },
+      });
+    } else {
+      console.error('userId não está definido.');
+    }
+  }
 
   showAddForm() {
     this.showAddTvForm = true;
-    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
+    this.newTv = { youtubeLink: '', vimeoLink: '', address: '', plutoLink: '' };
     this.tvToEdit = null;
   }
 
   editTv(tv: any) {
     this.tvToEdit = tv;
-    this.newTv = { ...tv };
+    this.newTv = { ...tv, plutoLink: '' }; // adiciona plutoLink vazio
     this.showAddTvForm = true;
   }
 
@@ -169,8 +161,9 @@ fetchTvs() {
 
     const payload = {
       ...this.newTv,
+      youtubeLink: this.newTv.plutoLink || this.newTv.youtubeLink,
       user: this.userId,
-      status: false, // Status inicial agora é booleano (false)
+      status: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -204,7 +197,7 @@ fetchTvs() {
 
   resetForm() {
     this.showAddTvForm = false;
-    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
+    this.newTv = { youtubeLink: '', vimeoLink: '', address: '', plutoLink: '' };
     this.tvToEdit = null;
     this.errorMessage = '';
   }
@@ -226,4 +219,12 @@ fetchTvs() {
   navigateTo(route: string, tvId: string): void {
     this.router.navigate([route, tvId]);
   }
+
+  onPlutoChannelSelected(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+    
+    this.newTv.plutoLink = selectedValue;
+  }
+  
 }
