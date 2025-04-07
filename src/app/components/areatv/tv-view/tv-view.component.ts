@@ -70,12 +70,11 @@ export class TvViewComponent implements OnInit, OnDestroy {
       }
     });
   }
-
   private updateVideoUrl(): void {
     let newUrl: SafeResourceUrl | null = null;
 
-    if (this.tv.youtubeLink) {
-      const transformedUrl = this.transformYoutubeLink(this.tv.youtubeLink);
+    if (this.tv.plutoLink) {
+      const transformedUrl = this.transformPlutoLink(this.tv.plutoLink);
       if (this.videoUrl !== transformedUrl) {
         this.videoUrl = this.sanitizeUrl(transformedUrl);
       }
@@ -155,35 +154,29 @@ export class TvViewComponent implements OnInit, OnDestroy {
         this.tv = data;
         console.log('TV carregada:', this.tv);
 
-        if (this.tv.youtubeLink) {
-          this.tv.youtubeLink = this.transformYoutubeLink(this.tv.youtubeLink);
-          this.videoUrl = this.sanitizeUrl(this.tv.youtubeLink);
-          setTimeout(() => {
-            console.log('Inicializando YouTube Player...');
-            this.initializeYoutubePlayer();
-          }, 20000);
+        if (this.tv.plutoLink) {
+          this.tv.plutoLink = this.transformPlutoLink(this.tv.plutoLink);
+          this.videoUrl = this.sanitizeUrl(this.tv.plutoLink);
         }
 
         if (this.tv.vimeoLink) {
           this.tv.vimeoLink = this.transformVimeoLink(this.tv.vimeoLink);
           this.videoUrl = this.sanitizeUrl(this.tv.vimeoLink);
-          setTimeout(() => {
-            console.log('Inicializando Vimeo Player...');
-            this.initializeVimeoPlayer();
-          }, 20000);
         }
       },
       error: (err: any) => console.error('Erro ao carregar TV:', err)
     });
   }
 
-  transformYoutubeLink(url: string, loop: boolean = false): string {
-    const videoIdMatch = url.match(/[?&]v=([^&#]*)/);
-    const videoId = videoIdMatch ? videoIdMatch[1] : null;
-    return videoId
-      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&controls=0${loop ? '&loop=1&playlist=' + videoId : ''}`
-      : url;
+
+  transformPlutoLink(url: string): string {
+    // Caso o link já esteja no formato embed, retorna direto
+    if (url.includes('embed')) return url;
+
+    // Caso contrário, tenta transformar num link embed padrão (ajuste conforme seu backend)
+    return `${url}?autoplay=true&mute=1`;
   }
+
 
   transformVimeoLink(url: string): string {
     const videoId = url.split('/').pop();

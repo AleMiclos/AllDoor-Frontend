@@ -22,7 +22,7 @@ export class TvsComponent implements OnInit, OnDestroy {
     vimeoLink: '',
     address: ''
   };
-  
+
   tvToEdit: any = null;
   selectedTvId: string | null = null;
   @Input() userId: string | undefined;
@@ -50,8 +50,6 @@ export class TvsComponent implements OnInit, OnDestroy {
       if (this.tvs.length > 0) {
         this.tvs.forEach((tv) => {
           this.tvStatusService.getTvStatus(tv._id);
-          this.tvStatusService.getVimeoStatus(tv._id);
-          this.tvStatusService.getYouTubeStatus(tv._id);
         });
       }
     }, 50000);
@@ -66,7 +64,6 @@ export class TvsComponent implements OnInit, OnDestroy {
     const tv = this.tvs.find((tv) => tv._id === tvId);
     if (tv) {
       tv.status = status === 'online';
-      console.log(`Status atualizado para TV ${tvId}: ${tv.status}`);
     }
   }
 
@@ -77,40 +74,19 @@ export class TvsComponent implements OnInit, OnDestroy {
         const tv = this.tvs.find((tv) => tv._id === tvId);
         if (tv) {
           tv.status = status === 'online';
-          console.log(`Status geral atualizado para TV ${tvId}: ${tv.status}`);
         }
       }
     });
   }
 
-  fetchVimeoStatus(tvId: string) {
-    this.tvStatusService.getVimeoStatus(tvId);
-    this.tvStatusService.vimeoStatus$.subscribe(({ tvId: updatedTvId, status }) => {
-      const tv = this.tvs.find((tv) => tv._id === updatedTvId);
-      if (tv) {
-        tv.vimeoStatus = status === 'online' ? 'online' : 'offline';
-        console.log(`Status do Vimeo atualizado para TV ${tvId}`);
-      }
-    });
-  }
 
-  fetchYoutubeStatus(tvId: string) {
-    this.tvStatusService.getYouTubeStatus(tvId);
-    this.tvStatusService.youtubeStatus$.subscribe(({ tvId: updatedTvId, status }) => {
-      const tv = this.tvs.find((tv) => tv._id === updatedTvId);
-      if (tv) {
-        tv.youtubeStatus = status === 'online' ? 'online' : 'offline';
-        console.log(`Status do YouTube atualizado para TV ${tvId}: ${tv.youtubeStatus}`);
-      }
-    });
-  }
 
   canaisPlutoTV = [
-    { nome: 'PlutoTV Notícias', link: 'https://pluto.tv/live-tv/pluto-tv-noticias' },
-    { nome: 'PlutoTV Filmes', link: 'https://pluto.tv/live-tv/pluto-tv-filmes' },
-    { nome: 'PlutoTV Cine Sucessos', link: 'https://pluto.tv/live-tv/pluto-tv-cine-sucessos' },
-    { nome: 'PlutoTV Novelas', link: 'https://pluto.tv/live-tv/pluto-tv-novelas' },
-    { nome: 'PlutoTV Comédia', link: 'https://pluto.tv/live-tv/pluto-tv-comedia' },
+    { nome: 'Record News', link: 'https://pluto.tv/br/live-tv/6102e04e9ab1db0007a980a1?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
+    { nome: 'Filmes Familia', link: 'https://pluto.tv/br/live-tv/5f171f032cd22e0007f17f3d?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
+    { nome: 'Filmes de Ação', link: 'https://pluto.tv/br/live-tv/5f120f41b7d403000783a6d6?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
+    { nome: 'Novelas', link: 'https://pluto.tv/br/live-tv/5f512365abe1f50007d3ff56?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
+    { nome: 'Comédia', link: 'https://pluto.tv/br/live-tv/5f12101f0b12f00007844c7c?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
   ];
 
   fetchTvs() {
@@ -125,8 +101,6 @@ export class TvsComponent implements OnInit, OnDestroy {
             console.log('Buscando status das TVs...');
             this.tvs.forEach((tv) => {
               this.fetchTvStatus(tv._id);
-              this.fetchVimeoStatus(tv._id);
-              this.fetchYoutubeStatus(tv._id);
             });
           }
         },
@@ -223,8 +197,8 @@ export class TvsComponent implements OnInit, OnDestroy {
   onPlutoChannelSelected(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     const selectedValue = selectElement.value;
-    
+
     this.newTv.plutoLink = selectedValue;
   }
-  
+
 }

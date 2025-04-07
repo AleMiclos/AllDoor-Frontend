@@ -12,8 +12,8 @@
   <!-- Div do vídeo (direita) -->
   <div *ngIf="tv.youtubeLink" class="tv">
     <iframe
-      id="youtube-player"
-      src="https://pluto.tv/br/live-tv/5f32d2db0af67400077f29c4"
+      id="pluto-player"
+      [src]="sanitizeUrl(tv.plutoLink)"
       frameborder="0"
       allowfullscreen
     ></iframe>
