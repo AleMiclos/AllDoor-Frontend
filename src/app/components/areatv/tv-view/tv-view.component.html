@@ -1,12 +1,16 @@
 <div *ngIf="tv" class="container">
   <!-- Div do anúncio (esquerda) -->
   <div *ngIf="tv.vimeoLink" class="ad">
-    <iframe
+    <video width="600" autoplay loop muted controls>
+      <source src="../../../../assets/videos/anuncio_3 (540p).mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video>
+    <!-- <iframe
     id="ad"
       [src]="sanitizeUrl(tv.vimeoLink + '?autoplay=1&loop=1')"
       frameborder="0"
       allowfullscreen
-    ></iframe>
+    ></iframe> -->
   </div>
 
   <!-- Div do vídeo (direita) -->
