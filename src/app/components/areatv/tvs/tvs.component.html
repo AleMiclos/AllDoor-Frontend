@@ -10,29 +10,15 @@
     <div class="tv-details">
       <h3>TV #{{ tv._id }}</h3>
       <p><strong>PlutoTV:</strong> {{ tv.plutoLink || "N/A" }}</p>
-      <p><strong>Vimeo:</strong> {{ tv.vimeoLink || "N/A" }}</p>
       <p><strong>Endereço:</strong> {{ tv.address }}</p>
       
       <p>
-        <strong>Página:</strong>
+        <strong></strong>
         <span [ngClass]="{ online: tv.status, offline: !tv.status }">
           {{ tv.status ? "🟢 Online" : "🔴 Offline" }} 
         </span>
       </p>
 
-      <p>
-        <strong>PlutoTV:</strong>
-        <span [ngClass]="{ online: tv.plutoStatus === 'online', offline: tv.plutoStatus !== 'online' }">
-          {{ tv.plutoStatus === 'online' ? "🟢 Online" : "🔴 Offline" }} 
-        </span>
-      </p>
-
-      <p>
-        <strong>Vimeo:</strong>
-        <span [ngClass]="{ online: tv.vimeoStatus === 'online', offline: tv.vimeoStatus !== 'online' }">
-          {{ tv.vimeoStatus === 'online' ? "🟢 Online" : "🔴 Offline" }} 
-        </span>
-      </p>
     </div>
 
     <div class="tv-actions">
@@ -68,11 +54,7 @@
         
         
       </div>
-      
-      <div class="form-group">
-        <label for="vimeoLink">Link do Vimeo:</label>
-        <input id="vimeoLink" [(ngModel)]="newTv.vimeoLink" name="vimeoLink" />
-      </div>
+    
 
       <div class="form-group">
         <label for="address">Endereço:</label>

@@ -50,11 +50,10 @@ export class TvViewComponent implements OnInit, OnDestroy {
 
   private listenForUpdates(): void {
     this.websocketSubscription = this.webSocketService.getMessages().subscribe((message) => {
-      if (message.type === 'tvUpdate' && message.tv._id === this.tvId) {
+      if (message.type === 'statusUpdate' && message.tv._id === this.tvId) {
         this.tv = { ...this.tv, ...message.tv, _id: this.tv._id };
         this.updateVideoUrl();
-        window.location.reload();
-      } else if (message.type === 'tvStatusUpdate' && message.tvId === this.tvId) {
+      } else if (message.type === 'statusUpdate' && message.tvId === this.tvId){
         this.tv.status = message.status;
       }
     });

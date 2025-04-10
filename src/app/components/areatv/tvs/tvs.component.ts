@@ -87,6 +87,15 @@ export class TvsComponent implements OnInit, OnDestroy {
     { nome: 'Filmes de Ação', link: 'https://pluto.tv/br/live-tv/5f120f41b7d403000783a6d6?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
     { nome: 'Novelas', link: 'https://pluto.tv/br/live-tv/5f512365abe1f50007d3ff56?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
     { nome: 'Comédia', link: 'https://pluto.tv/br/live-tv/5f12101f0b12f00007844c7c?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
+    { nome: 'Master Chefe', link: 'https://pluto.tv/br/live-tv/6077045b6031bd00078de127' },
+    { nome: 'CSI Miami', link: 'https://pluto.tv/br/live-tv/63eb9c5351f5d000085e8d7e' },
+    { nome: 'Kenan e Kel', link: 'https://pluto.tv/br/live-tv/5ffcc5130fd98c0007f2e216' },
+    { nome: 'Shark Tank', link: 'https://pluto.tv/br/live-tv/6647c0b91050b60008390de4' },
+    { nome: 'Jovem Pan', link: 'https://pluto.tv/br/live-tv/6317ba014d4d040007227f72' },
+    { nome: 'Esporte', link: 'https://pluto.tv/br/live-tv/5f32d2db0af67400077f29c4' },
+    { nome: 'Manual do Mundo', link: 'https://pluto.tv/br/live-tv/664df5221dc48600087592b1' },
+    { nome: 'MTV Hits Anos 90', link: 'https://pluto.tv/br/live-tv/66a01dcb8561260008b0a41d' },
+    
   ];
 
   fetchTvs() {
