@@ -38,7 +38,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   // Atualiza o nome do usuário a partir do localStorage
   updateUserName(): void {
     const storedUserName = localStorage.getItem("userName");
-    const storedUserRole = localStorage.getItem("userRole"); // Pegando o papel do usuário
+    const storedUserRole = localStorage.getItem("role"); // Pegando o papel do usuário
     this.userName = storedUserName ? storedUserName : "";
     this.userRole = storedUserRole ? storedUserRole : ""; // Define o papel do usuário
   }

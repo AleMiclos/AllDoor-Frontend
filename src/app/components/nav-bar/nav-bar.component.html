@@ -16,7 +16,7 @@
     <a routerLink="/home">Home</a>
 
     <!-- Botão SERVIÇOS - Exibido apenas se o usuário estiver logado -->
-    <a *ngIf="userName" [routerLink]="userRole === 'admin' ? '/usuario' : '/admin'">
+    <a *ngIf="userName" [routerLink]="userRole === 'admin' ? '/admin' : '/usuario'">
       Serviços
     </a>
 

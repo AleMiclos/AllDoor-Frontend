@@ -82,12 +82,11 @@ export class TvsComponent implements OnInit, OnDestroy {
 
 
   canaisPlutoTV = [
-    { nome: 'Record News', link: 'https://pluto.tv/br/live-tv/6102e04e9ab1db0007a980a1?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
-    { nome: 'Filmes Familia', link: 'https://pluto.tv/br/live-tv/5f171f032cd22e0007f17f3d?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
-    { nome: 'Filmes de Ação', link: 'https://pluto.tv/br/live-tv/5f120f41b7d403000783a6d6?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
-    { nome: 'Novelas', link: 'https://pluto.tv/br/live-tv/5f512365abe1f50007d3ff56?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
-    { nome: 'Comédia', link: 'https://pluto.tv/br/live-tv/5f12101f0b12f00007844c7c?msockid=2f851e9f99e2660a3b5e0d2498b36766' },
-    { nome: 'Master Chefe', link: 'https://pluto.tv/br/live-tv/6077045b6031bd00078de127' },
+    { nome: 'Record News', link: 'https://pluto.tv/br/live-tv/6102e04e9ab1db0007a980a1' },
+    { nome: 'Filmes Familia', link: 'https://pluto.tv/br/live-tv/5f171f032cd22e0007f17f3d' },
+    { nome: 'Filmes de Ação', link: 'https://pluto.tv/br/live-tv/5f120f41b7d403000783a6d6' },
+    { nome: 'Novelas', link: 'https://pluto.tv/br/live-tv/5f512365abe1f50007d3ff56' },
+    { nome: 'Master Chef', link: 'https://pluto.tv/br/live-tv/6077045b6031bd00078de127' },
     { nome: 'CSI Miami', link: 'https://pluto.tv/br/live-tv/63eb9c5351f5d000085e8d7e' },
     { nome: 'Kenan e Kel', link: 'https://pluto.tv/br/live-tv/5ffcc5130fd98c0007f2e216' },
     { nome: 'Shark Tank', link: 'https://pluto.tv/br/live-tv/6647c0b91050b60008390de4' },
