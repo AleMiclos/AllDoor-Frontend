@@ -64,7 +64,7 @@ export class AuthService {
     console.log('Redirecionando com base na role:', role); // Log para depuração
     if (role === 'admin') {
       this.router.navigate(['/admin']); // Redireciona para a página de admin
-    } else if (role === 'cliente') {
+    } else if (role === 'user') {
       this.router.navigate(['/usuario']); // Redireciona para a página de usuário
     } else {
       this.router.navigate(['/']); // Redireciona para a home se a role for desconhecida

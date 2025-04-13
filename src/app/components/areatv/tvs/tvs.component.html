@@ -7,34 +7,36 @@
 <!-- Lista de TVs em cards -->
 <div *ngIf="!loading && tvs.length" class="tv-list">
   <div *ngFor="let tv of tvs" class="tv-card">
-    <div class="tv-details">
+    <div class="id-status">
       <h3>TV #{{ tv._id }}</h3>
-      <p><strong>YouTube:</strong> {{ tv.youtubeLink || "N/A" }}</p>
-      <p><strong>Vimeo:</strong> {{ tv.vimeoLink || "N/A" }}</p>
-      <p><strong>Endereço:</strong> {{ tv.address }}</p>
       <p>
-        <strong>Status:</strong>
+        <strong></strong>
         <span [ngClass]="{ online: tv.status, offline: !tv.status }">
           {{ tv.status ? "🟢 Online" : "🔴 Offline" }}
         </span>
       </p>
     </div>
+
+    <div class="tv-details">
+      <p><strong>YouTube:</strong> {{ tv.youtubeLink || "N/A" }}</p>
+      <p><strong>Endereço:</strong> {{ tv.address }}</p>
+    </div>
+
     <div class="tv-actions">
       <button (click)="editTv(tv)" title="Editar">
         <i class="fas fa-edit"></i>
+        <P>Editar</P>
       </button>
+      <button (click)="navigateTo('view-tv', tv._id)">Tela com TV</button>
+      <button (click)="navigateTo('ad-full', tv._id)">Tela Anuncios</button>
       <button (click)="deleteTv(tv._id)" title="Excluir">
         <i class="fas fa-trash-alt"></i>
       </button>
-      <!-- <button (click)="viewTv(tv._id)" title="Visualizar">
-        <i class="fas fa-eye"></i>
-      </button> -->
-      <button (click)="navigateTo('view-tv', tv._id)">Tela Vimeo + YouTube</button>
-      <button (click)="navigateTo('ad-full', tv._id)">Tela Apenas Vimeo</button>
-
     </div>
   </div>
 </div>
+
+
 
 <!-- Mensagem caso não haja TVs -->
 <p *ngIf="!loading && tvs.length === 0" class="no-tvs-message">
