@@ -1,33 +1,21 @@
-<div *ngIf="loading" class="loading-message">Carregando usuários e TVs...</div>
+<div *ngIf="loading" class="loading-message">Carregando TVs...</div>
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-<!-- Exibe os usuários e suas respectivas TVs -->
-<div *ngIf="!loading && users?.length" class="users-list">
-  <div *ngFor="let user of users" class="user-card">
-    <h2>Usuário: {{ user.name }}</h2>
-    <p><strong>Email:</strong> {{ user.email }}</p>
+<!-- Exibe todas as TVs, independentemente de usuário -->
+<div *ngIf="!loading && users?.length" class="tv-list">
+  <div *ngFor="let user of users">
+    <div *ngFor="let tv of user.tvs" class="tv-card">
+      <h3>TV {{ user.name }} / {{ tv._id }} </h3>
 
-    <div *ngIf="user.tvs?.length" class="tv-list">
-      <div *ngFor="let tv of user.tvs" class="tv-card">
-        <h3>TV #{{ tv._id }}</h3>
-        <p><strong>Endereço:</strong> {{ tv.address }}</p>
-        <p>
-          <strong>Status:</strong>
-          <span [ngClass]="{ online: tv.status, offline: !tv.status }">
-            {{ tv.status ? "🟢 Online" : "🔴 Offline" }}
-          </span>
-        </p>
-      </div>
+      <p> <strong></strong> ...{{ tv.address }} </p>
+      <p>
+        <span [ngClass]="{ online: tv.status, offline: !tv.status }">
+          {{ tv.status ? "🟢 Online" : "🔴 Offline" }}
+        </span>
+      </p>
+
     </div>
-
-    <!-- Mensagem caso o usuário não tenha TVs -->
-    <p *ngIf="!user.tvs?.length" class="no-tvs-message">
-      Nenhuma TV cadastrada para este usuário.
-    </p>
   </div>
 </div>
 
-<!-- Mensagem caso nenhum usuário seja encontrado -->
-<p *ngIf="!loading && users.length === 0" class="no-users-message">
-  Nenhum usuário encontrado.
-</p>
+<!-- Mensagem caso nenhuma TV seja encontrada -->
