@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TvsService } from '../../../services/tvs.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -14,13 +14,17 @@ import { Subscription } from 'rxjs';
   imports: [CommonModule, TvsInfoComponent]
 })
 
-export class TvViewComponent implements OnInit, OnDestroy {
+export class TvViewComponent implements OnInit, AfterViewChecked, OnDestroy {
   @Input() tv: any;
   tvId: string | null = null;
   videoUrl: SafeResourceUrl | null = null;
   private visibilitySubscription: any;
   private checkInterval: any;
   private websocketSubscription: Subscription | null = null;
+  private videoListenerAttached = false;
+
+  @ViewChild('videoPlayer') videoRef!: ElementRef<HTMLVideoElement>;
+
 
 
 
@@ -44,6 +48,31 @@ export class TvViewComponent implements OnInit, OnDestroy {
 
     this.enterFullscreen();
     this.handleVisibilityChange();
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.videoListenerAttached && this.videoRef?.nativeElement) {
+      const video = this.videoRef.nativeElement;
+
+      video.addEventListener('pause', () => {
+        console.log('Vídeo local pausou, tentando tocar novamente...');
+        video.play().catch(err => {
+          console.warn('Erro ao tentar tocar o vídeo local:', err);
+        });
+      });
+
+      // Timeout extra para garantir que o vídeo está tocando
+      setTimeout(() => {
+        if (video.paused) {
+          console.log('Forçando vídeo local a tocar (timeout inicial)...');
+          video.play().catch(err => {
+            console.warn('Erro ao tentar tocar o vídeo no timeout:', err);
+          });
+        }
+      }, 5000);
+
+      this.videoListenerAttached = true;
+    }
   }
 
   private listenForUpdates(): void {
