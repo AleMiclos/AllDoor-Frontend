@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TvStatusService } from '../../../services/tv-status.service';
 import { Subscription } from 'rxjs';
+import { WebSocketService } from '../../../services/websocket.service';
+
 
 @Component({
   selector: 'app-tvs',
@@ -23,46 +25,39 @@ export class TvsComponent implements OnInit, OnDestroy {
   @Input() userId: string | undefined;
   tvToView: any;
 
-  // Declaração da propriedade tvStatusSubscription
   private tvStatusSubscription: Subscription | undefined;
-  private intervalId: any; // Armazena o ID do intervalo
-  cdr: any;
+  private intervalId: any;
 
   constructor(
     private tvsService: TvsService,
     private router: Router,
     private tvStatusService: TvStatusService,
+    private webSocketService: WebSocketService // ✅ Aqui!
 
   ) {}
 
   ngOnInit() {
     this.fetchTvs();
 
-    // Inscreve-se para receber atualizações de status em tempo real
     this.tvStatusSubscription = this.tvStatusService.tvStatus$.subscribe(
       ({ tvId, status }) => {
         this.updateTvStatus(tvId, status);
-
       }
     );
 
-    // Atualiza o status das TVs a cada 5 segundos
     this.intervalId = setInterval(() => {
       if (this.tvs.length > 0) {
         this.tvs.forEach((tv) => {
           this.tvStatusService.getTvStatus(tv._id);
-
         });
       }
-    }, 5000); // Atualiza a cada 5 segundos
+    }, 5000);
   }
 
   ngOnDestroy() {
-    // Cancela a inscrição ao destruir o componente
     if (this.tvStatusSubscription) {
       this.tvStatusSubscription.unsubscribe();
     }
-    // Limpa o intervalo ao destruir o componente
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
@@ -71,55 +66,49 @@ export class TvsComponent implements OnInit, OnDestroy {
   updateTvStatus(tvId: string, status: string) {
     const tv = this.tvs.find((tv) => tv._id === tvId);
     if (tv) {
-      tv.status = status === 'online'; // Converte para booleano
-      console.log(`Status atualizado para TV ${tvId}: ${tv.status}`);
-
-      // Garante que a UI seja atualizada corretamente
-
+      tv.status = status === 'online';
+      // console.log(`Status atualizado para TV ${tvId}: ${tv.status}`);
     }
   }
 
- // Método para atualizar o status geral da TV
- fetchTvStatus(tvId: string) {
-  this.tvStatusService.getTvStatus(tvId);
-  this.tvStatusService.tvStatus$.subscribe(({ tvId: updatedTvId, status }) => {
-    if (updatedTvId === tvId) {
-      const tv = this.tvs.find((tv) => tv._id === tvId);
-      if (tv) {
-        tv.status = status === 'online';
-        console.log(`Status geral atualizado para TV ${tvId}: ${tv.status}`);
-      }
-    }
-  });
-}
-
-
-fetchTvs() {
-  if (this.userId) {
-    this.loading = true;
-    this.tvsService.getTvsByUserId(this.userId).subscribe({
-      next: (data: any[]) => {
-        this.loading = false;
-        this.tvs = data;
-
-        if (this.tvs.length > 0) {
-          console.log('Buscando status das TVs...');
-          this.tvs.forEach((tv) => {
-            this.fetchTvStatus(tv._id);
-          });
+  fetchTvStatus(tvId: string) {
+    this.tvStatusService.getTvStatus(tvId);
+    this.tvStatusService.tvStatus$.subscribe(({ tvId: updatedTvId, status }) => {
+      if (updatedTvId === tvId) {
+        const tv = this.tvs.find((tv) => tv._id === tvId);
+        if (tv) {
+          tv.status = status === 'online';
+          // console.log(`Status geral atualizado para TV ${tvId}: ${tv.status}`);
         }
-      },
-      error: (err: any) => {
-        this.errorMessage = 'Erro ao carregar TVs.';
-        console.error(err);
-        this.loading = false;
-      },
+      }
     });
-  } else {
-    console.error('userId não está definido.');
   }
-}
 
+  fetchTvs() {
+    if (this.userId) {
+      this.loading = true;
+      this.tvsService.getTvsByUserId(this.userId).subscribe({
+        next: (data: any[]) => {
+          this.loading = false;
+          this.tvs = data;
+
+          if (this.tvs.length > 0) {
+            console.log('Buscando status das TVs...');
+            this.tvs.forEach((tv) => {
+              this.fetchTvStatus(tv._id);
+            });
+          }
+        },
+        error: (err: any) => {
+          this.errorMessage = 'Erro ao carregar TVs.';
+          console.error(err);
+          this.loading = false;
+        },
+      });
+    } else {
+      console.error('userId não está definido.');
+    }
+  }
 
   showAddForm() {
     this.showAddTvForm = true;
@@ -142,7 +131,7 @@ fetchTvs() {
     const payload = {
       ...this.newTv,
       user: this.userId,
-      status: false, // Status inicial agora é booleano (false)
+      status: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -198,4 +187,14 @@ fetchTvs() {
   navigateTo(route: string, tvId: string): void {
     this.router.navigate([route, tvId]);
   }
+
+  atualizarTv(tvId: string): void {
+    console.log('[Dashboard] Clicou no botão de atualizar TV:', tvId);
+    this.webSocketService.sendMessage({
+      type: 'tvReload',
+      tvId: tvId
+    });
+  }
+
+
 }

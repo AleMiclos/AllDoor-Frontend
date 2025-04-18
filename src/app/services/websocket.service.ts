@@ -23,8 +23,8 @@ export class WebSocketService {
 
     // Verifica se o token existe antes de adicioná-lo
     this.socket = isTvView || !token
-      ? new WebSocket('wss://outdoor-backend.onrender.com') // Sem token para tv-view ou caso o token esteja ausente
-      : new WebSocket('wss://outdoor-backend.onrender.com', [token]); // Com token para outras páginas
+      ? new WebSocket('ws://localhost:5000') // Sem token para tv-view ou caso o token esteja ausente
+      : new WebSocket('ws://localhost:5000', [token]); // Com token para outras páginas
 
     //localhost:5000
     //outdoor-backend.onrender.com
