@@ -1,0 +1,18 @@
+<h2 class="section-title">Meus Totens</h2>
+<div class="totens-list">
+  <div *ngFor="let totem of totems" class="totem-card">
+    <ng-container *ngIf="editingTotem?._id === totem._id; else viewMode">
+      <input class="c-Area" type="text" [(ngModel)]="editingTotem.title" placeholder="Título do Totem" />
+      <input class="c-Area" [(ngModel)]="editingTotem.description" placeholder="Descrição do Totem" />
+      <button class="btn success" (click)="save.emit()">Atualizar</button>
+      <button class="btn secondary" (click)="cancel.emit()">Cancelar</button>
+    </ng-container>
+
+    <ng-template #viewMode>
+      <h3>{{ totem.title }}</h3>
+      <p>{{ totem.description }}</p>
+      <p><strong>Endereço:</strong> {{ totem.address }}</p>
+      <button class="btn primary" (click)="startEdit.emit(totem)">Editar</button>
+    </ng-template>
+  </div>
+</div>

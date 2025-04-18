@@ -1,0 +1,153 @@
+/* Título da seção */
+.section-title {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 30px 0 15px;
+  color: #333;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Container com a lista de cards */
+.totens-list, .tvs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+/* Card de totem ou tv */
+.totem-card, .tv-card {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+/* Títulos dentro do card */
+.totem-card h3, .tv-card h3 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* Descrição e detalhes dentro do card */
+.totem-card p, .tv-card p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+/* Inputs de edição */
+.c-Area {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.c-Area:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botões dentro do card */
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 15px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.btn.success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn.success:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.btn.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn.secondary:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+.btn.disabled {
+  background-color: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Área de links (quando um link é exibido no card) */
+.totem-card a, .tv-card a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.totem-card a:hover, .tv-card a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .totens-list, .tvs-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .totem-card, .tv-card {
+    width: 90%;
+    max-width: 100%;
+  }
+
+  .section-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .totem-card, .tv-card {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+}

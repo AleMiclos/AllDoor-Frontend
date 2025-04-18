@@ -1,0 +1,28 @@
+<h2 class="section-title">Minhas TVs</h2>
+<div class="totens-list">
+  <div *ngFor="let tv of tvs" class="totem-card">
+    <ng-container *ngIf="editingTv?._id === tv._id; else viewMode">
+      <!-- Apenas campo editável para o link do YouTube -->
+      <input
+        class="c-Area"
+        type="text"
+        [(ngModel)]="editingTv.youtubeLink"
+        placeholder="Link do YouTube"
+      />
+      <div class="btn-group">
+        <button class="btn success" (click)="save.emit()">Atualizar</button>
+        <button class="btn secondary" (click)="cancel.emit()">Cancelar</button>
+      </div>
+    </ng-container>
+
+    <ng-template #viewMode>
+      <h3>{{ tv.title }}</h3>
+      <p>{{ tv.description }}</p>
+      <p><strong>Endereço:</strong> {{ tv.address }}</p>
+      <p><strong>Link YouTube:</strong> {{ tv.youtubeLink }}</p>
+      <div class="btn-group">
+        <button class="btn primary" (click)="startEdit.emit(tv)">Editar</button>
+      </div>
+    </ng-template>
+  </div>
+</div>

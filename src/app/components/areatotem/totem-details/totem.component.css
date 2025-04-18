@@ -25,7 +25,7 @@
 }
 
 /* O iframe do vídeo */
-.video-container iframe {
+.video-container video {
   border: none;
   position: absolute;
   width: 100vw;
@@ -34,7 +34,7 @@
 
 /* Se o monitor estiver na vertical (portrait) */
 @media (orientation: portrait) {
-  .video-container iframe {
+  .video-container video {
     width: 100vh;  /* Inverte largura e altura */
     height: 100vw;
     transform: rotate(90deg); /* Rotaciona o vídeo para deixá-lo deitado */
@@ -44,7 +44,7 @@
 
 /* Se o monitor estiver na horizontal (landscape) */
 @media (orientation: landscape) {
-  .video-container iframe {
+  .video-container video {
     width: 100vw;
     height: 80vw; /* Mantém a proporção 16:9 */
     margin-top: -20%;
@@ -84,7 +84,7 @@ th, td {
   text-align: center;
   padding: 8px;
   border: 1px solid white;
-  
+
 }
 
 

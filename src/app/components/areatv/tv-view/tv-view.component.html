@@ -1,7 +1,7 @@
 <div *ngIf="tv" class="container">
   <!-- Div do anúncio (esquerda) -->
-  <div *ngIf="tv.vimeoLink" class="ad">
-    <video autoplay loop muted controls>
+  <div class="ad">
+    <video *ngIf="showVideo" #videoPlayer autoplay loop muted controls>
       <source src="../../../../assets/videos/anuncio_3 (540p).mp4" type="video/mp4">
     </video>
   </div>
@@ -10,7 +10,7 @@
   <div *ngIf="tv.youtubeLink" class="tv">
     <iframe
       id="youtube-player"
-      [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=0&controls=0&enablejsapi=1')"
+      [src]="sanitizeUrl(tv.youtubeLink + '?autoplay=1&loop=0&controls=0')"
       frameborder="0"
       allowfullscreen
     ></iframe>

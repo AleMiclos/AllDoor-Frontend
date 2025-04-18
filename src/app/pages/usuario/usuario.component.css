@@ -1,163 +1,151 @@
-/* Garante que a página ocupe toda a altura da tela */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: Arial, sans-serif;
-}
-
-/* Define um layout flexível para o conteúdo principal */
+/* Container principal */
 .cliente-container {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Faz o container ocupar a altura total da tela */
-  align-items: center;
   justify-content: center;
-  background-color: #f4f4f4;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8, #e3f2fd);
+  padding: 50px 15px;
+  font-family: 'Arial', sans-serif;
 }
 
-/* Garante que a navbar fique fixa no topo */
-
-
-
-
-/* Ajusta o espaço entre a navbar e o conteúdo */
+/* Conteúdo principal do dashboard */
 .dashboard-content {
-  margin-top: 80px; /* Espaço para não ficar escondido pela navbar */
   width: 100%;
-  max-width: 1200px;
-  padding-bottom: 60px; /* Espaço para evitar sobreposição com o footer */
+
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Mensagem de boas-vindas */
+.welcome-message {
   text-align: center;
-}
-
-/* Estiliza o título */
-.dashboard-title {
-  font-size: 28px;
+  padding: 30px;
+  border-radius: 15px;
+  width: 80%;
   margin-bottom: 20px;
-  color: #333;
 }
 
-/* Mensagens de status */
+.welcome-message h1 {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.welcome-message p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.welcome-message .btn {
+  background-color: #2980b9;
+  padding: 12px 25px;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.welcome-message .btn:hover {
+  background-color: #3498db;
+}
+
+/* Mensagem de Status */
 .status-message {
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .status-message.success {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #eafaf1;
+  color: #2ecc71;
 }
 
 .status-message.error {
   background-color: #f8d7da;
-  color: #721c24;
+  color: #e74c3c;
 }
 
-/* Estilização do carregamento */
+/* Container de Carregamento */
 .loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 18px;
-  font-weight: bold;
-  color: #555;
+  font-weight: 500;
+  color: #7f8c8d;
+  height: 100px;
 }
 
-/* Estilização da mensagem de nenhum totem encontrado */
+/* Mensagem sem Totens ou TVs */
 .no-totens-message {
   font-size: 18px;
-  color: #777;
-  font-style: italic;
+  color: #bdc3c7;
+  text-align: center;
+  margin-top: 40px;
 }
 
-/* Container de cartões responsivo */
-.totens-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  justify-content: center;
-  align-items: stretch;
+/* Efeitos de Hover para Botões */
+button {
+  transition: transform 0.2s, background-color 0.3s;
 }
 
-/* Estilização dos cards */
-.totem-card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: left;
-  transition: transform 0.3s ease;
+button:hover {
+  transform: scale(1.05);
 }
 
-.totem-card:hover {
-  transform: translateY(-5px);
-}
-
-.totem-card h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #222;
-}
-
-.totem-card p {
-  margin: 5px 0;
-  color: #555;
-}
-
-.totem-card a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.totem-card a:hover {
-  text-decoration: underline;
-}
-
-/* Estilização dos botões */
-.btn {
-  display: inline-block;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
-  text-transform: uppercase;
-  transition: background 0.3s;
-}
-
-.btn.primary {
-  background-color: #007bff;
+/* Estilo do Rodapé */
+app-footer {
+  padding: 30px 0;
+  background-color: #34495e;
   color: white;
+  text-align: center;
+  font-size: 14px;
+  margin-top: 40px;
 }
 
-.btn.primary:hover {
-  background-color: #0056b3;
-}
+/* Responsividade */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 20px;
+  }
 
-.btn.success {
-  background-color: #28a745;
-  color: white;
-}
+  .welcome-message {
+    padding: 20px;
+  }
 
-.btn.success:hover {
-  background-color: #1e7e34;
-}
+  .welcome-message h1 {
+    font-size: 28px;
+  }
 
-.btn.secondary {
-  background-color: #6c757d;
-  color: white;
-}
+  .welcome-message p {
+    font-size: 14px;
+  }
 
-.btn.secondary:hover {
-  background-color: #5a6268;
-}
+  .status-message {
+    font-size: 14px;
+  }
 
-/* Estiliza os inputs de edição */
-.c-Area {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+  .loading-container {
+    font-size: 16px;
+  }
+
+  .no-totens-message {
+    font-size: 16px;
+  }
 }

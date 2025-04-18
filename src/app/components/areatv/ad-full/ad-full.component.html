@@ -1,9 +1,5 @@
 <div class="fullscreen-view">
-  <iframe
-    *ngIf="vimeoUrl"
-    [src]="vimeoUrl"
-    frameborder="0"
-    allow="autoplay; fullscreen; picture-in-picture"
-    allowfullscreen>
-  </iframe>
+  <video autoplay loop muted controls>
+    <source src="../../../../assets/videos/0310 (720p).mp4" type="video/mp4">
+  </video>
 </div>

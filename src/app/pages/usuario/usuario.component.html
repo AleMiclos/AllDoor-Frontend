@@ -1,14 +1,13 @@
 <app-nav-bar></app-nav-bar>
+
 <div class="cliente-container">
   <div class="dashboard-content">
-    <h1 class="dashboard-title">Meus Serviços</h1>
+    <div class="welcome-message">
+      <h1>Bem-vindo!</h1>
+      <p>Acesse os seus serviços abaixo e comece a gerenciar seus totens e TVs com facilidade.</p>
+    </div>
 
-    <div
-      *ngIf="statusMessage"
-      class="status-message"
-      [ngClass]="{ error: statusMessage.includes('Erro'), success: !statusMessage.includes('Erro') }"
-      aria-live="polite"
-    >
+    <div *ngIf="statusMessage" class="status-message" [ngClass]="{ error: statusMessage.includes('Erro'), success: !statusMessage.includes('Erro') }">
       {{ statusMessage }}
     </div>
 
@@ -17,79 +16,25 @@
     </div>
 
     <div *ngIf="!loading">
-      <!-- Caso não tenha nenhum totem e nenhuma TV -->
       <div *ngIf="totems.length === 0 && tvs.length === 0">
         <p class="no-totens-message">Nenhum Totem ou TV encontrado.</p>
       </div>
 
-      <!-- Caso tenha apenas Totens -->
-      <div *ngIf="totems.length > 0">
-        <h2 class="section-title">Meus Totens</h2>
-        <div class="totens-list">
-          <div *ngFor="let totem of totems" class="totem-card">
-            <ng-container *ngIf="editingTotem && editingTotem._id === totem._id; else viewModeTotem">
-              <input
-                class="c-Area"
-                type="text"
-                [(ngModel)]="editingTotem.title"
-                placeholder="Título do Totem"
-              />
-              <input
-                class="c-Area"
-                [(ngModel)]="editingTotem.description"
-                placeholder="Descrição do Totem"
-              />
-              <button class="btn success" (click)="handleSaveChanges()">Atualizar</button>
-              <button class="btn secondary" (click)="editingTotem = null">Cancelar</button>
-            </ng-container>
+      <app-totuser
+        *ngIf="totems.length > 0"
+        [totems]="totems"
+        (startEdit)="handleStartEditing($event)"
+        (save)="handleSaveChanges()"
+      ></app-totuser>
 
-            <ng-template #viewModeTotem>
-              <h3>{{ totem.title }}</h3>
-              <p>{{ totem.description }}</p>
-              <p><strong>Endereço:</strong> {{ totem.address }}</p>
-              <p>
-                <a [routerLink]="['/totem', totem._id]" target="_blank">Ver Totem</a>
-              </p>
-              <button class="btn primary" (click)="handleStartEditing(totem)">Editar</button>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-
-      <!-- Caso tenha apenas TVs -->
-      <div *ngIf="tvs.length > 0">
-        <h2 class="section-title">Minhas TVs</h2>
-        <div class="totens-list">
-          <div *ngFor="let tv of tvs" class="totem-card">
-            <ng-container *ngIf="editingTotem && editingTotem._id === tv._id; else viewModeTv">
-              <input
-                class="c-Area"
-                type="text"
-                [(ngModel)]="editingTotem.title"
-                placeholder="Título da TV"
-              />
-              <input
-                class="c-Area"
-                [(ngModel)]="editingTotem.description"
-                placeholder="Descrição da TV"
-              />
-              <button class="btn success" (click)="handleSaveChanges()">Atualizar</button>
-              <button class="btn secondary" (click)="editingTotem = null">Cancelar</button>
-            </ng-container>
-
-            <ng-template #viewModeTv>
-              <h3>{{ tv.title }}</h3>
-              <p>{{ tv.description }}</p>
-              <p><strong>Endereço:</strong> {{ tv.address }}</p>
-              <p>
-                <a [routerLink]="['/tv', tv._id]" target="_blank">Ver TV</a>
-              </p>
-              <button class="btn primary" (click)="handleStartEditing(tv)">Editar</button>
-            </ng-template>
-          </div>
-        </div>
-      </div>
+      <app-tvuser
+        *ngIf="tvs.length > 0"
+        [tvs]="tvs"
+        (startEdit)="handleStartEditing($event)"
+        (save)="handleSaveChanges()"
+      ></app-tvuser>
     </div>
   </div>
 </div>
+
 <app-footer></app-footer>

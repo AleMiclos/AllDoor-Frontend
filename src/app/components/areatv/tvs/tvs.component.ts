@@ -17,7 +17,7 @@ export class TvsComponent implements OnInit, OnDestroy {
   loading = false;
   errorMessage = '';
   showAddTvForm = false;
-  newTv: any = { youtubeLink: '', vimeoLink: '', address: '' };
+  newTv: any = { youtubeLink: '', address: '' };
   tvToEdit: any = null;
   selectedTvId: string | null = null;
   @Input() userId: string | undefined;
@@ -123,7 +123,7 @@ fetchTvs() {
 
   showAddForm() {
     this.showAddTvForm = true;
-    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
+    this.newTv = { youtubeLink: '', address: '' };
     this.tvToEdit = null;
   }
 
@@ -176,7 +176,7 @@ fetchTvs() {
 
   resetForm() {
     this.showAddTvForm = false;
-    this.newTv = { youtubeLink: '', vimeoLink: '', address: '' };
+    this.newTv = { youtubeLink: '', address: '' };
     this.tvToEdit = null;
     this.errorMessage = '';
   }

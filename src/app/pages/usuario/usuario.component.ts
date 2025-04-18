@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { TvuserComponent } from "../../components/teladeusuarios/tvuser/tvuser.component";
+import { TotuserComponent } from "../../components/teladeusuarios/totuser/totuser.component";
 
 @Component({
   selector: 'app-usuario',
@@ -17,6 +19,8 @@ import { FooterComponent } from '../../components/footer/footer.component';
     RouterModule,
     NavBarComponent,
     FooterComponent,
+    TvuserComponent,
+    TotuserComponent
   ],
 })
 export class UsuarioComponent {
@@ -24,9 +28,8 @@ export class UsuarioComponent {
   statusMessage: string = '';
   loading = false;
   totems: any[] = [];
-  tvs: any[] = []; // Adicionada a lista de TVs
-  editingItem: any = null; // Agora pode ser tanto Totem quanto TV
-  editingTotem: any;
+  tvs: any[] = [];
+  editingItem: any = null; // Agora usado para ambos
 
   constructor(private http: HttpClient) {}
 
@@ -40,22 +43,27 @@ export class UsuarioComponent {
     }
 
     this.fetchData('totens');
-    this.fetchData('tvs');
+    this.fetchData('tv');
   }
 
-  fetchData(type: 'totens' | 'tvs'): void {
+  fetchData(type: 'totens' | 'tv'): void {
     this.loading = true;
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      this.statusMessage = 'Erro: Token de autenticação não encontrado.';
+    if (!token || !this.selectedUserId) {
+      this.statusMessage = 'Erro: Token ou ID de usuário não encontrado.';
       this.loading = false;
       return;
     }
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    // Correção da URL
-    const apiUrl = `https://outdoor-backend.onrender.com/services/${type}/`;
+
+    let apiUrl = '';
+    if (type === 'totens') {
+      apiUrl = `https://outdoor-backend.onrender.com/totem/totem/user/${this.selectedUserId}`;
+    } else {
+      apiUrl = `https://outdoor-backend.onrender.com/tv/user/${this.selectedUserId}`;
+    }
 
     this.http.get<any[]>(apiUrl, { headers }).subscribe({
       next: (data) => {
@@ -75,8 +83,9 @@ export class UsuarioComponent {
   }
 
 
+
   handleStartEditing(item: any) {
-    this.editingItem = { ...item };
+    this.editingItem = { ...item }; // Cria cópia editável
   }
 
   handleSaveChanges() {
