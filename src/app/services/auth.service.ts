@@ -67,7 +67,7 @@ export class AuthService {
     } else if (role === 'user') {
       this.router.navigate(['/usuario']); // Redireciona para a página de usuário
     } else {
-      this.router.navigate(['/']); // Redireciona para a home se a role for desconhecida
+      this.router.navigate(['/']);
     }
   }
 }
