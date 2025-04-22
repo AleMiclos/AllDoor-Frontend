@@ -83,38 +83,4 @@ export class UsuarioComponent {
   }
 
 
-
-  handleStartEditing(item: any) {
-    this.editingItem = { ...item }; // Cria cópia editável
-  }
-
-  handleSaveChanges() {
-    if (!this.editingItem) return;
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      this.statusMessage = 'Erro: Token de autenticação não encontrado.';
-      return;
-    }
-
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    const apiUrl = `https://outdoor-backend.onrender.com/${this.editingItem.type}/${this.editingItem._id}`;
-
-    this.http.put(apiUrl, this.editingItem, { headers }).subscribe({
-      next: () => {
-        const list =
-          this.editingItem.type === 'totens' ? this.totems : this.tvs;
-        const index = list.findIndex((t) => t._id === this.editingItem._id);
-        if (index !== -1) {
-          list[index] = { ...this.editingItem };
-        }
-        this.editingItem = null;
-        this.statusMessage = 'Atualização realizada com sucesso!';
-      },
-      error: (error) => {
-        console.error('Erro ao atualizar:', error);
-        this.statusMessage = 'Erro ao atualizar.';
-      },
-    });
-  }
 }

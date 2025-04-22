@@ -23,15 +23,10 @@
       <app-totuser
         *ngIf="totems.length > 0"
         [totems]="totems"
-        (startEdit)="handleStartEditing($event)"
-        (save)="handleSaveChanges()"
       ></app-totuser>
 
       <app-tvuser
         *ngIf="tvs.length > 0"
-        [tvs]="tvs"
-        (startEdit)="handleStartEditing($event)"
-        (save)="handleSaveChanges()"
       ></app-tvuser>
     </div>
   </div>

@@ -10,7 +10,7 @@
 }
 
 /* Container com a lista de cards */
-.totens-list, .tvs-list {
+.totens-list {
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
@@ -19,7 +19,7 @@
 }
 
 /* Card de totem ou tv */
-.totem-card, .tv-card {
+.totem-card {
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -32,7 +32,7 @@
 }
 
 /* Títulos dentro do card */
-.totem-card h3, .tv-card h3 {
+.totem-card h3 {
   font-size: 22px;
   color: #333;
   margin-bottom: 12px;
@@ -40,7 +40,7 @@
 }
 
 /* Descrição e detalhes dentro do card */
-.totem-card p, .tv-card p {
+.totem-card p {
   font-size: 14px;
   color: #666;
   line-height: 1.6;
@@ -113,25 +113,14 @@
   cursor: not-allowed;
 }
 
-/* Área de links (quando um link é exibido no card) */
-.totem-card a, .tv-card a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.totem-card a:hover, .tv-card a:hover {
-  text-decoration: underline;
-}
-
 /* Responsividade */
 @media (max-width: 768px) {
-  .totens-list, .tvs-list {
+  .totens-list {
     flex-direction: column;
     align-items: center;
   }
 
-  .totem-card, .tv-card {
+  .totem-card {
     width: 90%;
     max-width: 100%;
   }
@@ -142,7 +131,7 @@
 }
 
 @media (max-width: 480px) {
-  .totem-card, .tv-card {
+  .totem-card {
     padding: 15px;
     max-width: 100%;
   }
